@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>监督学习之k近邻 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="监督学习之k近邻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监督学习之k近邻">
+<meta property="og:url" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="监督学习之k近邻">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_3_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_5_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_11_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_12_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_15_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_18_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_20_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_29_1.png">
+<meta property="article:published_time" content="2019-10-05T07:32:44.000Z">
+<meta property="article:modified_time" content="2019-10-05T08:03:43.686Z">
+<meta property="article:author" content="山海南话">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_3_0.png">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-监督学习之k近邻" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/" class="article-date">
+  <time datetime="2019-10-05T07:32:44.000Z" itemprop="datePublished">2019-10-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      监督学习之k近邻
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="监督学习之k近邻"><a href="#监督学习之k近邻" class="headerlink" title="监督学习之k近邻"></a>监督学习之k近邻</h1><a id="more"></a>
+<h2 id="所需要的所有包"><a href="#所需要的所有包" class="headerlink" title="所需要的所有包"></a>所需要的所有包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> mglearn</span><br><span class="line">%matplotlib inline</span><br><span class="line"><span class="comment"># 由于 %matplotlib inline 的存在，当输入plt.plot(x,y_1)后，不必再输入 plt.show()</span></span><br><span class="line"><span class="comment">#图像将自动显示出来</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="1-k近邻分类"><a href="#1-k近邻分类" class="headerlink" title="1.k近邻分类"></a>1.k近邻分类</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mglearn</span><br><span class="line">%matplotlib inline</span><br><span class="line">mglearn.plots.plot_knn_classification(n_neighbors=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_3_0.png" alt="png"></p>
+<p>除了仅考虑最近邻，我还可以考虑任意个（k 个）邻居。这也是 k 近邻算法名字的来历。在考虑多于一个邻居的情况时，我们<span class="burk">用“投票法”（voting）来指定标签</span>。也就是说，对于每个测试点，我们数一数多少个邻居属于类别 0，多少个邻居属于类别 1。然后将出现<span class="mark">次数更多的类别（也就是 k 个近邻中占多数的类别）作为预测结果</span>。下面的例子（图 2-5）用到了 3 个近邻：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mglearn.plots.plot_knn_classification(n_neighbors=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_5_0.png" alt="png"></p>
+<p>通过scikit-learn来应用k近邻算法</p>
+<ul>
+<li>导入类并将其实例化。这时可以设定参数，如邻居的个数</li>
+<li>利用训练集对这个分类器进行拟合</li>
+<li>调用 predict 方法来对测试数据进行预测</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">X,y=mglearn.datasets.make_forge()</span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line">clf=KNeighborsClassifier(n_neighbors=<span class="number">3</span>)</span><br><span class="line">clf.fit(X_train,y_train)</span><br><span class="line">print(<span class="string">"Test set predictions: &#123;&#125;"</span>.format(clf.predict(X_test)))</span><br><span class="line">print(<span class="string">"Test set accuracy: &#123;:.2f&#125;"</span>.format(clf.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Test set predictions: [1 0 1 0 1 0 0]
+Test set accuracy: 0.86</code></pre><h2 id="2-分析KNeighborsClassifier"><a href="#2-分析KNeighborsClassifier" class="headerlink" title="2.分析KNeighborsClassifier"></a>2.分析KNeighborsClassifier</h2><p>对于二维数据集，我们还可以在 xy 平面上画出所有可能的测试点的预测结果。我们根据平面中每个点所属的类别对平面进行着色。这样可以查看决策边界（decision boundary），即算法对类别 0 和类别 1 的分界线。</p>
+<p>zip() 函数用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。<br><br>zip 方法在 Python 2 和 Python 3 中的不同：在 Python 3.x 中为了减少内存，zip() 返回的是一个对象。如需展示列表，需手动 list() 转换。</p>
+<p>subplots参数与subplots相似。<br><br>两者都可以规划figure划分为n个子图，但每条subplot命令只会创建一个子图，而一条subplots就可以将所有子图创建好。<br><br>subplots用法示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"> </span><br><span class="line">x = np.arange(<span class="number">0</span>, <span class="number">100</span>)</span><br><span class="line"><span class="comment">#划分子图</span></span><br><span class="line">fig,axes=plt.subplots(<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">ax1=axes[<span class="number">0</span>,<span class="number">0</span>]</span><br><span class="line">ax2=axes[<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">ax3=axes[<span class="number">1</span>,<span class="number">0</span>]</span><br><span class="line">ax4=axes[<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line"> </span><br><span class="line"><span class="comment">#作图1</span></span><br><span class="line">ax1.plot(x, x)</span><br><span class="line"><span class="comment">#作图2</span></span><br><span class="line">ax2.plot(x, -x)</span><br><span class="line"><span class="comment">#作图3</span></span><br><span class="line">ax3.plot(x, x ** <span class="number">2</span>)</span><br><span class="line">ax3.grid(color=<span class="string">'r'</span>, linestyle=<span class="string">'--'</span>, linewidth=<span class="number">1</span>,alpha=<span class="number">0.3</span>)</span><br><span class="line"><span class="comment">#作图4</span></span><br><span class="line">ax4.plot(x, np.log(x))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_11_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fig,axes=plt.subplots(<span class="number">1</span>,<span class="number">3</span>,figsize=(<span class="number">10</span>,<span class="number">3</span>))</span><br><span class="line"><span class="keyword">for</span> n_neighbors,ax <span class="keyword">in</span> zip([<span class="number">1</span>,<span class="number">3</span>,<span class="number">9</span>],axes):</span><br><span class="line">    clf=KNeighborsClassifier(n_neighbors=n_neighbors).fit(X,y)</span><br><span class="line">    mglearn.plots.plot_2d_separator(clf,X,fill=<span class="literal">True</span>,eps=<span class="number">0.5</span>,ax=ax,alpha=<span class="number">.4</span>)</span><br><span class="line">    mglearn.discrete_scatter(X[:,<span class="number">0</span>],X[:,<span class="number">1</span>],y,ax=ax)</span><br><span class="line">    ax.set_title(<span class="string">"&#123;&#125; neighbor(s)"</span>.format(n_neighbors))</span><br><span class="line">    ax.set_xlabel(<span class="string">"feature 0"</span>)</span><br><span class="line">    ax.set_ylabel(<span class="string">"feature 1"</span>)</span><br><span class="line">axes[<span class="number">0</span>].legend(loc=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x242302ba9b0&gt;</code></pre><p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_12_1.png" alt="png"></p>
+<p>用单一邻居绘制的决策边界紧跟着训练数据。随着邻居个数越来越多，决策边界也越来越平滑。更平滑的边界对应更简单的模型。换句话说，使用更少的邻居对应更高的模型复杂度，而使用更多的邻居对应更低的模型复杂度。假如考虑极端情况，即邻居个数等于训练集中所有数据点的个数，那么每个测试点的邻居都完全相同（即所有训练点），所有预测结果也完全相同（即训练集中出现次数最多的类别）。</p>
+<p>在现实世界的乳腺癌数据集上进行研究，证实模型复杂度和泛化能力的关系</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_breast_cancer</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> neighbors</span><br><span class="line">cancer=load_breast_cancer()  <span class="comment">#加载癌症数据集</span></span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(cancer.data,cancer.target,</span><br><span class="line">                                                stratify=cancer.target,random_state=<span class="number">66</span>)</span><br><span class="line"></span><br><span class="line">training_accuracy=[]</span><br><span class="line">test_accuracy=[]</span><br><span class="line"></span><br><span class="line"><span class="comment">#neighbors取值从1到10</span></span><br><span class="line">neighbors_settings=range(<span class="number">1</span>,<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> n_neighbors <span class="keyword">in</span> neighbors_settings:</span><br><span class="line">    clf=KNeighborsClassifier(n_neighbors=n_neighbors)</span><br><span class="line">    clf.fit(X_train,y_train)</span><br><span class="line">    training_accuracy.append(clf.score(X_train,y_train))</span><br><span class="line">    test_accuracy.append(clf.score(X_test,y_test))</span><br><span class="line">    </span><br><span class="line">plt.plot(neighbors_settings,training_accuracy,label=<span class="string">"trainning accuracy"</span>)</span><br><span class="line">plt.plot(neighbors_settings,test_accuracy,label=<span class="string">"test_accuracy"</span>)</span><br><span class="line">plt.ylabel(<span class="string">"Accuracy"</span>)</span><br><span class="line">plt.xlabel(<span class="string">"n_neighbors"</span>)</span><br><span class="line">plt.legend()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x24230a4b5c0&gt;</code></pre><p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_15_1.png" alt="png"></p>
+<p>仅考虑单一近邻时，训练集上的预测结果十分完美。但随着邻居个数的增多，模型变得更简单，训练集精度也随之下降。单一邻居时的测试集精度比使用更多邻居时要低，这表示单一近邻的模型过于复杂。与之相反，当考虑 10 个邻居时，模型又过于简单，性能甚至变得更差。最佳性能在中间的某处，邻居个数大约为 6。不过最好记住这张图的坐标轴刻度。最差的性能约为 88% 的精度，这个结果仍然可以接受。</p>
+<h2 id="3-K近邻回归"><a href="#3-K近邻回归" class="headerlink" title="3.K近邻回归"></a>3.K近邻回归</h2><p>k近邻算法还可以用于回归(把邻居的平均值赋给目标)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mglearn.plots.plot_knn_regression(n_neighbors=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_18_0.png" alt="png"></p>
+<p>用多个近邻进行回归,预测结果为这些邻居的平均值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mglearn.plots.plot_knn_regression(n_neighbors=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_20_0.png" alt="png"></p>
+<p>用于回归的k近邻算法在sklearn的KNeighborsRegressor类中实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsRegressor</span><br><span class="line">X,y=mglearn.datasets.make_wave(n_samples=<span class="number">40</span>)</span><br><span class="line"><span class="comment"># 划分训练数据集</span></span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 实例化模型，邻居设定为3</span></span><br><span class="line">reg=KNeighborsRegressor(n_neighbors=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 拟合模型</span></span><br><span class="line">reg.fit(X_train,y_train)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>KNeighborsRegressor(algorithm=&apos;auto&apos;, leaf_size=30, metric=&apos;minkowski&apos;,
+                    metric_params=None, n_jobs=None, n_neighbors=3, p=2,
+                    weights=&apos;uniform&apos;)</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">print(<span class="string">"Test set predictions:\n&#123;&#125;"</span>.format(reg.predict(X_test)))</span><br><span class="line">print(<span class="string">"Test set R^2:&#123;:.2f&#125;"</span>.format(reg.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Test set predictions:
+[-0.05396539  0.35686046  1.13671923 -1.89415682 -1.13881398 -1.63113382
+  0.35686046  0.91241374 -0.44680446 -1.13881398]
+Test set R^2:0.83</code></pre><p>可以用score方法来评估模型，对于回归问题，这一方法返回的是$R^2$分数，也叫做决定系数，是回归模型预测的优度度量，位于0到1之间，1完美预测，0对于常数模型，即总是预测训练集响应(y_train)的平均值</p>
+<h2 id="4-分析KNeigborsRegressor"><a href="#4-分析KNeigborsRegressor" class="headerlink" title="4.分析KNeigborsRegressor"></a>4.分析KNeigborsRegressor</h2><p>对于我们的一维数据集，可以查看所有特征取值对应的预测结果（图 2-10）。为了便于绘<br>图，我们创建一个由许多点组成的测试数据集</p>
+<p>np reshape  array  linespace 用法：<br>numpy.arange(n).reshape(a, b); 依次生成n个自然数，并且以a行b列的数组形式显示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">print(np.array([<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>]).reshape(<span class="number">3</span>,<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[1]
+ [1]
+ [1]]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(np.linspace(<span class="number">1</span>,<span class="number">100</span>,<span class="number">2</span>).reshape(<span class="number">2</span>,<span class="number">-1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>[[  1.]
+ [100.]]</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">fig,axes=plt.subplots(<span class="number">1</span>,<span class="number">3</span>,figsize=(<span class="number">15</span>,<span class="number">4</span>))</span><br><span class="line"><span class="comment">#创建1000个数据点，在-3和3之间均匀分布</span></span><br><span class="line">line=np.linspace(<span class="number">-3</span>,<span class="number">3</span>,<span class="number">1000</span>).reshape(<span class="number">-1</span>,<span class="number">1</span>)</span><br><span class="line"><span class="keyword">for</span> n_neighbors,ax <span class="keyword">in</span> zip([<span class="number">1</span>,<span class="number">3</span>,<span class="number">9</span>],axes):</span><br><span class="line">    reg=KNeighborsRegressor(n_neighbors=n_neighbors)</span><br><span class="line">    reg.fit(X_train,y_train)</span><br><span class="line">    ax.plot(line,reg.predict(line))</span><br><span class="line">    ax.plot(X_train,y_train,<span class="string">'^'</span>,c=mglearn.cm2(<span class="number">0</span>),markersize=<span class="number">8</span>)</span><br><span class="line">    ax.plot(X_test,y_test,<span class="string">'v'</span>,c=mglearn.cm2(<span class="number">1</span>),markersize=<span class="number">8</span>)</span><br><span class="line">    ax.set_title(</span><br><span class="line">    <span class="string">"&#123;&#125; neighbor(s) \n train score:&#123;:.2f&#125; test_score: &#123;:.2f&#125;"</span>.format(</span><br><span class="line">    n_neighbors,reg.score(X_train,y_train),reg.score(X_test,y_test)))</span><br><span class="line">    ax.set_xlabel(<span class="string">"Feature"</span>)</span><br><span class="line">    ax.set_ylabel(<span class="string">"Target"</span>)</span><br><span class="line">axes[<span class="number">0</span>].legend([<span class="string">"Model predictions"</span>,<span class="string">"Training data/target"</span>,</span><br><span class="line">               <span class="string">"Test data/target"</span>],loc=<span class="string">"best"</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x2422e47e5c0&gt;</code></pre><p><img src="%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB%5Coutput_29_1.png" alt="png"></p>
+<p>从图中可以看出，仅使用单一邻居，训练集中的每个点都对预测结果有显著影响，预测结果的图像经过所有数据点。这导致预测结果非常不稳定。考虑更多的邻居之后，预测结果变得更加平滑，但对训练数据的拟合也不好。</p>
+<h2 id="5-优点，缺点和参数"><a href="#5-优点，缺点和参数" class="headerlink" title="5.优点，缺点和参数"></a>5.优点，缺点和参数</h2><p>一般来说， KNeighbors 分类器有 2 个重要参数：邻居个数与数据点之间距离的度量方法。在实践中，使用较小的邻居个数（比如 3 个或 5 个）往往可以得到比较好的结果，但你应该调节这个参数。选择合适的距离度量方法超出了本书的范围。默认使用欧式距离，它在许多情况下的效果都很好。</p>
+<p>k-NN 的优点之一就是模型很容易理解，通常不需要过多调节就可以得到不错的性能。在考虑使用更高级的技术之前，尝试此算法是一种很好的基准方法。构建最近邻模型的速度通常很快，但如果训练集很大（特征数很多或者样本数很大），预测速度可能会比较慢。使用 k-NN 算法时，对数据进行预处理是很重要的（见第 3 章）。这一算法对于有很多特征（几百或更多）的数据集往往效果不好，对于大多数特征的大多数取值都为 0 的数据集（所谓的稀疏数据集）来说，这一算法的效果尤其不好。</p>
+<p>虽然 k 近邻算法很容易理解，但由于预测速度慢且不能处理具有很多特征的数据集，所以在实践中往往不会用到</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/" data-id="ck5cbb5mr003v1wuy7rsh5ghf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E9%9B%86%E6%88%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          监督学习之决策树集成
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">鸢尾花的例子</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

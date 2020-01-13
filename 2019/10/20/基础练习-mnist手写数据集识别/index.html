@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>基础练习-mnist手写数据集识别 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础练习-mnist手写数据集识别">
+<meta property="og:url" content="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_1.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_2.png">
+<meta property="article:published_time" content="2019-10-20T07:09:46.000Z">
+<meta property="article:modified_time" content="2019-10-20T07:13:16.029Z">
+<meta property="article:author" content="山海南话">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-基础练习-mnist手写数据集识别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" class="article-date">
+  <time datetime="2019-10-20T07:09:46.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基础练习-mnist手写数据集识别
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”</p>
+<a id="more"></a>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>第一层接收输入信号，最后一层返回输出信号，这些网络通常都是前馈神经网络<br><br>传递函数：最常用的一种传递函数就是sigmoid函数，值域为(0,1）<br><br>一般情况下，前馈神经网络的最后一层会采用一个softmax函数，这样可以方便地用后验概率解释网络的输出</p>
+<h1 id="MNIST手写数字数据集"><a href="#MNIST手写数字数据集" class="headerlink" title="MNIST手写数字数据集"></a>MNIST手写数字数据集</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">%matplotlib inline</span><br><span class="line">mnist_data=input_data.read_data_sets(<span class="string">"Data/data"</span>,one_hot=<span class="literal">True</span>)</span><br><span class="line">print(<span class="string">'输入数据:'</span>,mnist_data.train.images)</span><br><span class="line">print(<span class="string">'输入数据的shape'</span>,mnist_data.train.images.shape)</span><br><span class="line"><span class="keyword">import</span> pylab</span><br><span class="line">im=mnist_data.train.images[<span class="number">1</span>]</span><br><span class="line">im=im.reshape(<span class="number">-1</span>,<span class="number">28</span>)</span><br><span class="line">pylab.imshow(im)</span><br><span class="line">pylab.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Extracting Data/data\train-images-idx3-ubyte.gz
+Extracting Data/data\train-labels-idx1-ubyte.gz
+Extracting Data/data\t10k-images-idx3-ubyte.gz
+Extracting Data/data\t10k-labels-idx1-ubyte.gz
+输入数据: [[0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ ...
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]]
+输入数据的shape (55000, 784)</code></pre><p><img src="%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png" alt="png"></p>
+<p>mnist数据集 输入图片是个550000x784的矩阵，第一个维度代表图片索引，第二个<br>维度代表图像像素，28x28像素的图片，共有10个类别<br><br>所以先创建一个[None,784]的占位符x和一个[None,10]的占位符y</p>
+<p>交叉熵可在神经网络(机器学习)中作为损失函数，p表示真实标记的分布，q则为训练后的模型的预测标记分布，交叉熵损失函数可以衡量p与q的相似性。交叉熵作为损失函数还有一个好处是使用sigmoid函数在梯度下降时能避免均方误差损失函数学习速率降低的问题，因为学习速率可以被输出的误差所控制。 [</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist=input_data.read_data_sets(<span class="string">"Data/data/"</span>,one_hot=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">import</span> pylab</span><br><span class="line">tf.reset_default_graph()</span><br><span class="line">x=tf.placeholder(tf.float32,[<span class="literal">None</span>,<span class="number">784</span>])</span><br><span class="line">y=tf.placeholder(tf.float32,[<span class="literal">None</span>,<span class="number">10</span>])</span><br><span class="line"><span class="comment">#定义学习参数</span></span><br><span class="line">W=tf.Variable(tf.random_normal([<span class="number">784</span>,<span class="number">10</span>])) <span class="comment">#W设为随机值</span></span><br><span class="line">b=tf.Variable(tf.zeros([<span class="number">10</span>]))<span class="comment">#b设为0</span></span><br><span class="line"><span class="comment">#构建模型</span></span><br><span class="line">pred=tf.nn.softmax(tf.matmul(x,W)+b)<span class="comment">#softmax分类</span></span><br><span class="line"><span class="comment">#定义反向传播结构，进行优化</span></span><br><span class="line"><span class="comment">#损失函数</span></span><br><span class="line">cost=tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred),reduction_indices=<span class="number">1</span>))</span><br><span class="line"><span class="comment">#定义参数</span></span><br><span class="line">learning_rate=<span class="number">0.01</span></span><br><span class="line"><span class="comment">#使用梯度下降优化器</span></span><br><span class="line">optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)</span><br><span class="line"><span class="comment">#开始训练模型</span></span><br><span class="line"><span class="comment">#定义训练迭代次数</span></span><br><span class="line">training_epochs=<span class="number">25</span></span><br><span class="line"><span class="comment">#定义在训练过程中一次取100条数据进行训练</span></span><br><span class="line">batch_size=<span class="number">100</span></span><br><span class="line"><span class="comment">#显示训练中间状态的间隔</span></span><br><span class="line">display_step=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#保存模型</span></span><br><span class="line">saver=tf.train.Saver()</span><br><span class="line">model_path=<span class="string">"log/521model.ckpt"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#启动session</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="literal">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(tf.global_variables_initializer())</span><br><span class="line">        <span class="comment">#启动循环开始训练</span></span><br><span class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> range(training_epochs):</span><br><span class="line">            avg_cost=<span class="number">0.0</span></span><br><span class="line">            total_batch=int(mnist.train.num_examples/batch_size)</span><br><span class="line">            <span class="comment">#循环所有数据集</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(total_batch):</span><br><span class="line">                batch_xs,batch_ys=mnist.train.next_batch(batch_size)</span><br><span class="line">                <span class="comment">#运行优化器</span></span><br><span class="line">                [opti,c]=sess.run([optimizer,cost],feed_dict=&#123;x:batch_xs,y:batch_ys&#125;)</span><br><span class="line">                <span class="comment">#计算平均loss值</span></span><br><span class="line">                avg_cost+=c/total_batch</span><br><span class="line">                <span class="comment">#显示训练中的详细信息</span></span><br><span class="line">            <span class="keyword">if</span> (epoch+<span class="number">1</span>)%display_step==<span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"Epoch:"</span>,<span class="string">"%04d"</span> % (epoch+<span class="number">1</span>),<span class="string">"cost="</span>,<span class="string">"&#123;:.9f&#125;"</span>.format(avg_cost))</span><br><span class="line">        print(<span class="string">"Finshed!"</span>)</span><br><span class="line">        <span class="comment">#保存模型</span></span><br><span class="line">        save_path=saver.save(sess,model_path)</span><br><span class="line">        print(<span class="string">"Model saved in file:&#123;&#125;"</span>.format(save_path))</span><br><span class="line"><span class="keyword">if</span> tf.test.gpu_device_name():</span><br><span class="line">    print(<span class="string">'Default GPU Device:&#123;&#125;'</span>.format(tf.test.gpu_device_name()))</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Please install GPU version or TF'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#读取模型并将两张图片放进去让模型预测结果</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Starting 2nd session..."</span>)</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment">#初始化变量</span></span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    <span class="comment">#恢复模型变量</span></span><br><span class="line">    saver.restore(sess,model_path)</span><br><span class="line">    <span class="comment">#测试 model</span></span><br><span class="line">    correct_prediction=tf.equal(tf.arg_max(pred,<span class="number">1</span>),tf.arg_max(y,<span class="number">1</span>))</span><br><span class="line">    <span class="comment">#计算准确率</span></span><br><span class="line">    accuracy=tf.reduce_mean(tf.cast(correct_prediction,tf.float32))</span><br><span class="line">    print(<span class="string">"Accuracy:"</span>,accuracy.eval(&#123;x:mnist.test.images,y:mnist.test.labels&#125;))</span><br><span class="line">    output=tf.arg_max(pred,<span class="number">1</span>)</span><br><span class="line">    output = tf.argmax(pred, <span class="number">1</span>)</span><br><span class="line">    batch_xs, batch_ys = mnist.train.next_batch(<span class="number">2</span>)</span><br><span class="line">    outputval,predv = sess.run([output,pred], feed_dict=&#123;x: batch_xs&#125;)</span><br><span class="line">    print(outputval,predv,batch_ys)</span><br><span class="line">    im = batch_xs[<span class="number">0</span>]</span><br><span class="line">    im = im.reshape(<span class="number">-1</span>,<span class="number">28</span>)</span><br><span class="line">    pylab.imshow(im)</span><br><span class="line">    pylab.show()</span><br><span class="line">    im = batch_xs[<span class="number">1</span>]</span><br><span class="line">    im = im.reshape(<span class="number">-1</span>,<span class="number">28</span>)</span><br><span class="line">    pylab.imshow(im)</span><br><span class="line">    pylab.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Extracting Data/data/train-images-idx3-ubyte.gz
+Extracting Data/data/train-labels-idx1-ubyte.gz
+Extracting Data/data/t10k-images-idx3-ubyte.gz
+Extracting Data/data/t10k-labels-idx1-ubyte.gz
+Epoch: 0001 cost= 8.901484704
+Epoch: 0002 cost= 4.491928911
+Epoch: 0003 cost= 3.105935341
+Epoch: 0004 cost= 2.460903181
+Epoch: 0005 cost= 2.088093793
+Epoch: 0006 cost= 1.843727299
+Epoch: 0007 cost= 1.670136872
+Epoch: 0008 cost= 1.539499564
+Epoch: 0009 cost= 1.437489002
+Epoch: 0010 cost= 1.355080850
+Epoch: 0011 cost= 1.287055298
+Epoch: 0012 cost= 1.229517875
+Epoch: 0013 cost= 1.180266858
+Epoch: 0014 cost= 1.137388955
+Epoch: 0015 cost= 1.099723647
+Epoch: 0016 cost= 1.066415745
+Epoch: 0017 cost= 1.036452132
+Epoch: 0018 cost= 1.009471819
+Epoch: 0019 cost= 0.985050059
+Epoch: 0020 cost= 0.962679997
+Epoch: 0021 cost= 0.942112822
+Epoch: 0022 cost= 0.923188624
+Epoch: 0023 cost= 0.905731321
+Epoch: 0024 cost= 0.889469135
+Epoch: 0025 cost= 0.874153477
+Finshed!
+Model saved in file:log/521model.ckpt
+Default GPU Device:/device:GPU:0
+Starting 2nd session...
+INFO:tensorflow:Restoring parameters from log/521model.ckpt
+Accuracy: 0.8259
+[2 8] [[5.4470024e-06 1.0342207e-14 9.9999440e-01 8.0820775e-12 4.5177516e-12
+  3.1603236e-16 6.3706992e-08 3.8312063e-15 7.3337933e-11 3.1762011e-18]
+ [2.8309601e-04 9.6081327e-05 1.4640624e-03 3.5183481e-10 1.6233769e-03
+  3.4435538e-03 1.4779908e-02 9.2782180e-08 9.7314465e-01 5.1651290e-03]] [[0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 0.]]</code></pre><p><img src="%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_1.png" alt="png"></p>
+<p><img src="%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_2.png" alt="png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" data-id="ck5cbb5kp00141wuy35bi2g2y" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/20/%E5%8D%95%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          单个神经元
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">TensorFlow编程基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

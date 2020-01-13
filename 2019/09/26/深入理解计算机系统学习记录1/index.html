@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>深入理解计算机系统学习记录1 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="信息的表示和处理学习《深入理解计算机系统》第二章，记录个人觉得重要的点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解计算机系统学习记录1">
+<meta property="og:url" content="http://yoursite.com/2019/09/26/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%951/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="信息的表示和处理学习《深入理解计算机系统》第二章，记录个人觉得重要的点">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-26T11:58:16.000Z">
+<meta property="article:modified_time" content="2019-09-26T12:07:31.280Z">
+<meta property="article:author" content="山海南话">
+<meta property="article:tag" content="计算机基础">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-深入理解计算机系统学习记录1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/26/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%951/" class="article-date">
+  <time datetime="2019-09-26T11:58:16.000Z" itemprop="datePublished">2019-09-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入理解计算机系统学习记录1
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="信息的表示和处理"><a href="#信息的表示和处理" class="headerlink" title="信息的表示和处理"></a>信息的表示和处理</h1><p>学习《深入理解计算机系统》第二章，记录个人觉得重要的点</p>
+<a id="more"></a>
+<ol>
+<li>二进制，十进制，16进制之间的转换<br><br>按四位一组划分二进制可转换为16进制<br><br>转换表：<br></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>二进制</th>
+<th>10进制</th>
+<th>16进制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0000</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0001</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0010</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>0011</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>0100</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>0101</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>0110</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td>0111</td>
+<td>7</td>
+<td>7</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>9</td>
+<td>9</td>
+</tr>
+<tr>
+<td>1010</td>
+<td>10</td>
+<td>A</td>
+</tr>
+<tr>
+<td>1011</td>
+<td>11</td>
+<td>B</td>
+</tr>
+<tr>
+<td>1100</td>
+<td>12</td>
+<td>C</td>
+</tr>
+<tr>
+<td>1101</td>
+<td>13</td>
+<td>D</td>
+</tr>
+<tr>
+<td>1110</td>
+<td>14</td>
+<td>E</td>
+</tr>
+<tr>
+<td>1111</td>
+<td>15</td>
+<td>F</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>十六进制数字0代表4个二进制0。所以，当n表示为i+4j的形式，其中0&lt;=i&lt;=3，我们可以把x写成开头的十六进制数字为<br>(i=0)，2(i=1)，4(i=2)或者8(i=3)，后面跟随着j个十六进制的0。比如，x=2048=2^11，我们有n=11=3+4*2，从而得到0x800</p>
+</blockquote>
+<ol start="2">
+<li><p>.C语言格式化输出<br><br>%d,%c,%x,%u,%f,%.2x</p>
+</li>
+<li><p>指针和数组<br><br>C语言中指针和数组可以互相表示<br></p>
+</li>
+<li><blockquote>
+<p>C语言中字符串被编码成一个以null，值为0的字符结尾的字符数组。十进制数字x的ASCII码正好是0x3x，而终止字节的试卷进制为0x00.在使用ASCII码的任何系统上都将得到相同结果，与字节顺序和字大小无关，因此文本数据比二进制数据具有更强的平台独立性</p>
+</blockquote>
+</li>
+<li><p>utf-8表示将每个字符编码成一个字节序列，java编程语言使用Unicode来表示字符串<br></p>
+</li>
+<li><p>逻辑运算和位运算<br><br>逻辑运算：与&amp;&amp;，或||，非！<br><br>位运算：&amp;，|，^<br><br>要分清区别:<br><br>按位运算只有在特殊情况下，也就是参数限制为0，1时才与其对应的逻辑运算有相同的行为，逻辑运算符&amp;&amp;，||与位级运算&amp;，|之间重要的区别就是如果对第一个参数求值就能确定表达式的结果，那么逻辑运算就不会对第二个参数求值<br></p>
+</li>
+<li><p>C语言中的移位运算<br></p>
+</li>
+<li><p>左移K位 &lt;&lt; k: 丢弃最高的k位，并在右端补k个0<br><br>右移k位 &gt;&gt; k:<br><br>有两种形式：逻辑右移和算术右移<br></p>
+</li>
+</ol>
+<ul>
+<li>逻辑右移，补0</li>
+<li>算术右移，补最高有效位的值，即1</li>
+</ul>
+<p>而C语言对这点并没有明确规定<br><br>实际上所有的编译器/机器组合都对有符号数使用算术右移，且许多程序员也都假设机器会使用这种右移，另一方面，对于无符号数，右移是必须的。与c相比，java对于如何进行右移有明确的定义，<strong>逻辑右移：x&gt;&gt;&gt;k，算术右移：x&gt;&gt;k</strong>  <br><br>9. C/C++都支持有符号(默认)和无符号数，java只支持有符号数<br><br>10. 无符号编码，补码编码具有唯一性<br></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/26/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%951/" data-id="ck5cbb5kw001j1wuy2v8d7w2t" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          基本排序算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/25/%E5%90%8C%E6%97%B6%E9%83%A8%E7%BD%B2hexo%E5%88%B0github%E5%92%8Ccoding%E4%B8%8A/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">同时部署hexo到github和coding上</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

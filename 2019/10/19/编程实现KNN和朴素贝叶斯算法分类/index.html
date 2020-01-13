@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>编程实现KNN和朴素贝叶斯算法分类 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="大数据上机作业，编程实现K近邻和朴素贝叶斯算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编程实现KNN和朴素贝叶斯算法分类">
+<meta property="og:url" content="http://yoursite.com/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="大数据上机作业，编程实现K近邻和朴素贝叶斯算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%5CKNN.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%5C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF.png">
+<meta property="article:published_time" content="2019-10-19T12:11:54.000Z">
+<meta property="article:modified_time" content="2019-10-20T07:05:25.634Z">
+<meta property="article:author" content="山海南话">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%5CKNN.png">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-编程实现KNN和朴素贝叶斯算法分类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/" class="article-date">
+  <time datetime="2019-10-19T12:11:54.000Z" itemprop="datePublished">2019-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      编程实现KNN和朴素贝叶斯算法分类
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>大数据上机作业，编程实现K近邻和朴素贝叶斯算法</p>
+<a id="more"></a>
+<p>1、    编程实现KNN算法对下表中两个未知类型的样本进行分类（冰川水或者湖泊水），其中K=3，即选择最近的3个邻居。<br><img src="%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%5CKNN.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line">a=np.array([[<span class="number">0.2</span>,<span class="number">0.5</span>,<span class="number">0.1</span>,<span class="number">0.1</span>],[<span class="number">0.4</span>,<span class="number">0.3</span>,<span class="number">0.4</span>,<span class="number">0.3</span>],[<span class="number">0.3</span>,<span class="number">0.4</span>,<span class="number">0.6</span>,<span class="number">0.3</span>],[<span class="number">0.2</span>,<span class="number">0.6</span>,<span class="number">0.2</span>,<span class="number">0.1</span>],[<span class="number">0.5</span>,<span class="number">0.5</span>,<span class="number">0.1</span>,<span class="number">0</span>],[<span class="number">0.3</span>,<span class="number">0.3</span>,<span class="number">0.4</span>,<span class="number">0.4</span>]])</span><br><span class="line">print(a)</span><br><span class="line">label=[<span class="string">"冰川水"</span>,<span class="string">"湖泊水"</span>,<span class="string">"冰川水"</span>,<span class="string">"冰川水"</span>,<span class="string">"湖泊水"</span>,<span class="string">"湖泊水"</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">distance</span><span class="params">(x,y)</span>:</span></span><br><span class="line">    sum=<span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(x)):</span><br><span class="line">        sum+=math.pow((x[i]-y[i]),<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> math.sqrt(sum)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classify</span><span class="params">(input,group,label,k)</span>:</span></span><br><span class="line">    mark=&#123;&#125;</span><br><span class="line">    flag=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> group:</span><br><span class="line">        tmpsum=distance(input,i)</span><br><span class="line">        print(<span class="string">"计算两者之间距离为&#123;&#125;"</span>.format(tmpsum))</span><br><span class="line">        mark[flag]=tmpsum</span><br><span class="line">        flag=flag+<span class="number">1</span></span><br><span class="line">    sorted_mark = sorted(mark.items(),key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>])  </span><br><span class="line">    after_mark=dict(sorted_mark[:k])</span><br><span class="line">    tmp=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> after_mark.keys():</span><br><span class="line">        tmp.append(label[i])</span><br><span class="line">    <span class="comment"># 直接统计</span></span><br><span class="line">    print(max(tmp, key=tmp.count))</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">Garr=np.array([<span class="number">0.3</span>,<span class="number">0.3</span>,<span class="number">0.3</span>,<span class="number">0.2</span>])</span><br><span class="line">Harr=np.array([<span class="number">0.1</span>,<span class="number">0.5</span>,<span class="number">0.2</span>,<span class="number">0.2</span>])</span><br><span class="line">classify(Garr,a,label,<span class="number">3</span>)</span><br><span class="line">classify(Harr,a,label,<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>计算两者之间距离为0.31622776601683794
+计算两者之间距离为0.17320508075688776
+计算两者之间距离为0.33166247903553997
+计算两者之间距离为0.34641016151377546
+计算两者之间距离为0.4
+计算两者之间距离为0.22360679774997902
+湖泊水
+计算两者之间距离为0.17320508075688776
+计算两者之间距离为0.42426406871192857
+计算两者之间距离为0.4690415759823429
+计算两者之间距离为0.17320508075688773
+计算两者之间距离为0.45825756949558405
+计算两者之间距离为0.4
+冰川水</code></pre><p><img src="%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB%5C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF.png" alt=""></p>
+<p>实现朴素贝叶斯算法预测是否适合户外活动</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_data</span><span class="params">(filename)</span>:</span></span><br><span class="line">    lines = csv.reader(open(filename, <span class="string">"rt"</span>))</span><br><span class="line">    dataset = list(lines)</span><br><span class="line">    data=[]</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> dataset:</span><br><span class="line">        tmp=[]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> i:</span><br><span class="line">            j=j[:<span class="number">-1</span>]</span><br><span class="line">            tmp.append(str(j))</span><br><span class="line">        data.append(tmp)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getSumOfC</span><span class="params">(C,data)</span>:</span></span><br><span class="line">    c=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        <span class="keyword">if</span>(i[len(i)<span class="number">-1</span>]==C):</span><br><span class="line">            c=c+<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPossibilityofCwhenData</span><span class="params">(C,data)</span>:</span></span><br><span class="line">    print(<span class="string">"标签&#123;&#125;的概率为&#123;&#125;"</span>.format(C,getSumOfC(C,data)/len(data)))</span><br><span class="line">    <span class="keyword">return</span> getSumOfC(C,data)/len(data)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPossibilityofXwhenC_Single</span><span class="params">(X,C,data)</span>:</span></span><br><span class="line">    sum_X=<span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        <span class="keyword">if</span> i[len(i)<span class="number">-1</span>]==C:</span><br><span class="line">            <span class="keyword">if</span> X <span class="keyword">in</span> i:</span><br><span class="line">                sum_X=sum_X+<span class="number">1</span></span><br><span class="line">    print(sum_X)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> sum_X/getSumOfC(C,data)</span><br><span class="line">                   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPossibilityofXwhenC_Summary</span><span class="params">(input,C,data)</span>:</span></span><br><span class="line">    sum_possibility=<span class="number">1.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> input:</span><br><span class="line">        print(<span class="string">"传入的要检查的x值为&#123;&#125;"</span>.format(i))</span><br><span class="line">        res=getPossibilityofXwhenC_Single(i,C,data)</span><br><span class="line">        <span class="keyword">if</span> res!=<span class="number">0</span>:</span><br><span class="line">            sum_possibility=sum_possibility*res</span><br><span class="line">    <span class="keyword">return</span> sum_possibility</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getPossibility</span><span class="params">(input,C,data)</span>:</span></span><br><span class="line">    <span class="comment">#先获取标签总的概率</span></span><br><span class="line">    a=getPossibilityofCwhenData(C,data)</span><br><span class="line">    <span class="comment">#然后获取对应元素概率</span></span><br><span class="line">    b=getPossibilityofXwhenC_Summary(input,C,data)</span><br><span class="line">    <span class="comment">#相乘获取结果概率</span></span><br><span class="line">    result=a*b</span><br><span class="line">    print(result)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    filename=<span class="string">"G:/学习/课程相关/大三/大数据挖掘/上机/3/thisdata.csv"</span></span><br><span class="line">    data=load_data(filename)</span><br><span class="line">    input=[<span class="string">'下雨'</span>,<span class="string">'低'</span>,<span class="string">'大'</span>,<span class="string">'微风'</span>]</span><br><span class="line">    C1=getPossibility(input,<span class="string">'适合'</span>,data)</span><br><span class="line">    C2=getPossibility(input,<span class="string">'不适合'</span>,data)</span><br><span class="line">    print(<span class="string">"&#123;&#125;概率为&#123;&#125;"</span>.format(<span class="string">"适合"</span>,C1))</span><br><span class="line">    print(<span class="string">"&#123;&#125;概率为&#123;&#125;"</span>.format(<span class="string">"不适合"</span>,C2))</span><br><span class="line">    <span class="keyword">if</span> C1&lt;C2:</span><br><span class="line">         print(<span class="string">"最终答案为&#123;&#125;"</span>.format(<span class="string">"不适合"</span>))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">         print(<span class="string">"最终答案为&#123;&#125;"</span>.format(<span class="string">"适合"</span>)) </span><br><span class="line">               </span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+
+<pre><code>标签适合的概率为0.6
+传入的要检查的x值为下雨
+3
+传入的要检查的x值为低
+3
+传入的要检查的x值为大
+2
+传入的要检查的x值为微风
+5
+0.041666666666666664
+标签不适合的概率为0.4
+传入的要检查的x值为下雨
+1
+传入的要检查的x值为低
+1
+传入的要检查的x值为大
+3
+传入的要检查的x值为微风
+2
+0.009375000000000001
+适合概率为0.041666666666666664
+不适合概率为0.009375000000000001
+最终答案为适合</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/" data-id="ck5cbb5le002i1wuyabsq9b0u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          TensorFlow编程基础
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0Apriori%E7%AE%97%E6%B3%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">编程实现Apriori算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

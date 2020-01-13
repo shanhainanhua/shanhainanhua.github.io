@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>计组上机总结 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="实验名称：模型机的总体设计-存储器设计一、实验目的熟练掌握存储器的设计 二、实验要求某机器中，已知ROM区域的地址空间起始地址为4000H开始，地址空间为8K * 16位（用8K * 8位的ROM芯片构成）。RAM采用最后地址8K*16位空间（用8K *8位的RAM芯片构成）。CPU采用8086、地址锁存器采用8282，数据缓冲器采用8286，译码器采用74ALS138。进行设计并用网络标签法完成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计组上机总结">
+<meta property="og:url" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="实验名称：模型机的总体设计-存储器设计一、实验目的熟练掌握存储器的设计 二、实验要求某机器中，已知ROM区域的地址空间起始地址为4000H开始，地址空间为8K * 16位（用8K * 8位的ROM芯片构成）。RAM采用最后地址8K*16位空间（用8K *8位的RAM芯片构成）。CPU采用8086、地址锁存器采用8282，数据缓冲器采用8286，译码器采用74ALS138。进行设计并用网络标签法完成">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E8%AF%91%E7%A0%81%E6%96%B9%E6%A1%88.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/ROM%E8%8A%AF%E7%89%87.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/RAM%E8%8A%AF%E7%89%87.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E9%94%81%E5%AD%98%E5%99%A8.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E6%95%B0%E6%8D%AE%E7%BC%93%E5%86%B2%E5%99%A8.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AF%91%E7%A0%81%E5%99%A8.png">
+<meta property="article:published_time" content="2019-11-03T07:01:55.000Z">
+<meta property="article:modified_time" content="2019-12-24T11:45:43.008Z">
+<meta property="article:author" content="山海南话">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E8%AF%91%E7%A0%81%E6%96%B9%E6%A1%88.png">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-计组上机总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/" class="article-date">
+  <time datetime="2019-11-03T07:01:55.000Z" itemprop="datePublished">2019-11-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计组上机总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="实验名称：模型机的总体设计-存储器设计"><a href="#实验名称：模型机的总体设计-存储器设计" class="headerlink" title="实验名称：模型机的总体设计-存储器设计"></a>实验名称：模型机的总体设计-存储器设计</h1><h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>熟练掌握存储器的设计<br></p>
+<h2 id="二、实验要求"><a href="#二、实验要求" class="headerlink" title="二、实验要求"></a>二、实验要求</h2><p>某机器中，已知ROM区域的地址空间起始地址为4000H开始，地址空间为8K * 16位（用8K * 8位的ROM芯片构成）。RAM采用最后地址8K*16位空间（用8K *8位的RAM芯片构成）。CPU采用8086、地址锁存器采用8282，数据缓冲器采用8286，译码器采用74ALS138。进行设计并用网络标签法完成要求：</p>
+<ol>
+<li>画出地址译码方案 </li>
+<li>画出存储器与CPU等元件的连接图<h2 id="三、实习步骤"><a href="#三、实习步骤" class="headerlink" title="三、实习步骤"></a>三、实习步骤</h2>首先分析题目所给的电路，题目中给的ROM地址空间起始地址为4000H，地址空间为8K<em>16为，8k即2^13，即A0~A12<br><br>再分析RAM，由于RAM采用的是最后地址8K</em>16为空间，因此同样是A0~A12<br><br>题目中给定使用8086CPU，8086是16位微处理器芯片，相关信号如下：<br></li>
+</ol>
+<p><strong>CPU相关信号:</strong><br><br>ALE：ALE 地址锁存允许信号（输出），高电平有效，不能被浮空。<br>一般用它来控制地址锁存器，它在下降沿会把地址锁存器的输入信号锁定，然后地址锁存器的输出用于提供地址。<br><br>一般在T1时刻出现ALE有效的信号，将地址送人地址锁存器。<br><br>RD 读信号引脚（输出），执行一个对内存货I/O端口的读操作，到底是读取内存中的单元数据还是I/O端口中的数据，取决于M/IO信号。<br><br>WR写信号（输出），低电平有效，对存储器或I/O写操作，具体哪种操作取决于M/IO信号。<br>M/IO存储器/输入/输出控制信号（输出）若此信号为高电平，表示CPU和存储器之间进行数据传输；<br><br>若为低电平，表示CPU和输入输出设备之间进行数据传输。<br><br>DEN信号：8086 CPU中，控制信号DEN的作用是.CPU发出的数据传输有效控制信号<br><br>DT/R信号：用来控制数据传送方向，在8086系统中，通常采用8286或8287作为数据总线的驱动器，用DT/R* 信号来控制数据驱动器的数据传送方向，当DT/R* =1时，数据驱动器进行数据发送；DT/R*=0时，数据驱动器进行数据接收。<br><br>因为是16位，所以地址为A0~A15,因此可以先画出地址译码方案</p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E8%AF%91%E7%A0%81%E6%96%B9%E6%A1%88.png" alt=""></p>
+<p>A0<del>A12为真正的地址，而A15</del>A13对应于译码器的A，B，C</p>
+<p>由于ROM地址空间为8k * 16位，所以依据题意需要采用2片8k * 8为的ROM芯片构成，在此选用两片2764芯片，基本参数如下：<br><br>A0到A12为13条地址信号输入线，说明芯片容量为2的13次方，即8K<br><br>D0到D7为数据线，表示芯片的每个存储单元存放一个字节（8位二进制数）。对芯片读数时，作为输出线，对芯片编程时，作为输入线。<br><br>CE为输入信号，低电平有效。（有称作片选信号）<br><br>OE为输出允许信号，低电平有效<br></p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/ROM%E8%8A%AF%E7%89%87.png" alt=""></p>
+<p>接着分析RAM芯片，同样是采用两个芯片进行片选，选择的芯片为SRAM6164芯片：<br>为8K×8bit的CMOSRAM芯片。<br><br>WE为写信号，CS为片选信号，OE为输出允许信号，D0<del>D7为8位数据线，A0</del>A12为13根地址线</p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/RAM%E8%8A%AF%E7%89%87.png" alt=""></p>
+<p>之后按照题目说的地址锁存器采用8282，关于地址锁存器相关概念不是很清楚，查阅后发现基本概念如下：<br><br>地址锁存器是一个暂存器，它根据控制信号的状态，将总线上地址代码暂存起来。8086/8088数据和地址总线采用分时复用操作方法，即用同一总线既传输数据又传输地址。当微处理器与存储器交换信号时，首先由CPU发出存储器地址，同时发出允许锁存信号ALE给锁存器，当锁存器接到该信号后将地址/数据总线上的地址锁存在总线上，随后才能传输数据。</p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E9%94%81%E5%AD%98%E5%99%A8.png" alt=""></p>
+<p>数据缓冲器采用8286，数据缓冲器相关概念如下：<br><br>数据缓冲器是一款具有不同传输能力元件之间通过时用来暂存这些数据的存储器。<br></p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E6%95%B0%E6%8D%AE%E7%BC%93%E5%86%B2%E5%99%A8.png" alt=""></p>
+<p>译码器采用74ALS138，根据输入的数字量在多个输出端中选一个有效，由之前的地址译码方案可知的当Y15，Y14，Y13分别为0, 1，0时，对应ROM地址，此时译码器的Y2端有效<br>同理RAM对应111，即Y7端有效</p>
+<p><img src="%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AF%91%E7%A0%81%E5%99%A8.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/" data-id="ck5cbb5ld002f1wuy38mo69e6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          关联规则挖掘系统
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">ID3实现决策树</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

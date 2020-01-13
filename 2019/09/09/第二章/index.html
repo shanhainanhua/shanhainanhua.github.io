@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>第二章 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="真值和机器数真值：正负符号加二进制绝对值机器数:正负号分别用0和1来代替，一般放在最高位数的机器码表示：在远离小数点的位置补0 原码表示法 纯小数时  正数：本身数值 负数：本身数值加上符号位 0为正，1为负   纯整数时  正数：本身数值 负数：本身数值加上2的n-1次方（n为字长）    补码表示法补码中1.0000000表示负1，补码的零只有一个对于n位数来说，其模的大小为n位数全为1后再在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章">
+<meta property="og:url" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="真值和机器数真值：正负符号加二进制绝对值机器数:正负号分别用0和1来代替，一般放在最高位数的机器码表示：在远离小数点的位置补0 原码表示法 纯小数时  正数：本身数值 负数：本身数值加上符号位 0为正，1为负   纯整数时  正数：本身数值 负数：本身数值加上2的n-1次方（n为字长）    补码表示法补码中1.0000000表示负1，补码的零只有一个对于n位数来说，其模的大小为n位数全为1后再在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%8A%A0%E5%87%8F%E6%B3%95%E5%99%A8.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%951.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%952.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E9%99%A4%E6%B3%95%E6%A0%A1%E6%AD%A3.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95.jpg">
+<meta property="article:published_time" content="2019-09-09T11:16:58.000Z">
+<meta property="article:modified_time" content="2019-09-25T12:57:58.027Z">
+<meta property="article:author" content="山海南话">
+<meta property="article:tag" content="组成原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-第二章" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" class="article-date">
+  <time datetime="2019-09-09T11:16:58.000Z" itemprop="datePublished">2019-09-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第二章
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="真值和机器数"><a href="#真值和机器数" class="headerlink" title="真值和机器数"></a>真值和机器数</h2><p><strong>真值</strong>：正负符号加二进制绝对值<br><br><strong>机器数</strong>:正负号分别用0和1来代替，一般放在最高位<br><br><strong>数的机器码表示：在远离小数点的位置补0</strong></p>
+<h2 id="原码表示法"><a href="#原码表示法" class="headerlink" title="原码表示法"></a>原码表示法</h2><ul>
+<li><p>纯小数时</p>
+<ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值加上符号位 0为正，1为负</li>
+</ul>
+</li>
+<li><p>纯整数时</p>
+<ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值加上2的n-1次方（n为字长）</li>
+</ul>
+</li>
+</ul>
+<h2 id="补码表示法"><a href="#补码表示法" class="headerlink" title="补码表示法"></a>补码表示法</h2><p>补码中1.0000000表示负1，补码的零只有一个<br><br>对于n位数来说，其模的大小为n位数全为1后再在最末位加1<br><br>如果某一数有n位整数（包括符号位），则它的模为2^n<br><br>如果是n位小数，它的模总是是2</p>
+<ul>
+<li>纯小数时<ul>
+<li>正数：本身数值</li>
+<li>负数：2-本身数值</li>
+</ul>
+</li>
+<li>纯整数时：<ul>
+<li>正数：本身数值</li>
+<li>负数：2^n-本身数值</li>
+</ul>
+</li>
+</ul>
+<h2 id="反码表示法"><a href="#反码表示法" class="headerlink" title="反码表示法"></a>反码表示法</h2><ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值按位取反</li>
+<li>+0反码：00000000</li>
+<li>-0反码：11111111</li>
+</ul>
+<h2 id="移码表示法"><a href="#移码表示法" class="headerlink" title="移码表示法"></a>移码表示法</h2><p>将补码符号位求反<br></p>
+<h2 id="数的定点表示"><a href="#数的定点表示" class="headerlink" title="数的定点表示"></a>数的定点表示</h2><p><strong>定点小数：用于尾数（表示数值）</strong><br><strong>定点整数：用于阶码（表示指数）</strong></p>
+<h2 id="数的浮点表示法"><a href="#数的浮点表示法" class="headerlink" title="数的浮点表示法"></a>数的浮点表示法</h2><h3 id="浮点数的表示格式"><a href="#浮点数的表示格式" class="headerlink" title="浮点数的表示格式"></a>浮点数的表示格式</h3><ul>
+<li>阶码+尾数：其中阶码是定点整数，用补码表示；尾数是定点小数，用补码显示</li>
+<li>尾数符+阶码+尾数值：其中阶码是定点整数，用移码表示；尾数值是定点小数，用补码表示<h3 id="浮点数的规格化"><a href="#浮点数的规格化" class="headerlink" title="浮点数的规格化"></a>浮点数的规格化</h3>可以提高数据的精度，—–&gt;提高精度可以有两种方法</li>
+</ul>
+<ol>
+<li>尾数位数增加</li>
+<li>尾数规格化<br><br>所谓规格化就是调整阶码使其尾数满足如下形式：</li>
+</ol>
+<ul>
+<li>原码规格化后：正数为0.1开头，负数为1.1开头</li>
+<li>补码规格化后：正数为0.1开头，负数为1.0开头<h3 id="浮点数规格化习题示例"><a href="#浮点数规格化习题示例" class="headerlink" title="浮点数规格化习题示例"></a>浮点数规格化习题示例</h3>某机器用32位表示一个数，阶码部分占8位（含一个符号位），尾数部分占24位（含一个符号位）<br>设x1=-256.5，x2=127/256，试写出x1和x2的两种浮点数表示格式：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">首先分析x1</span><br><span class="line">x1真值为-256.5</span><br><span class="line">写成原码就是二进制真值就是-（100000000.1）</span><br><span class="line">因为规格化后要满足：正数为0.1开头，负数为1.0开头</span><br><span class="line">所以可以写成-2^9*0.1000000001，也就是2^9*1.1000000001(接下来取补码后成为1.0开头）</span><br><span class="line">先计算阶码：</span><br><span class="line">阶码的原码为9</span><br><span class="line">所以阶码的补码为：1001，占8位，所以在远离小数点的地方补0，最后可得00001001</span><br><span class="line">移码为补码的符号位取反，所以移码为10001001</span><br><span class="line">接着计算尾数：</span><br><span class="line">尾数的补码为：1.01111111110000000000000</span><br><span class="line">接着组合写成格式即可</span><br><span class="line"></span><br><span class="line">再来分析x2</span><br><span class="line">x2&#x3D;127&#x2F;256可以写成1111111*2^(-8)&#x3D;0.1111111*2^(-1)</span><br><span class="line">阶码的补码为：-1的补码&#x3D;11111111</span><br><span class="line">阶码的移码为：01111111</span><br><span class="line">尾数为：0.11111110000000000000000</span><br><span class="line">组合即可</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="浮点数的表示范围（设阶码和尾数均为n位）"><a href="#浮点数的表示范围（设阶码和尾数均为n位）" class="headerlink" title="浮点数的表示范围（设阶码和尾数均为n位）"></a>浮点数的表示范围（设阶码和尾数均为n位）</h3><ol>
+<li>阶码表示范围</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>————</th>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制补码</td>
+<td>100…0(共n位，最小则全为0）</td>
+<td>111…1(共n位，首位的1代表负，最大则剩下的全补1)</td>
+<td>000…1(共n位，第一位0为符号位)</td>
+<td>011…1(共n位，第一位0为符号位)</td>
+</tr>
+<tr>
+<td>十进制真值</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+</tr>
+<tr>
+<td>2. 规格化尾数表示范围（补码规格化后正数为0.1…形式，负数为1.0…形式）</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>—————</th>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制补码</td>
+<td>1.0….0</td>
+<td>1.011..1</td>
+<td>0.10…0</td>
+<td>0.11…1</td>
+</tr>
+<tr>
+<td>十进制真值</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+</tr>
+<tr>
+<td>3. 规格化浮点数表示范围</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>尾数负最小*2^(正阶码最大)</td>
+<td>尾数负最大*2^(负阶码最小)</td>
+<td>尾数正最小*2^(负阶码最小)</td>
+<td>尾数正最大*2^(正阶码最大)</td>
+</tr>
+</tbody></table>
+<h2 id="非数值数据的表示"><a href="#非数值数据的表示" class="headerlink" title="非数值数据的表示"></a>非数值数据的表示</h2><h3 id="字符表示"><a href="#字符表示" class="headerlink" title="字符表示"></a>字符表示</h3><p>ASCII码（美国信息交换标准码）：<br>共有128个字符，即2^7，因此占据7位，最高位为0，而汉字编码最高位为1<br>所以可以根据最高位来区分是否为汉字编码</p>
+<h3 id="汉字的表示"><a href="#汉字的表示" class="headerlink" title="汉字的表示"></a>汉字的表示</h3><p>区位码(不唯一)→十进制区位码→十六进制+2020H→国标码十六进制+8080H→机内码(唯一)<br>一个汉字用两个字节表示区内码<br><br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png" alt=""></p>
+<h2 id="定点加减法运算"><a href="#定点加减法运算" class="headerlink" title="定点加减法运算"></a>定点加减法运算</h2><p>在计算机中，常将数值转化为补码后再进行加减运算，优点是可以将减法运算转化为加法运算<br></p>
+<h3 id="加减法运算规则："><a href="#加减法运算规则：" class="headerlink" title="加减法运算规则："></a>加减法运算规则：</h3><ol>
+<li>补码运算</li>
+<li>数值位和符号位一同参与运算</li>
+<li>求差时，将减数求补，用求和代替求差</li>
+<li>运算结果为补码，符号位0表示正数，符号位1表示负数</li>
+<li>符号位的进位为模值，应该丢掉</li>
+</ol>
+<h3 id="加法运算："><a href="#加法运算：" class="headerlink" title="加法运算："></a>加法运算：</h3><p> [X]补+[Y]补=[X+Y]补</p>
+<h3 id="减法运算"><a href="#减法运算" class="headerlink" title="减法运算"></a>减法运算</h3><p>[X]补-[Y]补=[X+(-Y)]补=[X]补+[-Y]补<br>因为[-Y]补+[Y]补=[0]补=0<br>所以[-Y]补=-[Y]补<br>所以只要能通过[Y]补求得[-Y]补，就可以将补码减法运算化为补码加法运算<br>已知[Y]补，求[-Y]补的法则是：<br>对[Y]补各位(包括符号位)求反，然后在末位加上1<br>例如：[Y]补=1.1010 ，则[-Y]补=0.0110</p>
+<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>求负数的补码：把它的原码自低位向高位看去，遇到的第一个’1’及其右边的’0’都不变，将左边的所有位按位取反，符号位不变。</p>
+<h3 id="溢出判断法："><a href="#溢出判断法：" class="headerlink" title="溢出判断法："></a>溢出判断法：</h3><p>在运算结果超出机器所能表示的数值范围后，就会产生溢出。<br><br>溢出有两种判断的方法：双符号法和进位判断法<br></p>
+<h4 id="双符号法："><a href="#双符号法：" class="headerlink" title="双符号法："></a>双符号法：</h4><p>也叫做变形补码法，模4补码法<br><br>采用的方法是用两个相同的符号位表示一个数的符号，左边第一位为第一符号位，第二位为第二符号位<br><br>第一符号位始终表示真正的符号，如果计算结果超出模值，则丢掉<br></p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00</td>
+<td>正数</td>
+</tr>
+<tr>
+<td>01</td>
+<td>正溢出</td>
+</tr>
+<tr>
+<td>10</td>
+<td>负溢出</td>
+</tr>
+<tr>
+<td>11</td>
+<td>负数</td>
+</tr>
+</tbody></table>
+<h4 id="进位判断法："><a href="#进位判断法：" class="headerlink" title="进位判断法："></a>进位判断法：</h4><p>当两个单符号位的补码进行加减运算时，若最高数值位向符号位的进位值C与符号位产生的进位输出值S相同则没有溢出发生，否则，有溢出发生<br><br>用异或的方式进行判断</p>
+<h2 id="基本的二进制加，减法器"><a href="#基本的二进制加，减法器" class="headerlink" title="基本的二进制加，减法器"></a>基本的二进制加，减法器</h2><p><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%8A%A0%E5%87%8F%E6%B3%95%E5%99%A8.png" alt="基本的加减法器"></p>
+<ol>
+<li><p>加法的实现<br><br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png" alt="实现的图片"></p>
+<ol>
+<li>p=0</li>
+<li>设$Y_{n-1}$=0，异或门输出为0；设$Y_{n-1}$为1，异或门输出为1。</li>
+<li>总结：异或门输出=$Y_{n-1}$</li>
+<li>加法：[X]补+[Y]补=[X+Y]补</li>
+</ol>
+</li>
+<li><p>减法的实现<br><br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png" alt="实现的图片"></p>
+<ol>
+<li>p=1</li>
+<li>设$Y_{n-1}$=0，异或门输出为1；反之为0；</li>
+<li>总结：异或门输出=$Y_{n-1}$取反</li>
+<li>减法实现：[X]补-[Y]补=[X]补+[Y]补取反+$2 ^{-n}$  (n是小数点之后的位数，+$2 ^{-n}$的意思是在末尾+1)</li>
+<li>末尾的加1来源于一开始的Cn，Cn=p=1 （设计巧妙）</li>
+</ol>
+</li>
+</ol>
+<h2 id="定点乘法运算"><a href="#定点乘法运算" class="headerlink" title="定点乘法运算"></a>定点乘法运算</h2><h3 id="原码一位乘法"><a href="#原码一位乘法" class="headerlink" title="原码一位乘法"></a>原码一位乘法</h3><h4 id="乘法的本质："><a href="#乘法的本质：" class="headerlink" title="乘法的本质："></a>乘法的本质：</h4><p>将乘法变成加法和右移运算的结果</p>
+<h4 id="运算法则："><a href="#运算法则：" class="headerlink" title="运算法则："></a>运算法则：</h4><ol>
+<li>被乘数和乘数均取绝对值参加运算，符号位单独考虑</li>
+<li>被乘数取双符号位，部分积的长度与被乘数的长度相同，初值为0</li>
+<li>从乘数的最低位的$y_n$位开始对乘数进行判断：若$y_n$=1，则部分积加上被乘数|X|，然后右移一位；若$y_n$=0，则部分积加上0，然后右移一位</li>
+<li>重复3的判断n次<h4 id="例题："><a href="#例题：" class="headerlink" title="例题："></a>例题：</h4><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg" alt="原码一位乘法">    </li>
+</ol>
+<p>之后符号位就是x，y的符号位进行异或运算为0，数值位就是|X|.|Y|=0.10001111<br>所以最后结果为0.10001111</p>
+<h3 id="补码一位乘法"><a href="#补码一位乘法" class="headerlink" title="补码一位乘法"></a>补码一位乘法</h3><h4 id="运算规则："><a href="#运算规则：" class="headerlink" title="运算规则："></a>运算规则：</h4><ol>
+<li>符号位参与运算，运算的数均以补码表示</li>
+<li>被乘数一般取双符号位参与运算，部分积初始值为0</li>
+<li>看乘数小数点位数决定移多少次</li>
+<li>乘数末位增设附加位$y_{n+1}$，且初值为0</li>
+<li>按下表进行操作</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>$y_n$(高位)</th>
+<th>$y_{n+1}$(低位)</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>部分积右移一位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>部分积加[x]补，右移一位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>部分积加[-x]补，右移一位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>部分积右移一位</td>
+</tr>
+</tbody></table>
+<h4 id="例题：-1"><a href="#例题：-1" class="headerlink" title="例题："></a>例题：</h4><p><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg" alt="补码一位乘法"></p>
+<h3 id="补码两位乘法"><a href="#补码两位乘法" class="headerlink" title="补码两位乘法"></a>补码两位乘法</h3><p>减少运算步骤，提高运算速度<br><br>运算规则如下：<br><br>符号位参与运算，两数均以补码表示<br><br>部分积与被乘数均采用<strong>3位符号</strong>表示，乘数<strong>末位增加一位</strong>$y_{n+1}$，其初值为0<br></p>
+<table>
+<thead>
+<tr>
+<th>$Y_{n-1}$</th>
+<th>$Y_n$</th>
+<th>$Y_{n+1}$</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>加0，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>加[x]补，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>加[x]补，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>加2[x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>加2[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>加[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>加[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>加0，右移两位</td>
+</tr>
+</tbody></table>
+<p>总结：<br><br>$Y_{n-1}$为0，代表正，即“+”，之后看1的个数决定加几个[x]补<br><br>$Y_{n-1}$为1，代表负，即“-”，之后看0的个数决定加几个[-x]补<br><br>若尾数n为偶数，则乘数用两位符号，最后一步不移位；<br><br>若尾数n为奇数，则乘数用一位符号，最后一步移一位<br><br>示例：<br>第一题：<br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%951.jpg" alt="第二章\补码两位乘法1.jpg"><br>第二题：<br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%952.jpg" alt="第二章\补码两位乘法2.jpg"></p>
+<h2 id="定点除法运算"><a href="#定点除法运算" class="headerlink" title="定点除法运算"></a>定点除法运算</h2><h3 id="补码一位除法"><a href="#补码一位除法" class="headerlink" title="补码一位除法"></a>补码一位除法</h3><p>本质：加法和左移<br><br>三个规则：</p>
+<ul>
+<li>比较上商规则：比较被除数与除数符号，余数和除数符号</li>
+<li>商的校正规则</li>
+<li>余数校正规则<br>补码不恢复余数法的算法规则；</li>
+</ul>
+<ol>
+<li>符号位参加运算，除数与被除数均用双符号位补码表示</li>
+<li>当被除数与除数同号时，用被除数减去除数；被除数与除数异号时，用被除数加上除数；商符号位的取值见3</li>
+<li>当余数与除数同号时，商上1，余数左移一位减去除数；余数与除数异号时，商上0，余数左移一位加上除数</li>
+<li>余数左移加上或减去除数后就得到了新余数</li>
+<li>采用校正法包括符号位在内，规则3应重复n+1次</li>
+</ol>
+<p>商的校正原则：</p>
+<ol>
+<li>当刚好能除尽(即运算过程中任一步余数为0)时，</li>
+</ol>
+<ul>
+<li>若除数为正，则商不必校正；</li>
+<li>若除数为负，则商需要校正，即加$2^{-n}$进行修正</li>
+</ul>
+<ol start="2">
+<li>当不能除尽时，</li>
+</ol>
+<ul>
+<li>若商为正，则不必校正；</li>
+<li>若商为负，则商需要加$2^{-n}$校正</li>
+</ul>
+<p>余数之所以要校正，是因为在补码不恢复余数除法运算过程中先比较后上商的缘故<br><br>余数的校正方法：</p>
+<ul>
+<li>若商为正，则当余数与被除数异号时，应将余数加上除数进行校正才能获得正确的余数</li>
+<li>若商为负，则当余数与被除数异号时，余数需要减去除数进行校正</li>
+</ul>
+<p>商校正，能除尽，看除数；不能除尽，看商，正的不必校正<br>余数校正，看被除数，同号不校正；异号看商，正加，负减除数<br>思维导图示例：<br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E9%99%A4%E6%B3%95%E6%A0%A1%E6%AD%A3.png" alt="补码一位除法思维导图"><br>习题示例：<br><img src="%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95.jpg" alt="补码除法习题"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" data-id="ck5cbb5ms003x1wuyg3f614xi" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/15/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%95%B0%E6%8D%AE%E8%AE%A4%E7%9F%A5%E4%B8%8E%E9%A2%84%E5%A4%84%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          第二章 数据认知与预处理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/08/Win10%E4%B8%8B%E5%AE%89%E8%A3%85Linux%E5%AD%90%E7%B3%BB%E7%BB%9F/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Win10下安装Linux子系统</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

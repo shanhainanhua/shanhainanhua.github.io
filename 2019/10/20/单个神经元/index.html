@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>单个神经元 | 山海南话</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="单个神经元 激活函数 损失函数 优化器 Maxout">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单个神经元">
+<meta property="og:url" content="http://yoursite.com/2019/10/20/%E5%8D%95%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="单个神经元 激活函数 损失函数 优化器 Maxout">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-20T08:17:15.000Z">
+<meta property="article:modified_time" content="2019-10-20T08:20:50.563Z">
+<meta property="article:author" content="山海南话">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="山海南话" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">山海南话</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">每一天都是新的开始</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-单个神经元" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/20/%E5%8D%95%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83/" class="article-date">
+  <time datetime="2019-10-20T08:17:15.000Z" itemprop="datePublished">2019-10-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      单个神经元
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>单个神经元</li>
+<li>激活函数</li>
+<li>损失函数</li>
+<li>优化器</li>
+<li>Maxout<a id="more"></a>
+<h1 id="单个神经元"><a href="#单个神经元" class="headerlink" title="单个神经元"></a>单个神经元</h1></li>
+</ul>
+<p>一个神经元由以下几个关键知识点组成：</p>
+<ul>
+<li>激活函数</li>
+<li>损失函数</li>
+<li>梯度下降</li>
+</ul>
+<p>将所有输入的信号经过w变换后，再添加一个额外的偏执量b，把它们加载一起求和，然后在选择一个模拟细胞体处理的函数来实现整个过程的仿真。这个函数称为激活函数。<br><br>把w和b赋予合适的值时，配合合适的激活函数，就会发现可以产生很好的拟合效果，这个过程叫做正向传播<br><br>实际过程中无法得知w和b的值具体是多少才是正常的，因此加入训练过程来让模型自动修正，最终产生一个合适的权重,这叫做反向传播<br><br>而如何将输出的误差转化为权重的误差，使用BP算法(误差反向传播算法)<br></p>
+<p>激活函数主要作用是用来加入非线性因素的，以解决线性模型表达能力不足的缺陷<br><br>神经网络里常用的激活函数有Sigmoid，Tanh和Relu等<br><br>Sigmoid函数：把输入的值压缩到0到1之间，TensorFlow中对应函数为tf.nn.sigmoid(x,name=None)<br><br>Tanh函数：将值域扩展到-1到1之间，TensorFlow对应函数tf.nn.tanh(x,name=None)<br><br>ReLU函数(也称为Rectifier)，max(0,x) ，仅在正向传播方面在信号响应上有优势，<br>TensorFlow中对应函数：</p>
+<ul>
+<li>tf.nn.relu(features,name=None)：一般的ReLU函数，max(features,0)</li>
+<li>tf.nn.relu6(features,name=None):是以6位阈值的ReLU函数，即min(max(features,0),6)</li>
+</ul>
+<p>relu6存在的原因是防止梯度爆炸， 当节点和层数特别多<br>而且输出都为正时， 它们的加和会是一个很大的值， 尤其在经历几层变<br>换之后， 最终的值可能会离目标值相差太远。 误差太大， 会导致对参数<br>调整修正值过大， 这会导致网络抖动得较厉害， 最终很难收敛。</p>
+<p>其他变种：</p>
+<ul>
+<li>tf.nn.softplus(features,name=None)</li>
+<li>tf.nn.elu(features,name=None)</li>
+<li>tf.maximum(x,leak*x,name=name) #leak为传入的参数，可以设为0.01等</li>
+</ul>
+<p>还可以手动封装Swish函数，要优于ReLU函数<br></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def Swish(x,beta&#x3D;1):</span><br><span class="line">return x*tf.nn.sigmoid(x*beta)</span><br></pre></td></tr></table></figure>
+
+<p>softmax算法-处理分类问题<br><br>tf.nn.softmax(logits,name=None) 计算softmax<br><br>tf.nn.log_softmax(logits,name=None) 对softmax取对数<br><br>实际使用中，softmax伴随的分类标签都为one_hot编码，在softmax时，需要将目标分成几类，就在最后这层放几个节点</p>
+<p>损失函数<br><br>两种比较常见的损失函数:</p>
+<ul>
+<li>均值平方差</li>
+<li>交叉熵</li>
+</ul>
+<p>损失函数的选取取决于输入标签数据的类型<br><br>如果输入的是实数、无界的值，损失函数使用平方差<br><br>如果输入的标签是位矢量(分类标志)，使用交叉熵会更合适<br></p>
+<p>TensorFlow中的梯度下降函数<br><br>在TensorFlow中是通过一个叫做Optimizer的优化器类进行训练优化的，对于不同算法的优化器，在TensorFlow中有不同的类<br><br>在训练过程中，先实例化一个优化函数如tf.train.GradientDescentOptimizer,并基于一定的学习率进行梯度优化训练</p>
+<p>optimizer=tf.train.GradentDescentOptimizer(learning_rate)<br><br>接着使用一个minimize()的操作，里面传入损失值节点loss，再启动一个外层的循环，优化器就会按照循环的次数一次次沿着loss最小值的方向优化参数<br><br>目前比较常用的优化器为Adam优化器</p>
+<p>每个优化器的第一个参数learning_rate代表学习率，设置学习率的方法：退化学习率，又叫学习率衰减<br><br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learning_rate&#x3D;tf.train.exponential_decay(starter_learning_rate,global_step,100000,0.96)</span><br></pre></td></tr></table></figure>
+<p>这种方式定义的学习率就是退化学习率，它的意思是当前迭代到global_step步，学习率每一步都按照每10万步缩小到0.96%的速度衰退<br><br>通过增大批次处理样本的数量也可以起到退化学习率的效果。但是这种方法要求训练时的最小批次要与实际应用中的最小批次一致</p>
+<h1 id="单个神经元的扩展——Maxout网络"><a href="#单个神经元的扩展——Maxout网络" class="headerlink" title="单个神经元的扩展——Maxout网络"></a>单个神经元的扩展——Maxout网络</h1><p>将激活函数变成一个网络选择器，原理就是将多个神经元并列地放在一起，从它们的输出结果找到最大的那个，代表对特征响应最敏感，然后取这个神尽管的结果参与后面的运算。这样的网络会有更好的拟合效果<br><br>Maxout的拟合功能很强大，但是也有节点过多，参数过多，训练过慢的缺点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"MNIST_data/"</span>)</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf <span class="comment">#导入tensorflow库</span></span><br><span class="line"></span><br><span class="line">tf.reset_default_graph()</span><br><span class="line"><span class="comment"># tf Graph Input</span></span><br><span class="line">x = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">784</span>]) <span class="comment"># mnist data维度 28*28=784</span></span><br><span class="line">y = tf.placeholder(tf.int32, [<span class="literal">None</span>]) <span class="comment"># 0-9 数字=&gt; 10 classes</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set model weights</span></span><br><span class="line">W = tf.Variable(tf.random_normal([<span class="number">784</span>, <span class="number">10</span>]))</span><br><span class="line">b = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">z= tf.matmul(x, W) + b</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">maxout = tf.reduce_max(z,axis= <span class="number">1</span>,keep_dims=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># Set model weights</span></span><br><span class="line">W2 = tf.Variable(tf.truncated_normal([<span class="number">1</span>, <span class="number">10</span>], stddev=<span class="number">0.1</span>))</span><br><span class="line">b2 = tf.Variable(tf.zeros([<span class="number">1</span>]))</span><br><span class="line"><span class="comment"># 构建模型</span></span><br><span class="line">pred = tf.nn.softmax(tf.matmul(maxout, W2) + b2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建模型</span></span><br><span class="line"><span class="comment">#pred = tf.nn.softmax(z) # Softmax分类</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Minimize error using cross entropy</span></span><br><span class="line"><span class="comment">#cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))</span></span><br><span class="line">cost = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=z))</span><br><span class="line"><span class="comment">#参数设置</span></span><br><span class="line">learning_rate = <span class="number">0.04</span></span><br><span class="line"><span class="comment"># 使用梯度下降优化器</span></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)</span><br><span class="line"></span><br><span class="line">training_epochs = <span class="number">200</span></span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line">display_step = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动session</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())<span class="comment"># Initializing OP</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 启动循环开始训练</span></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(training_epochs):</span><br><span class="line">        avg_cost = <span class="number">0.</span></span><br><span class="line">        total_batch = int(mnist.train.num_examples/batch_size)</span><br><span class="line">        <span class="comment"># 遍历全部数据集</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(total_batch):</span><br><span class="line">            batch_xs, batch_ys = mnist.train.next_batch(batch_size)</span><br><span class="line">            <span class="comment"># Run optimization op (backprop) and cost op (to get loss value)</span></span><br><span class="line">            _, c = sess.run([optimizer, cost], feed_dict=&#123;x: batch_xs,</span><br><span class="line">                                                          y: batch_ys&#125;)</span><br><span class="line">            <span class="comment"># Compute average loss</span></span><br><span class="line">            avg_cost += c / total_batch</span><br><span class="line">        <span class="comment"># 显示训练中的详细信息</span></span><br><span class="line">        <span class="keyword">if</span> (epoch+<span class="number">1</span>) % display_step == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">print</span> (<span class="string">"Epoch:"</span>, <span class="string">'%04d'</span> % (epoch+<span class="number">1</span>), <span class="string">"cost="</span>, <span class="string">"&#123;:.9f&#125;"</span>.format(avg_cost))</span><br><span class="line"></span><br><span class="line">    print( <span class="string">" Finished!"</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>Epoch: 0001 cost= 4.593184041
+Epoch: 0002 cost= 1.818854022
+Epoch: 0003 cost= 1.314909137
+、、、
+Epoch: 0197 cost= 0.289531484
+Epoch: 0198 cost= 0.289406507
+Epoch: 0199 cost= 0.289030269
+Epoch: 0200 cost= 0.288644536
+ Finished!</code></pre><br>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/20/%E5%8D%95%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83/" data-id="ck5cbb5kl000v1wuyf4brd2ox" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python日常问题总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基础练习-mnist手写数据集识别</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/">hexo博客相关配置</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%84%E7%A7%8D%E6%90%AD%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%9D%91%E7%9A%84%E8%AE%B0%E5%BD%95/">各种搭建配置坑的记录</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/">大数据挖掘及应用</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">深入理解计算机系统</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">计算机组成原理</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JDBC/" rel="tag">JDBC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jdbc/" rel="tag">jdbc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag">操作系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag">组成原理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" rel="tag">计算机基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" rel="tag">配置环境</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/JDBC/" style="font-size: 10px;">JDBC</a> <a href="/tags/hexo/" style="font-size: 14px;">hexo</a> <a href="/tags/java/" style="font-size: 18px;">java</a> <a href="/tags/jdbc/" style="font-size: 10px;">jdbc</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 12px;">大数据</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 20px;">总结</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 12px;">操作系统</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a> <a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 14px;">线程</a> <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" style="font-size: 14px;">组成原理</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">计算机基础</a> <a href="/tags/%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83/" style="font-size: 16px;">配置环境</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/01/13/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/">关联规则挖掘系统</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/">计组上机总结</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/">ID3实现决策树</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">Python日常问题总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 山海南话<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
