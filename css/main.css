@@ -262,7 +262,7 @@ kbd {
 table {
   border-collapse: collapse;
   border-spacing: 0;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   margin: 0 0 20px 0;
   width: 100%;
 }
@@ -298,7 +298,7 @@ td {
   border-radius: 0;
   color: #555;
   display: inline-block;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   line-height: 2;
   padding: 0 20px;
   text-decoration: none;
@@ -391,7 +391,7 @@ td {
   background-image: linear-gradient(#fcfcfc, #eee);
   border: 1px solid #d5d5d5;
   border-radius: 3px;
-  font-size: 0.75em;
+  font-size: 0.8em;
   right: 4px;
   top: 8px;
 }
@@ -434,7 +434,7 @@ code {
 .highlight figcaption {
   background: #eee;
   color: #eaeaea;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   line-height: 1.2;
   padding: 0.5em;
 }
@@ -484,7 +484,7 @@ pre {
 pre code {
   background: none;
   color: #eaeaea;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   padding: 0;
   text-shadow: none;
 }
@@ -1012,7 +1012,7 @@ pre .javascript .function {
 }
 .site-subtitle {
   color: #999;
-  font-size: 0.75em;
+  font-size: 0.8em;
   margin-top: 10px;
 }
 .use-motion .brand {
@@ -1077,7 +1077,7 @@ pre .javascript .function {
 .menu-item span.exturl {
   border-bottom: 0;
   display: block;
-  font-size: 0.75em;
+  font-size: 0.8em;
   transition-property: border-color;
   transition-delay: 0s;
   transition-duration: 0.2s;
@@ -1252,14 +1252,14 @@ pre .javascript .function {
 .links-of-author span.exturl {
   border-bottom-color: #555;
   display: inline-block;
-  font-size: 0.75em;
+  font-size: 0.8em;
   margin-bottom: 10px;
   margin-right: 10px;
   vertical-align: middle;
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff04be;
+  background: #2970d6;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1290,11 +1290,11 @@ pre .javascript .function {
   color: #fff;
 }
 .links-of-blogroll {
-  font-size: 0.75em;
+  font-size: 0.8em;
   margin-top: 10px;
 }
 .links-of-blogroll-title {
-  font-size: 0.8125em;
+  font-size: 0.85em;
   font-weight: 600;
   margin-top: 0;
 }
@@ -1346,7 +1346,7 @@ pre .javascript .function {
   color: #555;
   cursor: pointer;
   display: inline-block;
-  font-size: 0.8125em;
+  font-size: 0.85em;
 }
 .sidebar-nav li.sidebar-nav-overview {
   margin-left: 10px;
@@ -1393,7 +1393,7 @@ pre .javascript .function {
   overflow-y: auto;
 }
 .post-toc {
-  font-size: 0.8125em;
+  font-size: 0.85em;
 }
 .post-toc ol {
   list-style: none;
@@ -1471,11 +1471,11 @@ pre .javascript .function {
 }
 .site-state-item-name {
   color: inherit;
-  font-size: 0.8125em;
+  font-size: 0.85em;
 }
 .footer {
   color: #999;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   padding: 20px 0;
 }
 .footer.footer-fixed {
@@ -1565,6 +1565,81 @@ pre .javascript .function {
     transform: scale(1.1);
   }
 }
+@media (max-width: 567px) {
+  .content-wrap {
+    padding: initial !important;
+  }
+  .posts-expand {
+    margin: initial !important;
+    padding-top: 8px !important;
+  }
+  .posts-expand .post-header {
+    padding: 0 18px;
+  }
+  .posts-expand .post-meta {
+    margin: 3px 0 10px 0 !important;
+  }
+  .post-block {
+    margin-top: initial !important;
+    padding: 8px 0 !important;
+  }
+  .post-body h1,
+  .post-body h2,
+  .post-body h3,
+  .post-body h4,
+  .post-body h5,
+  .post-body h6 {
+    margin: 10px 18px 8px;
+  }
+  .post-body .note h1,
+  .post-body .tabs .tab-content .tab-pane h1,
+  .post-body .note h2,
+  .post-body .tabs .tab-content .tab-pane h2,
+  .post-body .note h3,
+  .post-body .tabs .tab-content .tab-pane h3,
+  .post-body .note h4,
+  .post-body .tabs .tab-content .tab-pane h4,
+  .post-body .note h5,
+  .post-body .tabs .tab-content .tab-pane h5,
+  .post-body .note h6,
+  .post-body .tabs .tab-content .tab-pane h6 {
+    margin: 0 5px;
+  }
+  .post-body > p {
+    margin: 0 0 10px 0;
+    padding: 0 18px;
+  }
+  .post-body > ul {
+    margin-inline-end: 1em;
+  }
+  .post-body > blockquote {
+    margin: 0 18px;
+  }
+  .post-body > span.exturl {
+    margin-left: 18px;
+  }
+  .post-body > .post-button a {
+    margin-left: 18px;
+  }
+  .post-body .note > p,
+  .post-body .tabs .tab-content .tab-pane > p {
+    padding: 0 5px;
+  }
+  .post-body img,
+  .post-body video {
+    margin-bottom: 10px !important;
+  }
+  .post-body .note {
+    margin-bottom: 10px !important;
+    padding: 10px !important;
+  }
+  .post-body .tabs .tab-content .tab-pane {
+    padding: 10px 10px 0 10px !important;
+  }
+  .post-nav {
+    padding-bottom: 2px;
+  }
+}
 .back-to-top {
   background: #222;
   font-size: 12px;
@@ -1596,13 +1671,13 @@ pre .javascript .function {
   }
 }
 .post-body span.exturl .fa {
-  font-size: 0.8125em;
+  font-size: 0.85em;
   margin-left: 4px;
 }
 .post-body .image-caption,
 .post-body .figure .caption {
   color: #999;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   font-weight: bold;
   line-height: 1;
   margin: -20px auto 15px;
@@ -1741,7 +1816,7 @@ pre .javascript .function {
   width: 4px;
 }
 .posts-collapse .fa-external-link {
-  font-size: 0.8125em;
+  font-size: 0.85em;
   margin-left: 5px;
 }
 .post-eof {
@@ -1885,7 +1960,7 @@ pre .javascript .function {
   visibility: visible;
 }
 .posts-expand .post-title-link .fa {
-  font-size: 0.8125em;
+  font-size: 0.85em;
   margin-left: 5px;
 }
 .posts-expand .post-meta {
@@ -1896,7 +1971,7 @@ pre .javascript .function {
   text-align: center;
 }
 .posts-expand .post-meta .post-description {
-  font-size: 0.8125em;
+  font-size: 0.85em;
   margin-top: 2px;
 }
 .posts-expand .post-meta time {
@@ -1936,7 +2011,7 @@ pre .javascript .function {
 .post-nav-item a {
   border-bottom: none;
   display: block;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   line-height: 1.6;
   position: relative;
 }
@@ -1992,7 +2067,7 @@ pre .javascript .function {
 }
 .post-tags a {
   display: inline-block;
-  font-size: 0.75em;
+  font-size: 0.8em;
 }
 .post-tags a:not(:last-child) {
   margin-right: 10px;
@@ -2011,7 +2086,7 @@ pre .javascript .function {
 }
 .social-like {
   display: flex;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   justify-content: center;
   text-align: center;
 }
@@ -2585,7 +2660,7 @@ hr {
   background: none;
   border: 0;
   border-bottom: 2px solid #666;
-  font-size: 0.8125em;
+  font-size: 0.85em;
   padding: 0;
   transition-property: border;
 }
@@ -2628,8 +2703,7 @@ body {
 }
 .main-inner {
   margin-top: 60px;
-  padding: 60px 60px 60px 60px;
   background: #fff;
+  padding: 8px 8px 8px 8px;
   opacity: 0.85;
-  min-height: 500px;
 }
