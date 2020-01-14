@@ -22,7 +22,7 @@
   var CONFIG = {
     hostname: new URL('http://yoursite.com').hostname,
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '7.7.0',
     exturl: false,
     sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
@@ -54,13 +54,13 @@
 <meta property="og:site_name" content="山海南话">
 <meta property="og:description" content="监督学习问题：预测花的品种">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png">
+<meta property="og:image" content="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90%5Coutput_28_1.png">
 <meta property="article:published_time" content="2019-10-05T07:28:44.000Z">
 <meta property="article:modified_time" content="2019-10-05T08:10:09.623Z">
 <meta property="article:author" content="山海南话">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png">
 
 <link rel="canonical" href="http://yoursite.com/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/">
 
@@ -535,7 +535,7 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> mglearn</span><br><span class="line"><span class="comment">#利用X_train中的数据创建DataFrame</span></span><br><span class="line"><span class="comment">#利用iris_dataset.feature_names中的字符串对数据列进行标记</span></span><br><span class="line">iris_dataframe=pd.DataFrame(X_train,columns=iris_dataset.feature_names)</span><br><span class="line"><span class="comment">#利用DataFrame创建散点图矩阵，按y_train着色</span></span><br><span class="line">grr=pd.plotting.scatter_matrix(iris_dataframe,c=y_train,figsize=(<span class="number">15</span>,<span class="number">15</span>),marker=<span class="string">'o'</span>,</span><br><span class="line">                              hist_kwds=&#123;<span class="string">'bins'</span>:<span class="number">20</span>&#125;,s=<span class="number">60</span>,alpha=<span class="number">.8</span>,cmap=mglearn.cm3)</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png" alt="png"></p>
+<p><img src="%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/output_18_0.png" alt="png"></p>
 <h2 id="4-KNN算法"><a href="#4-KNN算法" class="headerlink" title="4.KNN算法"></a>4.KNN算法</h2><p>开始构建机器学习模型<br><br>skikit-learn中有许多<br>可用的分类算法<br><br>这里采用k近邻算法：<br>考虑训练集中与新数据点最近的任意 k 个邻居（比如说，距离最近的 3 个或 5 个邻居），而不是只考虑最近的那一个。然后，我们可以用这些邻居中数量最多的类别做出预测<br><br>scikit-learn 中所有的机器学习模型都在各自的类中实现，这些类被称为 Estimator类。k 近邻分类算法是在 neighbors 模块的 KNeighborsClassifier 类中实现的。我们需要将这个类实例化为一个对象，然后才能使用这个模型。这时我们需要设置模型的参数。KNeighborsClassifier 最重要的参数就是邻居的数目，这里我们设为 1 ：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line">knn=KNeighborsClassifier(n_neighbors=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 
@@ -556,7 +556,7 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
 <pre><code>Test set score: 0.97</code></pre><p>对于这个模型来说，测试集的精度约为 0.97，也就是说，对于测试集中的鸢尾花，我们的预测有 97% 是正确的。根据一些数学假设，对于新的鸢尾花，可以认为我们的模型预测结果有 97% 都是正确的。</p>
 <h2 id="完整代码如下："><a href="#完整代码如下：" class="headerlink" title="完整代码如下："></a>完整代码如下：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np <span class="comment">#矩阵运算</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt  <span class="comment">#绘图</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd  <span class="comment">#基于numpy的数据分析库</span></span><br><span class="line"><span class="keyword">import</span> mglearn <span class="comment">#美化图像</span></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line">iris_dataset=load_iris()</span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(iris_dataset[<span class="string">'data'</span>],</span><br><span class="line">iris_dataset[<span class="string">'target'</span>],random_state=<span class="number">0</span>) <span class="comment">#为了保证多次运行同一函数能得到相同输出，利用random_state指定了生成随机参数的种子</span></span><br><span class="line"><span class="comment">#输出的结果都是Numpy数组</span></span><br><span class="line"><span class="comment">#利用X_train中的数据创建DataFrame</span></span><br><span class="line"><span class="comment">#利用iris_dataset.feature_names中的字符串对数据列进行标记</span></span><br><span class="line">iris_dataframe=pd.DataFrame(X_train,columns=iris_dataset.feature_names)</span><br><span class="line"><span class="comment">#利用DataFrame创建散点图矩阵，按y_train着色</span></span><br><span class="line">grr=pd.plotting.scatter_matrix(iris_dataframe,c=y_train,figsize=(<span class="number">15</span>,<span class="number">15</span>),marker=<span class="string">'o'</span>,</span><br><span class="line">                              hist_kwds=&#123;<span class="string">'bins'</span>:<span class="number">20</span>&#125;,s=<span class="number">60</span>,alpha=<span class="number">.8</span>,cmap=mglearn.cm3)</span><br><span class="line">knn=KNeighborsClassifier(n_neighbors=<span class="number">1</span>)</span><br><span class="line">knn.fit(X_train,y_train)</span><br><span class="line">y_pred=knn.predict(X_test)</span><br><span class="line">print(<span class="string">"Test set score: &#123;:.2f&#125;"</span>.format(np.mean(y_pred==y_test)))</span><br></pre></td></tr></table></figure>
 
-<pre><code>Test set score: 0.97</code></pre><p><img src="/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90%5Coutput_28_1.png" alt="png"></p>
+<pre><code>Test set score: 0.97</code></pre><p><img src="%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90%5Coutput_28_1.png" alt="png"></p>
 
     </div>
 
@@ -749,7 +749,7 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -779,7 +779,7 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>

@@ -22,7 +22,7 @@
   var CONFIG = {
     hostname: new URL('http://yoursite.com').hostname,
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '7.7.0',
     exturl: false,
     sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
@@ -276,7 +276,7 @@
       
         <p>近期写博客，遇到有些地方需要写数学公式，因为一直没用过所以初次使用遇到了问题。<br><br>使用markdown编写的公式在hexo博客中并不会正常显示出来。<br>网上查阅后发现原因如下：</p>
 <blockquote>
-<p>Hexo默认使用”hexo-renderer-marked”引擎渲染网页，该引擎会把一些特殊的markdown符号转换为相应的html标签，比如在markdown语法中，下划线’<em>‘代表斜体，会被渲染引擎处理为<em>标签。<br>因为类Latex格式书写的数学公式下划线 ‘</em>‘ 表示下标，有特殊的含义，如果被强制转换为<em>标签，那么MathJax引擎在渲染数学公式的时候就会出错。例如，$x_i$在开始被渲染的时候，处理为$x<em>i</em>$，这样MathJax引擎就认为该公式有语法错误，因为不会渲染。<br>类似的语义冲突的符号还包括’*’, ‘{‘, ‘}’, ‘&#39;等。<br><a href="https://www.jianshu.com/p/d87d7d2dcea9" target="_blank" rel="noopener">https://www.jianshu.com/p/d87d7d2dcea9</a></em></em></p>
+<p>Hexo默认使用”hexo-renderer-marked”引擎渲染网页，该引擎会把一些特殊的markdown符号转换为相应的html标签，比如在markdown语法中，下划线’<em>‘代表斜体，会被渲染引擎处理为<em>标签。<br>因为类Latex格式书写的数学公式下划线 ‘</em>‘ 表示下标，有特殊的含义，如果被强制转换为<em>标签，那么MathJax引擎在渲染数学公式的时候就会出错。例如，$x_i$在开始被渲染的时候，处理为$x<em>i</em>$，这样MathJax引擎就认为该公式有语法错误，因为不会渲染。<br>类似的语义冲突的符号还包括’*’, ‘{‘, ‘}’, ‘&#39;等。<br><a href="https://www.jianshu.com/p/d87d7d2dcea9" target="_blank" rel="noopener">https://www.jianshu.com/p/d87d7d2dcea9</a></p>
 </blockquote>
 <p>解决方法：</p>
 <ol>
@@ -300,7 +300,7 @@
       <div class="popular-posts-title"><a href="\2019\05\19\记录hexo博客的建立\" rel="bookmark">记录hexo博客的建立</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2019\09\26\基本排序算法\" rel="bookmark">基本排序算法</a></div>
+      <div class="popular-posts-title"><a href="\2019\09\27\hexo博客添加代码高亮-代码复制与评论系统\" rel="bookmark">hexo博客添加代码高亮,代码复制与评论系统</a></div>
     </li>
     <li class="popular-posts-item">
       <div class="popular-posts-title"><a href="\2019\09\25\同时部署hexo到github和coding上\" rel="bookmark">同时部署hexo到github和coding上</a></div>
@@ -309,7 +309,7 @@
       <div class="popular-posts-title"><a href="\2019\05\21\Eclipse连接MySQL数据库\" rel="bookmark">Eclipse连接MySQL数据库</a></div>
     </li>
     <li class="popular-posts-item">
-      <div class="popular-posts-title"><a href="\2019\09\22\markdown进阶\" rel="bookmark">markdown进阶</a></div>
+      <div class="popular-posts-title"><a href="\2019\10\06\python常用库总结\" rel="bookmark">python常用库总结</a></div>
     </li>
   </ul>
 
@@ -500,7 +500,7 @@
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.7.0
   </div>
 
         
@@ -530,7 +530,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/muse.js"></script>
+<script src="/js/schemes/pisces.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
