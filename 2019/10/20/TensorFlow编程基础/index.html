@@ -1,140 +1,85 @@
 <!DOCTYPE html>
-
-
-
-  
-
-
-<html class="theme-next muse use-motion" lang="zh-CN">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
 
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="TensorFlow编程相关基础知识，会逐渐补充，以备复习">
+  <meta name="description" content="TensorFlow编程相关基础知识，会逐渐补充，以备复习">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow编程基础">
 <meta property="og:url" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/index.html">
 <meta property="og:site_name" content="山海南话">
 <meta property="og:description" content="TensorFlow编程相关基础知识，会逐渐补充，以备复习">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_2.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_2.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu1.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu2.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu3.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png">
+<meta property="og:image" content="http://yoursite.com/.com//output_2_0.png">
+<meta property="og:image" content="http://yoursite.com/.com//output_6_1.png">
+<meta property="og:image" content="http://yoursite.com/.com//output_6_2.png">
+<meta property="og:image" content="http://yoursite.com/.com//%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png">
+<meta property="og:image" content="http://yoursite.com/.com//output_26_1.png">
+<meta property="og:image" content="http://yoursite.com/.com//output_26_2.png">
+<meta property="og:image" content="http://yoursite.com/.com//hanshu1.png">
+<meta property="og:image" content="http://yoursite.com/.com//hanshu2.png">
+<meta property="og:image" content="http://yoursite.com/.com//hanshu3.png">
+<meta property="og:image" content="http://yoursite.com/.com//%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png">
 <meta property="article:published_time" content="2019-10-20T06:47:01.000Z">
 <meta property="article:modified_time" content="2019-10-20T06:56:32.531Z">
 <meta property="article:author" content="山海南话">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png">
+<meta name="twitter:image" content="http://yoursite.com/.com//output_2_0.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
 
 
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Muse',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
   };
 </script>
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2019/10/20/TensorFlow编程基础/"/>
-
-
-
-
 
   <title>TensorFlow编程基础 | 山海南话</title>
   
@@ -144,192 +89,197 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
 
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+</head>
 
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
 
-    <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+    <div>
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">山海南话</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle">每一天都是新的开始</p>
-      
+        <p class="site-subtitle">且行且珍惜</p>
   </div>
 
   <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
 </div>
 
+
 <nav class="site-nav">
   
-
-  
-    <ul id="menu" class="menu">
-      
-        
+  <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
-          <a href="/%20" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            Home
-          </a>
-        </li>
-      
-        
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-archives">
-          <a href="/archives/%20" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            Archives
-          </a>
-        </li>
-      
 
-      
-    </ul>
-  
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
-  
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
 </nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
 
+</div>
+<div class="search-pop-overlay"></div>
 
-
- </div>
+  </div>
+</div>
     </header>
 
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
     
 
-  
+  <a href="https://github.com/3422878082" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
 
-  
-  
-  
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
       <meta itemprop="name" content="山海南话">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="description" content="行者">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="山海南话">
     </span>
-
-    
       <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">TensorFlow编程基础</h1>
-        
+        <h1 class="post-title" itemprop="name headline">
+          TensorFlow编程基础
+        </h1>
 
         <div class="post-meta">
-          <span class="post-time">
-            
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
+              <span class="post-meta-item-text">发表于</span>
               
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-20T14:47:01+08:00">
-                2019-10-20
-              </time>
-            
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
+              <time title="创建时间：2019-10-20 14:47:01 / 修改时间：14:56:32" itemprop="dateCreated datePublished" datetime="2019-10-20T14:47:01+08:00">2019-10-20</time>
+            </span>
+            <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
+              <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
                     <span itemprop="name">机器学习</span>
                   </a>
                 </span>
-
-                
-                
-              
             </span>
-          
 
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
 
         </div>
       </header>
-    
 
     
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-      
 
       
         <p>TensorFlow编程相关基础知识，会逐渐补充，以备复习</p>
@@ -377,7 +327,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line">train_X=np.linspace(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">100</span>)</span><br><span class="line">train_Y=<span class="number">2</span>*train_X+np.random.randn(<span class="number">100</span>)*<span class="number">0.3</span></span><br><span class="line"><span class="comment">#显示模拟数据点</span></span><br><span class="line">plt.plot(train_X,train_Y,<span class="string">'ro'</span>,label=<span class="string">'Original data'</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 
 
-<p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png" alt="png"></p>
+<p><img src="/.com//output_2_0.png" alt="png"></p>
 <p>接下来进行模型搭建，正向和反向<br><br>创建模型：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">X=tf.placeholder(<span class="string">"float"</span>)</span><br><span class="line">Y=tf.placeholder(<span class="string">"float"</span>)</span><br><span class="line"><span class="comment">#模型参数</span></span><br><span class="line">W=tf.Variable(tf.random_normal([<span class="number">1</span>]),name=<span class="string">"weight"</span>)</span><br><span class="line"><span class="comment">#tf.random_normal()函数用于从服从指定正态分布的数值中取出指定个数的值</span></span><br><span class="line">b=tf.Variable(tf.zeros([<span class="number">1</span>]),name=<span class="string">"bias"</span>)</span><br><span class="line"><span class="comment">#前向结构</span></span><br><span class="line">z=tf.multiply(X,W)+b  <span class="comment">#乘以权值加上偏差</span></span><br><span class="line"><span class="comment">#反向优化</span></span><br><span class="line">cost=tf.reduce_mean(tf.square(Y-z))</span><br><span class="line"><span class="comment">#学习率一般小于1，小而精确且慢</span></span><br><span class="line">learning_rate=<span class="number">0.01</span></span><br><span class="line"><span class="comment">#梯度下降</span></span><br><span class="line">optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)</span><br></pre></td></tr></table></figure>
 
@@ -395,13 +345,13 @@ Epoch: 15 cost= 0.07760566 W= [1.9747877] b= [-0.0090847]
 Epoch: 17 cost= 0.077605836 W= [1.9748603] b= [-0.00911253]
 Epoch: 19 cost= 0.07760589 W= [1.9748794] b= [-0.00911988]
 Finished!
-cost= 0.077605896 W= [1.9748821] b= [-0.00912086]</code></pre><p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_1.png" alt="png"></p>
-<p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_2.png" alt="png"></p>
+cost= 0.077605896 W= [1.9748821] b= [-0.00912086]</code></pre><p><img src="/.com//output_6_1.png" alt="png"></p>
+<p><img src="/.com//output_6_2.png" alt="png"></p>
 <pre><code>x=0.2,z= [0.3858556]</code></pre><p>Tensorflow将中间结点及结点间的运算关系定义在图上，图是静态的，会话是动态的，只有启动会话后才会将数据流向图中<br><br>定义数据时可以通过占位符，也可以通过字典方式，也可以直接定义</p>
 <p>记得在session创建后初始化所有变量，而变量定义在此之前</p>
 <br>
 
-<p>TensorFlow模型构建的概念<br><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png" alt=""></p>
+<p>TensorFlow模型构建的概念<br><img src="/.com//%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png" alt></p>
 <p>两个重要的机制：注入机制，取回机制</p>
 <p>注入机制：占位符<br>placeholder，feed-dict<br><br>示例如下:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a=tf.placeholder(tf.int32)</span><br><span class="line">b=tf.placeholder(tf.int32)</span><br><span class="line">add=tf.add(a,b)</span><br><span class="line">multiply=tf.multiply(a,b)</span><br><span class="line">mysess=tf.Session()</span><br><span class="line">print(mysess.run(add,feed_dict=&#123;a:<span class="number">1</span>,b:<span class="number">2</span>&#125;))</span><br><span class="line">print(mysess.run(multiply,feed_dict=&#123;a:<span class="number">1</span>,b:<span class="number">2</span>&#125;))</span><br><span class="line"><span class="comment">#一次取出多个结点</span></span><br><span class="line">print(mysess.run([add,multiply],feed_dict=&#123;a:<span class="number">1</span>,b:<span class="number">2</span>&#125;))</span><br><span class="line">mysess.close()</span><br></pre></td></tr></table></figure>
@@ -446,16 +396,16 @@ Epoch: 15 cost= 0.06590037 W= [2.016844] b= [-0.0168497]
 Epoch: 17 cost= 0.065898314 W= [2.0169504] b= [-0.01689044]
 Epoch: 19 cost= 0.0658978 W= [2.0169766] b= [-0.0169006]
 Finished!
-cost= 0.06589771 W= [2.0169811] b= [-0.01690225]</code></pre><p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_1.png" alt="png"></p>
-<p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_2.png" alt="png"></p>
+cost= 0.06589771 W= [2.0169811] b= [-0.01690225]</code></pre><p><img src="/.com//output_26_1.png" alt="png"></p>
+<p><img src="/.com//output_26_2.png" alt="png"></p>
 <br>
 <br>
 模型操作相关函数
 
-<h1 id="常用函数总结（见pdf书籍）"><a href="#常用函数总结（见pdf书籍）" class="headerlink" title="常用函数总结（见pdf书籍）"></a>常用函数总结（见pdf书籍）</h1><h2 id="保存模型"><a href="#保存模型" class="headerlink" title="保存模型"></a>保存模型</h2><p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu1.png" alt=""></p>
-<h2 id="数值操作相关函数"><a href="#数值操作相关函数" class="headerlink" title="数值操作相关函数"></a>数值操作相关函数</h2><p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu2.png" alt=""></p>
-<p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu3.png" alt=""></p>
-<h2 id="类型转换函数"><a href="#类型转换函数" class="headerlink" title="类型转换函数"></a>类型转换函数</h2><p><img src="TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png" alt=""></p>
+<h1 id="常用函数总结（见pdf书籍）"><a href="#常用函数总结（见pdf书籍）" class="headerlink" title="常用函数总结（见pdf书籍）"></a>常用函数总结（见pdf书籍）</h1><h2 id="保存模型"><a href="#保存模型" class="headerlink" title="保存模型"></a>保存模型</h2><p><img src="/.com//hanshu1.png" alt></p>
+<h2 id="数值操作相关函数"><a href="#数值操作相关函数" class="headerlink" title="数值操作相关函数"></a>数值操作相关函数</h2><p><img src="/.com//hanshu2.png" alt></p>
+<p><img src="/.com//hanshu3.png" alt></p>
+<h2 id="类型转换函数"><a href="#类型转换函数" class="headerlink" title="类型转换函数"></a>类型转换函数</h2><p><img src="/.com//%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png" alt></p>
 <h2 id="形状变换函数"><a href="#形状变换函数" class="headerlink" title="形状变换函数"></a>形状变换函数</h2><ul>
 <li>tf.shape(input,name=None)<br>返回一个张量，值为输入参数input的shape，input可以是个张量，也可以是一个数组或list</li>
 <li>tf.size(input,name=None)<br>返回一个张量，内容为输入数据的元素数量</li>
@@ -465,215 +415,199 @@ cost= 0.06589771 W= [2.0169811] b= [-0.01690225]</code></pre><p><img src="Tensor
 <li>tf.squeeze(input,dim,name=None)<br>将dim指定的维度去掉(dim所指定的维度必须为1，如果不为1则会报错)</li>
 </ul>
 
-      
     </div>
-    
-    
-    
 
     
-
     
-
     
-
-    <footer class="post-footer">
       
 
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/" rel="next" title="编程实现KNN和朴素贝叶斯算法分类">
-                <i class="fa fa-chevron-left"></i> 编程实现KNN和朴素贝叶斯算法分类
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" rel="prev" title="基础练习-mnist手写数据集识别">
-                基础练习-mnist手写数据集识别 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
         
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>山海南话
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="TensorFlow编程基础">http://yoursite.com/2019/10/20/TensorFlow编程基础/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/" rel="prev" title="编程实现KNN和朴素贝叶斯算法分类">
+      <i class="fa fa-chevron-left"></i> 编程实现KNN和朴素贝叶斯算法分类
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" rel="next" title="基础练习-mnist手写数据集识别">
+      基础练习-mnist手写数据集识别 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
-  <aside id="sidebar" class="sidebar">
+
+          </div>
+          
     
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NjgzMy8yMzMzNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
     <div class="sidebar-inner">
 
-      
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">山海南话</p>
-              <p class="site-description motion-element" itemprop="description">孤单的一个人</p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/%20%7C%7C%20archive">
-              
-                  <span class="site-state-item-count">43</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
-                  <span class="site-state-item-name">categories</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
-                  <span class="site-state-item-name">tags</span>
-                </a>
-              </div>
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编程模型"><span class="nav-number">1.</span> <span class="nav-text">编程模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">2.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阶"><span class="nav-number">2.1.</span> <span class="nav-text">阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形状"><span class="nav-number">2.2.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">2.3.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取回"><span class="nav-number">2.4.</span> <span class="nav-text">取回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注入"><span class="nav-number">2.5.</span> <span class="nav-text">注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorBoard"><span class="nav-number">3.</span> <span class="nav-text">TensorBoard</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">4.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用函数总结（见pdf书籍）"><span class="nav-number">5.</span> <span class="nav-text">常用函数总结（见pdf书籍）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#保存模型"><span class="nav-number">5.1.</span> <span class="nav-text">保存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数值操作相关函数"><span class="nav-number">5.2.</span> <span class="nav-text">数值操作相关函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换函数"><span class="nav-number">5.3.</span> <span class="nav-text">类型转换函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形状变换函数"><span class="nav-number">5.4.</span> <span class="nav-text">形状变换函数</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编程模型"><span class="nav-number">1.</span> <span class="nav-text">编程模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">2.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阶"><span class="nav-number">2.1.</span> <span class="nav-text">阶</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形状"><span class="nav-number">2.2.</span> <span class="nav-text">形状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">2.3.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取回"><span class="nav-number">2.4.</span> <span class="nav-text">取回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注入"><span class="nav-number">2.5.</span> <span class="nav-text">注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorBoard"><span class="nav-number">3.</span> <span class="nav-text">TensorBoard</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">4.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用函数总结（见pdf书籍）"><span class="nav-number">5.</span> <span class="nav-text">常用函数总结（见pdf书籍）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#保存模型"><span class="nav-number">5.1.</span> <span class="nav-text">保存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数值操作相关函数"><span class="nav-number">5.2.</span> <span class="nav-text">数值操作相关函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换函数"><span class="nav-number">5.3.</span> <span class="nav-text">类型转换函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形状变换函数"><span class="nav-number">5.4.</span> <span class="nav-text">形状变换函数</span></a></li></ol></li></ol></div>
+      </div>
       <!--/noindex-->
-      
 
-      
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山海南话"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">山海南话</p>
+  <div class="site-description" itemprop="description">行者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/3422878082" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;3422878082" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3422878082@qq.com" title="E-Mail → mailto:3422878082@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>
+  <div id="sidebar-dimmer"></div>
 
 
-        
       </div>
     </main>
 
-    <footer id="footer" class="footer">
+    <footer class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">山海南话</span>
-
-  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">143k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:10</span>
 </div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
   <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
+  <div class="theme-info">主题 – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.7.0
+  </div>
 
         
 
@@ -683,159 +617,81 @@ cost= 0.06589771 W= [2.0169811] b= [-0.01690225]</code></pre><p><img src="Tensor
 
 
 
-        
+
       </div>
     </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
   </div>
 
   
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
 </script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
 
 </body>
 </html>
