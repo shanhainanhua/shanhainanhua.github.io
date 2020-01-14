@@ -276,7 +276,7 @@
       
         <p>近期写博客，遇到有些地方需要写数学公式，因为一直没用过所以初次使用遇到了问题。<br><br>使用markdown编写的公式在hexo博客中并不会正常显示出来。<br>网上查阅后发现原因如下：</p>
 <blockquote>
-<p>Hexo默认使用”hexo-renderer-marked”引擎渲染网页，该引擎会把一些特殊的markdown符号转换为相应的html标签，比如在markdown语法中，下划线’<em>‘代表斜体，会被渲染引擎处理为<em>标签。<br>因为类Latex格式书写的数学公式下划线 ‘</em>‘ 表示下标，有特殊的含义，如果被强制转换为<em>标签，那么MathJax引擎在渲染数学公式的时候就会出错。例如，$x_i$在开始被渲染的时候，处理为$x<em>i</em>$，这样MathJax引擎就认为该公式有语法错误，因为不会渲染。<br>类似的语义冲突的符号还包括’*’, ‘{‘, ‘}’, ‘&#39;等。<br><a href="https://www.jianshu.com/p/d87d7d2dcea9" target="_blank" rel="noopener">https://www.jianshu.com/p/d87d7d2dcea9</a></p>
+<p>Hexo默认使用”hexo-renderer-marked”引擎渲染网页，该引擎会把一些特殊的markdown符号转换为相应的html标签，比如在markdown语法中，下划线’<em>‘代表斜体，会被渲染引擎处理为<em>标签。<br>因为类Latex格式书写的数学公式下划线 ‘</em>‘ 表示下标，有特殊的含义，如果被强制转换为<em>标签，那么MathJax引擎在渲染数学公式的时候就会出错。例如，$x_i$在开始被渲染的时候，处理为$x<em>i</em>$，这样MathJax引擎就认为该公式有语法错误，因为不会渲染。<br>类似的语义冲突的符号还包括’*’, ‘{‘, ‘}’, ‘&#39;等。<br><a href="https://www.jianshu.com/p/d87d7d2dcea9" target="_blank" rel="noopener">https://www.jianshu.com/p/d87d7d2dcea9</a></em></em></p>
 </blockquote>
 <p>解决方法：</p>
 <ol>
