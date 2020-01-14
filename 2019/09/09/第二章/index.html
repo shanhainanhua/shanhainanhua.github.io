@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="[object Object]">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="真值和机器数真值：正负符号加二进制绝对值机器数:正负号分别用0和1来代替，一般放在最高位数的机器码表示：在远离小数点的位置补0 原码表示法 纯小数时  正数：本身数值 负数：本身数值加上符号位 0为正，1为负   纯整数时  正数：本身数值 负数：本身数值加上2的n-1次方（n为字长）    补码表示法补码中1.0000000表示负1，补码的零只有一个对于n位数来说，其模的大小为n位数全为1后再在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章">
+<meta property="og:url" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/index.html">
+<meta property="og:site_name" content="山海南话">
+<meta property="og:description" content="真值和机器数真值：正负符号加二进制绝对值机器数:正负号分别用0和1来代替，一般放在最高位数的机器码表示：在远离小数点的位置补0 原码表示法 纯小数时  正数：本身数值 负数：本身数值加上符号位 0为正，1为负   纯整数时  正数：本身数值 负数：本身数值加上2的n-1次方（n为字长）    补码表示法补码中1.0000000表示负1，补码的零只有一个对于n位数来说，其模的大小为n位数全为1后再在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%8A%A0%E5%87%8F%E6%B3%95%E5%99%A8.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%951.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%952.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E9%99%A4%E6%B3%95%E6%A0%A1%E6%AD%A3.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95.jpg">
+<meta property="article:published_time" content="2019-09-09T11:16:58.000Z">
+<meta property="article:modified_time" content="2019-09-25T12:57:58.027Z">
+<meta property="article:author" content="山海南话">
+<meta property="article:tag" content="组成原理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>第二章 | 山海南话</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">山海南话</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">且行且珍惜</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/3422878082" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="山海南话">
+      <meta itemprop="description" content="行者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="山海南话">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第二章
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-09 19:16:58" itemprop="dateCreated datePublished" datetime="2019-09-09T19:16:58+08:00">2019-09-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-25 20:57:58" itemprop="dateModified" datetime="2019-09-25T20:57:58+08:00">2019-09-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机组成原理</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="真值和机器数"><a href="#真值和机器数" class="headerlink" title="真值和机器数"></a>真值和机器数</h2><p><strong>真值</strong>：正负符号加二进制绝对值<br><br><strong>机器数</strong>:正负号分别用0和1来代替，一般放在最高位<br><br><strong>数的机器码表示：在远离小数点的位置补0</strong></p>
+<h2 id="原码表示法"><a href="#原码表示法" class="headerlink" title="原码表示法"></a>原码表示法</h2><ul>
+<li><p>纯小数时</p>
+<ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值加上符号位 0为正，1为负</li>
+</ul>
+</li>
+<li><p>纯整数时</p>
+<ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值加上2的n-1次方（n为字长）</li>
+</ul>
+</li>
+</ul>
+<h2 id="补码表示法"><a href="#补码表示法" class="headerlink" title="补码表示法"></a>补码表示法</h2><p>补码中1.0000000表示负1，补码的零只有一个<br><br>对于n位数来说，其模的大小为n位数全为1后再在最末位加1<br><br>如果某一数有n位整数（包括符号位），则它的模为2^n<br><br>如果是n位小数，它的模总是是2</p>
+<ul>
+<li>纯小数时<ul>
+<li>正数：本身数值</li>
+<li>负数：2-本身数值</li>
+</ul>
+</li>
+<li>纯整数时：<ul>
+<li>正数：本身数值</li>
+<li>负数：2^n-本身数值</li>
+</ul>
+</li>
+</ul>
+<h2 id="反码表示法"><a href="#反码表示法" class="headerlink" title="反码表示法"></a>反码表示法</h2><ul>
+<li>正数：本身数值</li>
+<li>负数：本身数值按位取反</li>
+<li>+0反码：00000000</li>
+<li>-0反码：11111111</li>
+</ul>
+<h2 id="移码表示法"><a href="#移码表示法" class="headerlink" title="移码表示法"></a>移码表示法</h2><p>将补码符号位求反<br></p>
+<h2 id="数的定点表示"><a href="#数的定点表示" class="headerlink" title="数的定点表示"></a>数的定点表示</h2><p><strong>定点小数：用于尾数（表示数值）</strong><br><strong>定点整数：用于阶码（表示指数）</strong></p>
+<h2 id="数的浮点表示法"><a href="#数的浮点表示法" class="headerlink" title="数的浮点表示法"></a>数的浮点表示法</h2><h3 id="浮点数的表示格式"><a href="#浮点数的表示格式" class="headerlink" title="浮点数的表示格式"></a>浮点数的表示格式</h3><ul>
+<li>阶码+尾数：其中阶码是定点整数，用补码表示；尾数是定点小数，用补码显示</li>
+<li>尾数符+阶码+尾数值：其中阶码是定点整数，用移码表示；尾数值是定点小数，用补码表示<h3 id="浮点数的规格化"><a href="#浮点数的规格化" class="headerlink" title="浮点数的规格化"></a>浮点数的规格化</h3>可以提高数据的精度，—–&gt;提高精度可以有两种方法</li>
+</ul>
+<ol>
+<li>尾数位数增加</li>
+<li>尾数规格化<br><br>所谓规格化就是调整阶码使其尾数满足如下形式：</li>
+</ol>
+<ul>
+<li>原码规格化后：正数为0.1开头，负数为1.1开头</li>
+<li>补码规格化后：正数为0.1开头，负数为1.0开头<h3 id="浮点数规格化习题示例"><a href="#浮点数规格化习题示例" class="headerlink" title="浮点数规格化习题示例"></a>浮点数规格化习题示例</h3>某机器用32位表示一个数，阶码部分占8位（含一个符号位），尾数部分占24位（含一个符号位）<br>设x1=-256.5，x2=127/256，试写出x1和x2的两种浮点数表示格式：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">首先分析x1</span><br><span class="line">x1真值为-256.5</span><br><span class="line">写成原码就是二进制真值就是-（100000000.1）</span><br><span class="line">因为规格化后要满足：正数为0.1开头，负数为1.0开头</span><br><span class="line">所以可以写成-2^9*0.1000000001，也就是2^9*1.1000000001(接下来取补码后成为1.0开头）</span><br><span class="line">先计算阶码：</span><br><span class="line">阶码的原码为9</span><br><span class="line">所以阶码的补码为：1001，占8位，所以在远离小数点的地方补0，最后可得00001001</span><br><span class="line">移码为补码的符号位取反，所以移码为10001001</span><br><span class="line">接着计算尾数：</span><br><span class="line">尾数的补码为：1.01111111110000000000000</span><br><span class="line">接着组合写成格式即可</span><br><span class="line"></span><br><span class="line">再来分析x2</span><br><span class="line">x2&#x3D;127&#x2F;256可以写成1111111*2^(-8)&#x3D;0.1111111*2^(-1)</span><br><span class="line">阶码的补码为：-1的补码&#x3D;11111111</span><br><span class="line">阶码的移码为：01111111</span><br><span class="line">尾数为：0.11111110000000000000000</span><br><span class="line">组合即可</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="浮点数的表示范围（设阶码和尾数均为n位）"><a href="#浮点数的表示范围（设阶码和尾数均为n位）" class="headerlink" title="浮点数的表示范围（设阶码和尾数均为n位）"></a>浮点数的表示范围（设阶码和尾数均为n位）</h3><ol>
+<li>阶码表示范围</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>————</th>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制补码</td>
+<td>100…0(共n位，最小则全为0）</td>
+<td>111…1(共n位，首位的1代表负，最大则剩下的全补1)</td>
+<td>000…1(共n位，第一位0为符号位)</td>
+<td>011…1(共n位，第一位0为符号位)</td>
+</tr>
+<tr>
+<td>十进制真值</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+</tr>
+<tr>
+<td>2. 规格化尾数表示范围（补码规格化后正数为0.1…形式，负数为1.0…形式）</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>—————</th>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制补码</td>
+<td>1.0….0</td>
+<td>1.011..1</td>
+<td>0.10…0</td>
+<td>0.11…1</td>
+</tr>
+<tr>
+<td>十进制真值</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+<td>计算可得</td>
+</tr>
+<tr>
+<td>3. 规格化浮点数表示范围</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>最小负数</th>
+<th>最大负数</th>
+<th>最小正数</th>
+<th>最大正数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>尾数负最小*2^(正阶码最大)</td>
+<td>尾数负最大*2^(负阶码最小)</td>
+<td>尾数正最小*2^(负阶码最小)</td>
+<td>尾数正最大*2^(正阶码最大)</td>
+</tr>
+</tbody></table>
+<h2 id="非数值数据的表示"><a href="#非数值数据的表示" class="headerlink" title="非数值数据的表示"></a>非数值数据的表示</h2><h3 id="字符表示"><a href="#字符表示" class="headerlink" title="字符表示"></a>字符表示</h3><p>ASCII码（美国信息交换标准码）：<br>共有128个字符，即2^7，因此占据7位，最高位为0，而汉字编码最高位为1<br>所以可以根据最高位来区分是否为汉字编码</p>
+<h3 id="汉字的表示"><a href="#汉字的表示" class="headerlink" title="汉字的表示"></a>汉字的表示</h3><p>区位码(不唯一)→十进制区位码→十六进制+2020H→国标码十六进制+8080H→机内码(唯一)<br>一个汉字用两个字节表示区内码<br><br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/hz.png" alt></p>
+<h2 id="定点加减法运算"><a href="#定点加减法运算" class="headerlink" title="定点加减法运算"></a>定点加减法运算</h2><p>在计算机中，常将数值转化为补码后再进行加减运算，优点是可以将减法运算转化为加法运算<br></p>
+<h3 id="加减法运算规则："><a href="#加减法运算规则：" class="headerlink" title="加减法运算规则："></a>加减法运算规则：</h3><ol>
+<li>补码运算</li>
+<li>数值位和符号位一同参与运算</li>
+<li>求差时，将减数求补，用求和代替求差</li>
+<li>运算结果为补码，符号位0表示正数，符号位1表示负数</li>
+<li>符号位的进位为模值，应该丢掉</li>
+</ol>
+<h3 id="加法运算："><a href="#加法运算：" class="headerlink" title="加法运算："></a>加法运算：</h3><p> [X]补+[Y]补=[X+Y]补</p>
+<h3 id="减法运算"><a href="#减法运算" class="headerlink" title="减法运算"></a>减法运算</h3><p>[X]补-[Y]补=[X+(-Y)]补=[X]补+[-Y]补<br>因为[-Y]补+[Y]补=[0]补=0<br>所以[-Y]补=-[Y]补<br>所以只要能通过[Y]补求得[-Y]补，就可以将补码减法运算化为补码加法运算<br>已知[Y]补，求[-Y]补的法则是：<br>对[Y]补各位(包括符号位)求反，然后在末位加上1<br>例如：[Y]补=1.1010 ，则[-Y]补=0.0110</p>
+<h3 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h3><p>求负数的补码：把它的原码自低位向高位看去，遇到的第一个’1’及其右边的’0’都不变，将左边的所有位按位取反，符号位不变。</p>
+<h3 id="溢出判断法："><a href="#溢出判断法：" class="headerlink" title="溢出判断法："></a>溢出判断法：</h3><p>在运算结果超出机器所能表示的数值范围后，就会产生溢出。<br><br>溢出有两种判断的方法：双符号法和进位判断法<br></p>
+<h4 id="双符号法："><a href="#双符号法：" class="headerlink" title="双符号法："></a>双符号法：</h4><p>也叫做变形补码法，模4补码法<br><br>采用的方法是用两个相同的符号位表示一个数的符号，左边第一位为第一符号位，第二位为第二符号位<br><br>第一符号位始终表示真正的符号，如果计算结果超出模值，则丢掉<br></p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00</td>
+<td>正数</td>
+</tr>
+<tr>
+<td>01</td>
+<td>正溢出</td>
+</tr>
+<tr>
+<td>10</td>
+<td>负溢出</td>
+</tr>
+<tr>
+<td>11</td>
+<td>负数</td>
+</tr>
+</tbody></table>
+<h4 id="进位判断法："><a href="#进位判断法：" class="headerlink" title="进位判断法："></a>进位判断法：</h4><p>当两个单符号位的补码进行加减运算时，若最高数值位向符号位的进位值C与符号位产生的进位输出值S相同则没有溢出发生，否则，有溢出发生<br><br>用异或的方式进行判断</p>
+<h2 id="基本的二进制加，减法器"><a href="#基本的二进制加，减法器" class="headerlink" title="基本的二进制加，减法器"></a>基本的二进制加，减法器</h2><p><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%8A%A0%E5%87%8F%E6%B3%95%E5%99%A8.png" alt="基本的加减法器"></p>
+<ol>
+<li><p>加法的实现<br><br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png" alt="实现的图片"></p>
+<ol>
+<li>p=0</li>
+<li>设$Y_{n-1}$=0，异或门输出为0；设$Y_{n-1}$为1，异或门输出为1。</li>
+<li>总结：异或门输出=$Y_{n-1}$</li>
+<li>加法：[X]补+[Y]补=[X+Y]补</li>
+</ol>
+</li>
+<li><p>减法的实现<br><br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E5%AE%9E%E7%8E%B0.png" alt="实现的图片"></p>
+<ol>
+<li>p=1</li>
+<li>设$Y_{n-1}$=0，异或门输出为1；反之为0；</li>
+<li>总结：异或门输出=$Y_{n-1}$取反</li>
+<li>减法实现：[X]补-[Y]补=[X]补+[Y]补取反+$2 ^{-n}$  (n是小数点之后的位数，+$2 ^{-n}$的意思是在末尾+1)</li>
+<li>末尾的加1来源于一开始的Cn，Cn=p=1 （设计巧妙）</li>
+</ol>
+</li>
+</ol>
+<h2 id="定点乘法运算"><a href="#定点乘法运算" class="headerlink" title="定点乘法运算"></a>定点乘法运算</h2><h3 id="原码一位乘法"><a href="#原码一位乘法" class="headerlink" title="原码一位乘法"></a>原码一位乘法</h3><h4 id="乘法的本质："><a href="#乘法的本质：" class="headerlink" title="乘法的本质："></a>乘法的本质：</h4><p>将乘法变成加法和右移运算的结果</p>
+<h4 id="运算法则："><a href="#运算法则：" class="headerlink" title="运算法则："></a>运算法则：</h4><ol>
+<li>被乘数和乘数均取绝对值参加运算，符号位单独考虑</li>
+<li>被乘数取双符号位，部分积的长度与被乘数的长度相同，初值为0</li>
+<li>从乘数的最低位的$y_n$位开始对乘数进行判断：若$y_n$=1，则部分积加上被乘数|X|，然后右移一位；若$y_n$=0，则部分积加上0，然后右移一位</li>
+<li>重复3的判断n次<h4 id="例题："><a href="#例题：" class="headerlink" title="例题："></a>例题：</h4><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E5%8E%9F%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg" alt="原码一位乘法">    </li>
+</ol>
+<p>之后符号位就是x，y的符号位进行异或运算为0，数值位就是|X|.|Y|=0.10001111<br>所以最后结果为0.10001111</p>
+<h3 id="补码一位乘法"><a href="#补码一位乘法" class="headerlink" title="补码一位乘法"></a>补码一位乘法</h3><h4 id="运算规则："><a href="#运算规则：" class="headerlink" title="运算规则："></a>运算规则：</h4><ol>
+<li>符号位参与运算，运算的数均以补码表示</li>
+<li>被乘数一般取双符号位参与运算，部分积初始值为0</li>
+<li>看乘数小数点位数决定移多少次</li>
+<li>乘数末位增设附加位$y_{n+1}$，且初值为0</li>
+<li>按下表进行操作</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>$y_n$(高位)</th>
+<th>$y_{n+1}$(低位)</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>部分积右移一位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>部分积加[x]补，右移一位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>部分积加[-x]补，右移一位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>部分积右移一位</td>
+</tr>
+</tbody></table>
+<h4 id="例题：-1"><a href="#例题：-1" class="headerlink" title="例题："></a>例题：</h4><p><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E4%B9%98%E6%B3%95.jpg" alt="补码一位乘法"></p>
+<h3 id="补码两位乘法"><a href="#补码两位乘法" class="headerlink" title="补码两位乘法"></a>补码两位乘法</h3><p>减少运算步骤，提高运算速度<br><br>运算规则如下：<br><br>符号位参与运算，两数均以补码表示<br><br>部分积与被乘数均采用<strong>3位符号</strong>表示，乘数<strong>末位增加一位</strong>$y_{n+1}$，其初值为0<br></p>
+<table>
+<thead>
+<tr>
+<th>$Y_{n-1}$</th>
+<th>$Y_n$</th>
+<th>$Y_{n+1}$</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>加0，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>加[x]补，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>加[x]补，右移两位</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>加2[x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>加2[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>加[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>加[-x]补，右移两位</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>加0，右移两位</td>
+</tr>
+</tbody></table>
+<p>总结：<br><br>$Y_{n-1}$为0，代表正，即“+”，之后看1的个数决定加几个[x]补<br><br>$Y_{n-1}$为1，代表负，即“-”，之后看0的个数决定加几个[-x]补<br><br>若尾数n为偶数，则乘数用两位符号，最后一步不移位；<br><br>若尾数n为奇数，则乘数用一位符号，最后一步移一位<br><br>示例：<br>第一题：<br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%951.jpg" alt="第二章\补码两位乘法1.jpg"><br>第二题：<br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%A4%E4%BD%8D%E4%B9%98%E6%B3%952.jpg" alt="第二章\补码两位乘法2.jpg"></p>
+<h2 id="定点除法运算"><a href="#定点除法运算" class="headerlink" title="定点除法运算"></a>定点除法运算</h2><h3 id="补码一位除法"><a href="#补码一位除法" class="headerlink" title="补码一位除法"></a>补码一位除法</h3><p>本质：加法和左移<br><br>三个规则：</p>
+<ul>
+<li>比较上商规则：比较被除数与除数符号，余数和除数符号</li>
+<li>商的校正规则</li>
+<li>余数校正规则<br>补码不恢复余数法的算法规则；</li>
+</ul>
+<ol>
+<li>符号位参加运算，除数与被除数均用双符号位补码表示</li>
+<li>当被除数与除数同号时，用被除数减去除数；被除数与除数异号时，用被除数加上除数；商符号位的取值见3</li>
+<li>当余数与除数同号时，商上1，余数左移一位减去除数；余数与除数异号时，商上0，余数左移一位加上除数</li>
+<li>余数左移加上或减去除数后就得到了新余数</li>
+<li>采用校正法包括符号位在内，规则3应重复n+1次</li>
+</ol>
+<p>商的校正原则：</p>
+<ol>
+<li>当刚好能除尽(即运算过程中任一步余数为0)时，</li>
+</ol>
+<ul>
+<li>若除数为正，则商不必校正；</li>
+<li>若除数为负，则商需要校正，即加$2^{-n}$进行修正</li>
+</ul>
+<ol start="2">
+<li>当不能除尽时，</li>
+</ol>
+<ul>
+<li>若商为正，则不必校正；</li>
+<li>若商为负，则商需要加$2^{-n}$校正</li>
+</ul>
+<p>余数之所以要校正，是因为在补码不恢复余数除法运算过程中先比较后上商的缘故<br><br>余数的校正方法：</p>
+<ul>
+<li>若商为正，则当余数与被除数异号时，应将余数加上除数进行校正才能获得正确的余数</li>
+<li>若商为负，则当余数与被除数异号时，余数需要减去除数进行校正</li>
+</ul>
+<p>商校正，能除尽，看除数；不能除尽，看商，正的不必校正<br>余数校正，看被除数，同号不校正；异号看商，正加，负减除数<br>思维导图示例：<br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E4%B8%80%E4%BD%8D%E9%99%A4%E6%B3%95%E6%A0%A1%E6%AD%A3.png" alt="补码一位除法思维导图"><br>习题示例：<br><img src="/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/%E7%AC%AC%E4%BA%8C%E7%AB%A0%5C%E8%A1%A5%E7%A0%81%E9%99%A4%E6%B3%95.jpg" alt="补码除法习题"></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\09\03\第一章\" rel="bookmark">第一章</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\09\22\计组习题纠错总结\" rel="bookmark">计组习题纠错总结</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>山海南话
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2019/09/09/%E7%AC%AC%E4%BA%8C%E7%AB%A0/" title="第二章">http://yoursite.com/2019/09/09/第二章/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag"># 组成原理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/08/Win10%E4%B8%8B%E5%AE%89%E8%A3%85Linux%E5%AD%90%E7%B3%BB%E7%BB%9F/" rel="prev" title="Win10下安装Linux子系统">
+      <i class="fa fa-chevron-left"></i> Win10下安装Linux子系统
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/15/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%95%B0%E6%8D%AE%E8%AE%A4%E7%9F%A5%E4%B8%8E%E9%A2%84%E5%A4%84%E7%90%86/" rel="next" title="第二章 数据认知与预处理">
+      第二章 数据认知与预处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NjgzMy8yMzMzNA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#真值和机器数"><span class="nav-number">1.</span> <span class="nav-text">真值和机器数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原码表示法"><span class="nav-number">2.</span> <span class="nav-text">原码表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补码表示法"><span class="nav-number">3.</span> <span class="nav-text">补码表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反码表示法"><span class="nav-number">4.</span> <span class="nav-text">反码表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移码表示法"><span class="nav-number">5.</span> <span class="nav-text">移码表示法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数的定点表示"><span class="nav-number">6.</span> <span class="nav-text">数的定点表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数的浮点表示法"><span class="nav-number">7.</span> <span class="nav-text">数的浮点表示法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数的表示格式"><span class="nav-number">7.1.</span> <span class="nav-text">浮点数的表示格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数的规格化"><span class="nav-number">7.2.</span> <span class="nav-text">浮点数的规格化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数规格化习题示例"><span class="nav-number">7.3.</span> <span class="nav-text">浮点数规格化习题示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数的表示范围（设阶码和尾数均为n位）"><span class="nav-number">7.4.</span> <span class="nav-text">浮点数的表示范围（设阶码和尾数均为n位）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非数值数据的表示"><span class="nav-number">8.</span> <span class="nav-text">非数值数据的表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符表示"><span class="nav-number">8.1.</span> <span class="nav-text">字符表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#汉字的表示"><span class="nav-number">8.2.</span> <span class="nav-text">汉字的表示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点加减法运算"><span class="nav-number">9.</span> <span class="nav-text">定点加减法运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加减法运算规则："><span class="nav-number">9.1.</span> <span class="nav-text">加减法运算规则：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加法运算："><span class="nav-number">9.2.</span> <span class="nav-text">加法运算：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#减法运算"><span class="nav-number">9.3.</span> <span class="nav-text">减法运算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充："><span class="nav-number">9.4.</span> <span class="nav-text">补充：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#溢出判断法："><span class="nav-number">9.5.</span> <span class="nav-text">溢出判断法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#双符号法："><span class="nav-number">9.5.1.</span> <span class="nav-text">双符号法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进位判断法："><span class="nav-number">9.5.2.</span> <span class="nav-text">进位判断法：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本的二进制加，减法器"><span class="nav-number">10.</span> <span class="nav-text">基本的二进制加，减法器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点乘法运算"><span class="nav-number">11.</span> <span class="nav-text">定点乘法运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原码一位乘法"><span class="nav-number">11.1.</span> <span class="nav-text">原码一位乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#乘法的本质："><span class="nav-number">11.1.1.</span> <span class="nav-text">乘法的本质：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运算法则："><span class="nav-number">11.1.2.</span> <span class="nav-text">运算法则：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例题："><span class="nav-number">11.1.3.</span> <span class="nav-text">例题：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补码一位乘法"><span class="nav-number">11.2.</span> <span class="nav-text">补码一位乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#运算规则："><span class="nav-number">11.2.1.</span> <span class="nav-text">运算规则：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例题：-1"><span class="nav-number">11.2.2.</span> <span class="nav-text">例题：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补码两位乘法"><span class="nav-number">11.3.</span> <span class="nav-text">补码两位乘法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定点除法运算"><span class="nav-number">12.</span> <span class="nav-text">定点除法运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#补码一位除法"><span class="nav-number">12.1.</span> <span class="nav-text">补码一位除法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="山海南话"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">山海南话</p>
+  <div class="site-description" itemprop="description">行者</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/3422878082" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;3422878082" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3422878082@qq.com" title="E-Mail → mailto:3422878082@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">山海南话</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">143k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:10</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.7.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-nest@1/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
