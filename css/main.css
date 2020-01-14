@@ -1259,7 +1259,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #e70540;
+  background: #df2bff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2605,13 +2605,27 @@ hr {
   display: inline-block;
 }
 body {
-  background: url("images/3.png");
+  background: url("/images/3.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
 }
+/* 主页文章添加阴影效果 */
+.posts-expand .home {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.post-toc .nav .nav-child {
+  display: block;
+}
 .main-inner {
+  margin-top: 60px;
+  padding: 60px 60px 60px 60px;
   background: #fff;
-  opacity: 0.8;
+  opacity: 0.85;
+  min-height: 500px;
 }
