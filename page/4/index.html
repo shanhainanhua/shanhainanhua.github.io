@@ -1465,343 +1465,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="山海南话">
-      <meta itemprop="description" content="行者">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="山海南话">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/09/03/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">java网络编程</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-03 17:45:09" itemprop="dateCreated datePublished" datetime="2019-09-03T17:45:09+08:00">2019-09-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-09-04 10:41:15" itemprop="dateModified" datetime="2019-09-04T10:41:15+08:00">2019-09-04</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>java中有关网络方面的功能定义都在java.net包中</strong></p>
-<h2 id="InetAddress类封装IP或域名"><a href="#InetAddress类封装IP或域名" class="headerlink" title="InetAddress类封装IP或域名"></a>InetAddress类封装IP或域名</h2><p>包含的方法：</p>
-<pre><code>* 获取本机对应的InetAdress对象：getLocalHost
-* 根据主机获得对应的InetAdress对象，参数为String类型，可以是ip地址或域名：getByName（String ）
-* 根据主机获得具有相同名字的一组InetAddress对象：getAllByName（String）
-* 获取addr所封装的IP地址对应的InetAddress对象：getByAddress（byte[] addr）
-* 获取ip地址：getHostAddress
-* 获取域名：getHostName
-* 判断是否可以到达该地址：isReachable</code></pre><h2 id="URL类（Uniform-Resource-Locator，统一资源定位器"><a href="#URL类（Uniform-Resource-Locator，统一资源定位器" class="headerlink" title="URL类（Uniform Resource Locator，统一资源定位器)"></a>URL类（Uniform Resource Locator，统一资源定位器)</h2><p>通常语法格式：  协议名：//主机名：端口号/资源名 <br><br>getXXX（）返回相应信息<br></p>
-<h2 id="URI类-统一资源标识符"><a href="#URI类-统一资源标识符" class="headerlink" title="URI类  统一资源标识符"></a>URI类  统一资源标识符</h2><p>唯一作用就是解析  可以将URL理解成URI的特例<br><br>创建URL对象需要抛出异常<br><br>openConnection方法用于返回一个URLConnection对象，URLConnection类提供一些更强的方法</p>
-<pre><code>• 获得文件的长度，类型，创建时间，修改时间  getXXX（）
-• 获得输入流，以便读取文件的数据  getInputStream（）
-• 获得输出流，以便输出数据 getOutputStream（）
-• 设置请求属性值：setRequestProperty（String key，String value）</code></pre><h2 id="基于TCP的网络编程-关于套接字-socket"><a href="#基于TCP的网络编程-关于套接字-socket" class="headerlink" title="基于TCP的网络编程  关于套接字 socket"></a>基于TCP的网络编程  关于套接字 socket</h2><p>使用TCP/IP协议进行通信时，会在通信的两端各建立一个Socket（套接字），从而形成虚拟链路<br><br>使用Socket对象封装了两端的通信端口，屏蔽了底层细节，其允许用户将网络连接当成一个IO流，<br><br>读写数据<br><br>主要使用java.net包下的两个类：</p>
-<p>   <strong>ServeSocket</strong>类：服务器套接字<br><br>   <strong>Socket</strong>类：客户端套接字<br><br><strong>都必须抛出异常</strong></p>
-<hr>
-<p>基础用法：<br><br><strong>客户端</strong>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> 网络编程;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//创建连接到本机对象</span></span><br><span class="line">			Socket socket=<span class="keyword">new</span> Socket(<span class="string">"10.0.218.101"</span>,<span class="number">28888</span>);</span><br><span class="line">			<span class="comment">//将socket对应的输出对象包装成printstream</span></span><br><span class="line">			PrintStream printStream=<span class="keyword">new</span> PrintStream(socket.getOutputStream());</span><br><span class="line">			<span class="comment">//往服务器发送信息</span></span><br><span class="line">			printStream.println(<span class="string">"我是客户"</span>);</span><br><span class="line">			printStream.flush();</span><br><span class="line">			<span class="comment">//获取服务器的信息,将socket对应的输入流包装成bufferreader</span></span><br><span class="line">			<span class="comment">//BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());</span></span><br><span class="line">		    BufferedReader bufferedReader=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">		    String line=bufferedReader.readLine();</span><br><span class="line">		    System.out.println(<span class="string">"来自服务器的数据："</span>+line);</span><br><span class="line">		    <span class="comment">//关闭</span></span><br><span class="line">		    bufferedReader.close();</span><br><span class="line">		    printStream.close();</span><br><span class="line">		    socket.close();</span><br><span class="line">		&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>服务端</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> 网络编程;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">	ServerSocket server;</span><br><span class="line">	<span class="comment">// 计数</span></span><br><span class="line">	<span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Server</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 创建serversocket，用于监听客户端对应的端口号是否有socket</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			server = <span class="keyword">new</span> ServerSocket(<span class="number">28888</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 启动当前线程，执行run方法</span></span><br><span class="line">		<span class="keyword">this</span>.start();</span><br><span class="line">		System.out.println(<span class="string">"服务器启动"</span>);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">// 首先接受客户端的Socket</span></span><br><span class="line">				Socket socket = server.accept();</span><br><span class="line">				BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">				<span class="comment">// 读客户端发送的消息并显示</span></span><br><span class="line">				String line = bufferedReader.readLine();</span><br><span class="line">				System.out.println(<span class="string">"客户端发送的消息为："</span> + line);</span><br><span class="line">				<span class="comment">// 将socket对应的输出流包装成为printstream</span></span><br><span class="line">				PrintStream printStream = <span class="keyword">new</span> PrintStream(socket.getOutputStream());</span><br><span class="line">				<span class="comment">// 往客户端发送消息</span></span><br><span class="line">				printStream.println(<span class="string">"您是第"</span> + (++num) + <span class="string">"个访问服务器的用户！"</span>);</span><br><span class="line">				printStream.close();</span><br><span class="line">				bufferedReader.close();</span><br><span class="line">				socket.close();</span><br><span class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">new</span> Server();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>应用：实现一个简易的聊天室</strong></p>
-<pre><code class="java">客户端：
-<span class="keyword">package</span> 网络编程;
-
-<span class="keyword">import</span> java.awt.BorderLayout;
-<span class="keyword">import</span> java.awt.Label;
-<span class="keyword">import</span> java.awt.event.ActionEvent;
-<span class="keyword">import</span> java.awt.event.ActionListener;
-<span class="keyword">import</span> java.io.BufferedReader;
-<span class="keyword">import</span> java.io.InputStreamReader;
-<span class="keyword">import</span> java.io.PrintStream;
-<span class="keyword">import</span> java.net.Socket;
-
-<span class="keyword">import</span> javax.swing.JButton;
-<span class="keyword">import</span> javax.swing.JFrame;
-<span class="keyword">import</span> javax.swing.JLabel;
-<span class="keyword">import</span> javax.swing.JPanel;
-<span class="keyword">import</span> javax.swing.JScrollPane;
-<span class="keyword">import</span> javax.swing.JTextArea;
-<span class="keyword">import</span> javax.swing.JTextField;
-
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">chatClient</span> <span class="keyword">extends</span> <span class="title">JFrame</span> </span>{
-    Socket socket = <span class="keyword">null</span>;
-    PrintStream pStream = <span class="keyword">null</span>;
-    BufferedReader bReader = <span class="keyword">null</span>;
-    JPanel jPanelbottom = <span class="keyword">null</span>;
-    JScrollPane jScrollPane = <span class="keyword">null</span>;
-    JLabel label_name = <span class="keyword">null</span>;
-    JLabel label_txt = <span class="keyword">null</span>;
-    JButton send = <span class="keyword">null</span>;
-    JTextArea maintxt = <span class="keyword">null</span>;
-    JTextField txt_name = <span class="keyword">null</span>;
-    JTextField txt_input = <span class="keyword">null</span>;
-
-    <span class="function"><span class="keyword">public</span> <span class="title">chatClient</span><span class="params">()</span> </span>{
-        <span class="comment">// TODO Auto-generated constructor stub</span>
-        <span class="comment">// 组装底部一栏</span>
-        <span class="keyword">super</span>(<span class="string">"聊天室"</span>);
-        label_name = <span class="keyword">new</span> JLabel(<span class="string">"昵称"</span>);
-        txt_name = <span class="keyword">new</span> JTextField(<span class="number">5</span>);
-        label_txt = <span class="keyword">new</span> JLabel(<span class="string">"输入消息"</span>);
-        txt_input = <span class="keyword">new</span> JTextField(<span class="number">20</span>);
-        send = <span class="keyword">new</span> JButton(<span class="string">"发送"</span>);
-        jPanelbottom = <span class="keyword">new</span> JPanel();
-        jPanelbottom.add(label_name);
-        jPanelbottom.add(txt_name);
-        jPanelbottom.add(label_txt);
-        jPanelbottom.add(txt_input);
-        jPanelbottom.add(send);
-        <span class="keyword">this</span>.add(jPanelbottom, BorderLayout.SOUTH);
-        <span class="comment">// 组装显示主界面</span>
-        maintxt = <span class="keyword">new</span> JTextArea();
-        maintxt.setEditable(<span class="keyword">false</span>);
-        jScrollPane = <span class="keyword">new</span> JScrollPane(maintxt);
-        <span class="keyword">this</span>.add(jScrollPane);
-        <span class="keyword">this</span>.setSize(<span class="number">500</span>, <span class="number">300</span>);
-        <span class="keyword">this</span>.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        <span class="keyword">try</span> {
-            <span class="comment">// 创建socket对象</span>
-            socket = <span class="keyword">new</span> Socket(<span class="string">"10.0.218.101"</span>, <span class="number">28888</span>);
-            <span class="comment">// 创建一个往socket里写数据的管道</span>
-            pStream = <span class="keyword">new</span> PrintStream(socket.getOutputStream());
-            <span class="comment">// 创建一个从socket里读数据的管道</span>
-            bReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));
-        } <span class="keyword">catch</span> (Exception e) {
-            e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-        }
-        <span class="comment">// 为发送按钮注册监听</span>
-        send.addActionListener(<span class="keyword">new</span> ActionListener() {
-
-            <span class="meta">@Override</span>
-            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent arg0)</span> </span>{
-                <span class="comment">// TODO Auto-generated method stub</span>
-                String name = txt_name.getText();
-                String msg = txt_input.getText();
-                <span class="keyword">if</span> (!msg.equals(<span class="string">""</span>)) {
-                    pStream.println(name + <span class="string">"说："</span> + msg);
-                    pStream.flush();
-                    <span class="comment">// 发送完毕清空输入框</span>
-                    txt_input.setText(<span class="string">""</span>);
-                }
-            }
-        });
-        <span class="comment">// 启动线程</span>
-        <span class="keyword">new</span> GetMsg().start();
-    }
-
-    <span class="comment">// 接收服务器返回信息的线程</span>
-    <span class="class"><span class="keyword">class</span> <span class="title">GetMsg</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
-                <span class="keyword">try</span> {
-                    String getMsg = bReader.readLine();
-                    <span class="keyword">if</span> (getMsg != <span class="keyword">null</span>) {
-                        <span class="comment">// 主窗口显示信息并换行</span>
-                        maintxt.append(getMsg + <span class="string">"\n"</span>);
-                    }
-                    Thread.sleep(<span class="number">50</span>);
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-                }
-            }
-        }
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        <span class="keyword">new</span> chatClient().setVisible(<span class="keyword">true</span>);
-    }
-}
-
-
-服务端：
-<span class="keyword">package</span> 网络编程;
-
-<span class="keyword">import</span> java.io.BufferedReader;
-<span class="keyword">import</span> java.io.InputStreamReader;
-<span class="keyword">import</span> java.io.PrintWriter;
-<span class="keyword">import</span> java.net.ServerSocket;
-<span class="keyword">import</span> java.net.Socket;
-<span class="keyword">import</span> java.text.SimpleDateFormat;
-<span class="keyword">import</span> java.util.ArrayList;
-<span class="keyword">import</span> java.util.Date;
-<span class="keyword">import</span> java.util.LinkedList;
-
-<span class="keyword">import</span> javax.swing.JFrame;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">chatServer</span> <span class="keyword">extends</span> <span class="title">JFrame</span> </span>{
-    <span class="comment">// 声明服务器端套接字</span>
-    ServerSocket serverSocket;
-    <span class="comment">// 输入流列表集合</span>
-    ArrayList&lt;BufferedReader&gt; bReaders = <span class="keyword">new</span> ArrayList&lt;BufferedReader&gt;();
-    <span class="comment">// 输出流列表集合</span>
-    ArrayList&lt;PrintWriter&gt; pStreams = <span class="keyword">new</span> ArrayList&lt;PrintWriter&gt;();
-    <span class="comment">// 聊天信息链表集合</span>
-    LinkedList&lt;String&gt; msgList = <span class="keyword">new</span> LinkedList&lt;String&gt;();
-
-    <span class="function"><span class="keyword">public</span> <span class="title">chatServer</span><span class="params">()</span> </span>{
-        <span class="keyword">try</span> {
-            serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">28888</span>);
-        } <span class="keyword">catch</span> (Exception e) {
-            e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-        }
-        <span class="comment">// 创建接收客户端Socket的线程实例，并启动</span>
-        <span class="keyword">new</span> getMsg().start();
-        <span class="comment">// 创建给客户端发送消息的线程实例，并启动</span>
-        <span class="keyword">new</span> SendMag().start();
-        System.out.println(<span class="string">"服务器已经启动"</span>);
-
-    }
-    <span class="comment">// 接收客户端消息线程</span>
-    <span class="class"><span class="keyword">class</span> <span class="title">getMsg</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
-        <span class="meta">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="comment">// TODO Auto-generated method stub</span>
-            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
-                <span class="keyword">try</span> {
-                    <span class="comment">// 接收一个客户端socket对象</span>
-                    Socket socket = serverSocket.accept();
-                    <span class="keyword">if</span> (socket != <span class="keyword">null</span>) {
-                        <span class="comment">// 获取socket对象的输入流</span>
-                        BufferedReader bReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));
-                        <span class="comment">// 将输入流添加入输入流列表集合中</span>
-                        bReaders.add(bReader);
-                        <span class="comment">// 开启一个线程接收该客户的聊天信息</span>
-                        <span class="keyword">new</span> getMsg1(bReader).start();
-                        <span class="comment">// 获取socket对象的输出流，并将其加入输出流列表中</span>
-                        pStreams.add(<span class="keyword">new</span> PrintWriter(socket.getOutputStream()));
-
-                    }
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-                }
-
-            }
-        }
-    }
-
-    <span class="comment">// 接收客户聊天信息的线程</span>
-    <span class="class"><span class="keyword">class</span> <span class="title">getMsg1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
-        BufferedReader bReader;
-        <span class="function"><span class="keyword">public</span> <span class="title">getMsg1</span><span class="params">(BufferedReader bReader)</span> </span>{
-            <span class="keyword">this</span>.bReader = bReader;
-        }
-        <span class="meta">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
-                <span class="keyword">try</span> {
-                    <span class="comment">// 从输入流中读取一行消息</span>
-                    String strMsg = bReader.readLine();
-                    <span class="keyword">if</span> (strMsg != <span class="keyword">null</span>) {
-                        SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);
-                        String strTime = dateFormat.format(<span class="keyword">new</span> Date());
-                        msgList.addFirst(<span class="string">"&lt;== "</span> + strTime + <span class="string">" ==&gt;\n"</span> + strMsg);
-                    }
-                } <span class="keyword">catch</span> (Exception e) {
-                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-                }
-            }
-        }
-    }
-    <span class="comment">// 给所有客户发送聊天信息的线程</span>
-    <span class="class"><span class="keyword">class</span> <span class="title">SendMag</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
-        <span class="meta">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
-                <span class="keyword">try</span> {
-                    <span class="comment">// 如果信息链表不为空 发送</span>
-                    <span class="keyword">if</span> (!msgList.isEmpty()) {
-                        String msg = msgList.removeLast();
-                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pStreams.size(); i++) {
-                            pStreams.get(i).println(msg);
-                            pStreams.get(i).flush();
-                        }
-                    }
-                } <span class="keyword">catch</span> (Exception e) {
-                    <span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
-                }
-            }
-        }
-    }
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        <span class="keyword">new</span> chatServer();
-    }
-}
-
-
-</code></pre>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/21/Eclipse%E8%BF%9E%E6%8E%A5MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1868,6 +1531,96 @@
       
           <p>其实很简单，但还是应该记录一下<br>参考了这个作者的<a href="http://www.cnblogs.com/fnng/archive/2011/07/18/2110023.html" target="_blank" rel="noopener">博客</a><br></p>
 <p>MySQL我选择了Navicat for MySQL这个软件，中文版，挺好用的</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/19/%E8%AE%B0%E5%BD%95hexo%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%BB%BA%E7%AB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="山海南话">
+      <meta itemprop="description" content="行者">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="山海南话">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/05/19/%E8%AE%B0%E5%BD%95hexo%E5%8D%9A%E5%AE%A2%E7%9A%84%E5%BB%BA%E7%AB%8B/" class="post-title-link" itemprop="url">记录hexo博客的建立</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-19 18:42:11" itemprop="dateCreated datePublished" datetime="2019-05-19T18:42:11+08:00">2019-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-27 22:48:56" itemprop="dateModified" datetime="2019-09-27T22:48:56+08:00">2019-09-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo%E5%8D%9A%E5%AE%A2%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo博客相关配置</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>625</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一直想有个自己单独的博客，这几天呢，踩了大大小小的坑，终于把它给弄好了，配置的过程参考了很多人的博客，在此记录:<br><br>1.<a href="https://www.bilibili.com/video/av44544186?from=search&seid=2380386286865002522/" target="_blank" rel="noopener" title="手把手教你从0开始搭建自己的个人博客 |无坑版视频教程| hexo">首先是B站一个up主的视频</a><br><br>up主介绍的虽然比较详细，但是所演示的环境并非在windows之下，然后我在视频评论中找到了这个老哥的链接<br><br>2.<a href="https://caiyantao.gitee.io/2019/04/13/Hexo-%E4%B8%80/#more/" target="_blank" rel="noopener" title="Hexo学习">windows下的讲解</a><br><br>一路走下去还算顺利，中间遇到了一个错误，解决方法在这:<a href="https://www.v2ex.com/t/175940/" target="_blank" rel="noopener" title="可能其他人不会遇到，仅提醒，可以试一下">错误解决</a>,之后老哥是部署到Coding上的，我注册时出现问题，就没成功，于是接着找了其他人的教程（当然了，最后我在github和Coding上都部署成功了）<br><br>3.<a href="https://zhuanlan.zhihu.com/p/26625249/" target="_blank" rel="noopener" title="GitHub+Hexo 搭建个人网站详细教程">知乎教程</a><br><br>这份教程特别详细，其实可以完全从一开始就按上面来.部署成功后自然是选择主题，优化主题，经过试错后选择了最多人用的next主题，简洁又不简单，资料又好找，之后可能会多尝试其他主题，不过呢，在安装next主题时注意安装目前的新版，此教程中的是旧版，可能会与某些插件有不兼容的问题<br><br>4.<a href="https://blog.csdn.net/qq_36759224/article/details/85420403/" target="_blank" rel="noopener" title="Hexo 博客优化之博客美化（看板娘/鼠标点击爱心字体烟花爆炸效果/自定义鼠标指针样式/彩色滚动变换字体/背景音乐/网页标题恶搞/动态线条/人体时钟挂件/雪花飘落/背景动态彩带......）">主题配置和优化</a><br><br>这方面网上教程特别多，不过看一两篇就够了，因为内容大多一样 <br><br>5.<a href="https://gaomf.cn/2015/11/01/Hexo%E5%8D%9A%E5%AE%A2%E4%BC%98%E5%8C%96%E5%8A%A0%E8%BD%BD%E9%80%9F%E5%BA%A6/" target="_blank" rel="noopener" title="Hexo博客优化加载速度">优化博客访问速度</a> <br><br>因为一开始是部署到Github上的，实在是有些慢，所以还是尝试部署在国内平台，参考了这位博主的教程成功了<br><br><br>在写博客时，有些特定的博客不想让其他人看见，我们可以加密自己的博客，具体参考<a href="https://github.com/MikeCoder/hexo-blog-encrypt/blob/master/ReadMe.zh.md" target="_blank" rel="noopener">这里</a><br>这样其他人就需要输入密码才能访问我们的博客<br><br>在写博客时，markdown编辑器的话，我用的是vs code ,装Markdown All in One 这个插件就够了，其他的按自己需要，感觉是目前用过的最好用的了.</p>
 
       
     </div>
@@ -1955,7 +1708,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -2014,12 +1767,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">161k</span>
+    <span title="站点总字数">154k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:26</span>
+    <span title="站点阅读时长">2:20</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
   </div>
