@@ -2948,6 +2948,265 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
       </tags>
   </entry>
   <entry>
+    <title>java网络编程</title>
+    <url>/2019/09/03/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><strong>java中有关网络方面的功能定义都在java.net包中</strong></p>
+<h2 id="InetAddress类封装IP或域名"><a href="#InetAddress类封装IP或域名" class="headerlink" title="InetAddress类封装IP或域名"></a>InetAddress类封装IP或域名</h2><p>包含的方法：</p>
+<pre><code>* 获取本机对应的InetAdress对象：getLocalHost
+* 根据主机获得对应的InetAdress对象，参数为String类型，可以是ip地址或域名：getByName（String ）
+* 根据主机获得具有相同名字的一组InetAddress对象：getAllByName（String）
+* 获取addr所封装的IP地址对应的InetAddress对象：getByAddress（byte[] addr）
+* 获取ip地址：getHostAddress
+* 获取域名：getHostName
+* 判断是否可以到达该地址：isReachable</code></pre><h2 id="URL类（Uniform-Resource-Locator，统一资源定位器"><a href="#URL类（Uniform-Resource-Locator，统一资源定位器" class="headerlink" title="URL类（Uniform Resource Locator，统一资源定位器)"></a>URL类（Uniform Resource Locator，统一资源定位器)</h2><p>通常语法格式：  协议名：//主机名：端口号/资源名 <br><br>getXXX（）返回相应信息<br></p>
+<h2 id="URI类-统一资源标识符"><a href="#URI类-统一资源标识符" class="headerlink" title="URI类  统一资源标识符"></a>URI类  统一资源标识符</h2><p>唯一作用就是解析  可以将URL理解成URI的特例<br><br>创建URL对象需要抛出异常<br><br>openConnection方法用于返回一个URLConnection对象，URLConnection类提供一些更强的方法</p>
+<pre><code>• 获得文件的长度，类型，创建时间，修改时间  getXXX（）
+• 获得输入流，以便读取文件的数据  getInputStream（）
+• 获得输出流，以便输出数据 getOutputStream（）
+• 设置请求属性值：setRequestProperty（String key，String value）</code></pre><h2 id="基于TCP的网络编程-关于套接字-socket"><a href="#基于TCP的网络编程-关于套接字-socket" class="headerlink" title="基于TCP的网络编程  关于套接字 socket"></a>基于TCP的网络编程  关于套接字 socket</h2><p>使用TCP/IP协议进行通信时，会在通信的两端各建立一个Socket（套接字），从而形成虚拟链路<br><br>使用Socket对象封装了两端的通信端口，屏蔽了底层细节，其允许用户将网络连接当成一个IO流，<br><br>读写数据<br><br>主要使用java.net包下的两个类：</p>
+<p>   <strong>ServeSocket</strong>类：服务器套接字<br><br>   <strong>Socket</strong>类：客户端套接字<br><br><strong>都必须抛出异常</strong></p>
+<hr>
+<p>基础用法：<br><br><strong>客户端</strong>：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> 网络编程;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//创建连接到本机对象</span></span><br><span class="line">			Socket socket=<span class="keyword">new</span> Socket(<span class="string">"10.0.218.101"</span>,<span class="number">28888</span>);</span><br><span class="line">			<span class="comment">//将socket对应的输出对象包装成printstream</span></span><br><span class="line">			PrintStream printStream=<span class="keyword">new</span> PrintStream(socket.getOutputStream());</span><br><span class="line">			<span class="comment">//往服务器发送信息</span></span><br><span class="line">			printStream.println(<span class="string">"我是客户"</span>);</span><br><span class="line">			printStream.flush();</span><br><span class="line">			<span class="comment">//获取服务器的信息,将socket对应的输入流包装成bufferreader</span></span><br><span class="line">			<span class="comment">//BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());</span></span><br><span class="line">		    BufferedReader bufferedReader=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">		    String line=bufferedReader.readLine();</span><br><span class="line">		    System.out.println(<span class="string">"来自服务器的数据："</span>+line);</span><br><span class="line">		    <span class="comment">//关闭</span></span><br><span class="line">		    bufferedReader.close();</span><br><span class="line">		    printStream.close();</span><br><span class="line">		    socket.close();</span><br><span class="line">		&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>服务端</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> 网络编程;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintStream;</span><br><span class="line"><span class="keyword">import</span> java.net.ServerSocket;</span><br><span class="line"><span class="keyword">import</span> java.net.Socket;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Server</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">	ServerSocket server;</span><br><span class="line">	<span class="comment">// 计数</span></span><br><span class="line">	<span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Server</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 创建serversocket，用于监听客户端对应的端口号是否有socket</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			server = <span class="keyword">new</span> ServerSocket(<span class="number">28888</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 启动当前线程，执行run方法</span></span><br><span class="line">		<span class="keyword">this</span>.start();</span><br><span class="line">		System.out.println(<span class="string">"服务器启动"</span>);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">// 首先接受客户端的Socket</span></span><br><span class="line">				Socket socket = server.accept();</span><br><span class="line">				BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));</span><br><span class="line">				<span class="comment">// 读客户端发送的消息并显示</span></span><br><span class="line">				String line = bufferedReader.readLine();</span><br><span class="line">				System.out.println(<span class="string">"客户端发送的消息为："</span> + line);</span><br><span class="line">				<span class="comment">// 将socket对应的输出流包装成为printstream</span></span><br><span class="line">				PrintStream printStream = <span class="keyword">new</span> PrintStream(socket.getOutputStream());</span><br><span class="line">				<span class="comment">// 往客户端发送消息</span></span><br><span class="line">				printStream.println(<span class="string">"您是第"</span> + (++num) + <span class="string">"个访问服务器的用户！"</span>);</span><br><span class="line">				printStream.close();</span><br><span class="line">				bufferedReader.close();</span><br><span class="line">				socket.close();</span><br><span class="line">			&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">				e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">new</span> Server();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>应用：实现一个简易的聊天室</strong></p>
+<pre><code class="java">客户端：
+<span class="keyword">package</span> 网络编程;
+
+<span class="keyword">import</span> java.awt.BorderLayout;
+<span class="keyword">import</span> java.awt.Label;
+<span class="keyword">import</span> java.awt.event.ActionEvent;
+<span class="keyword">import</span> java.awt.event.ActionListener;
+<span class="keyword">import</span> java.io.BufferedReader;
+<span class="keyword">import</span> java.io.InputStreamReader;
+<span class="keyword">import</span> java.io.PrintStream;
+<span class="keyword">import</span> java.net.Socket;
+
+<span class="keyword">import</span> javax.swing.JButton;
+<span class="keyword">import</span> javax.swing.JFrame;
+<span class="keyword">import</span> javax.swing.JLabel;
+<span class="keyword">import</span> javax.swing.JPanel;
+<span class="keyword">import</span> javax.swing.JScrollPane;
+<span class="keyword">import</span> javax.swing.JTextArea;
+<span class="keyword">import</span> javax.swing.JTextField;
+
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">chatClient</span> <span class="keyword">extends</span> <span class="title">JFrame</span> </span>{
+    Socket socket = <span class="keyword">null</span>;
+    PrintStream pStream = <span class="keyword">null</span>;
+    BufferedReader bReader = <span class="keyword">null</span>;
+    JPanel jPanelbottom = <span class="keyword">null</span>;
+    JScrollPane jScrollPane = <span class="keyword">null</span>;
+    JLabel label_name = <span class="keyword">null</span>;
+    JLabel label_txt = <span class="keyword">null</span>;
+    JButton send = <span class="keyword">null</span>;
+    JTextArea maintxt = <span class="keyword">null</span>;
+    JTextField txt_name = <span class="keyword">null</span>;
+    JTextField txt_input = <span class="keyword">null</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">chatClient</span><span class="params">()</span> </span>{
+        <span class="comment">// TODO Auto-generated constructor stub</span>
+        <span class="comment">// 组装底部一栏</span>
+        <span class="keyword">super</span>(<span class="string">"聊天室"</span>);
+        label_name = <span class="keyword">new</span> JLabel(<span class="string">"昵称"</span>);
+        txt_name = <span class="keyword">new</span> JTextField(<span class="number">5</span>);
+        label_txt = <span class="keyword">new</span> JLabel(<span class="string">"输入消息"</span>);
+        txt_input = <span class="keyword">new</span> JTextField(<span class="number">20</span>);
+        send = <span class="keyword">new</span> JButton(<span class="string">"发送"</span>);
+        jPanelbottom = <span class="keyword">new</span> JPanel();
+        jPanelbottom.add(label_name);
+        jPanelbottom.add(txt_name);
+        jPanelbottom.add(label_txt);
+        jPanelbottom.add(txt_input);
+        jPanelbottom.add(send);
+        <span class="keyword">this</span>.add(jPanelbottom, BorderLayout.SOUTH);
+        <span class="comment">// 组装显示主界面</span>
+        maintxt = <span class="keyword">new</span> JTextArea();
+        maintxt.setEditable(<span class="keyword">false</span>);
+        jScrollPane = <span class="keyword">new</span> JScrollPane(maintxt);
+        <span class="keyword">this</span>.add(jScrollPane);
+        <span class="keyword">this</span>.setSize(<span class="number">500</span>, <span class="number">300</span>);
+        <span class="keyword">this</span>.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        <span class="keyword">try</span> {
+            <span class="comment">// 创建socket对象</span>
+            socket = <span class="keyword">new</span> Socket(<span class="string">"10.0.218.101"</span>, <span class="number">28888</span>);
+            <span class="comment">// 创建一个往socket里写数据的管道</span>
+            pStream = <span class="keyword">new</span> PrintStream(socket.getOutputStream());
+            <span class="comment">// 创建一个从socket里读数据的管道</span>
+            bReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+        }
+        <span class="comment">// 为发送按钮注册监听</span>
+        send.addActionListener(<span class="keyword">new</span> ActionListener() {
+
+            <span class="meta">@Override</span>
+            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent arg0)</span> </span>{
+                <span class="comment">// TODO Auto-generated method stub</span>
+                String name = txt_name.getText();
+                String msg = txt_input.getText();
+                <span class="keyword">if</span> (!msg.equals(<span class="string">""</span>)) {
+                    pStream.println(name + <span class="string">"说："</span> + msg);
+                    pStream.flush();
+                    <span class="comment">// 发送完毕清空输入框</span>
+                    txt_input.setText(<span class="string">""</span>);
+                }
+            }
+        });
+        <span class="comment">// 启动线程</span>
+        <span class="keyword">new</span> GetMsg().start();
+    }
+
+    <span class="comment">// 接收服务器返回信息的线程</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">GetMsg</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
+                <span class="keyword">try</span> {
+                    String getMsg = bReader.readLine();
+                    <span class="keyword">if</span> (getMsg != <span class="keyword">null</span>) {
+                        <span class="comment">// 主窗口显示信息并换行</span>
+                        maintxt.append(getMsg + <span class="string">"\n"</span>);
+                    }
+                    Thread.sleep(<span class="number">50</span>);
+                } <span class="keyword">catch</span> (Exception e) {
+                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+                }
+            }
+        }
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        <span class="keyword">new</span> chatClient().setVisible(<span class="keyword">true</span>);
+    }
+}
+
+
+服务端：
+<span class="keyword">package</span> 网络编程;
+
+<span class="keyword">import</span> java.io.BufferedReader;
+<span class="keyword">import</span> java.io.InputStreamReader;
+<span class="keyword">import</span> java.io.PrintWriter;
+<span class="keyword">import</span> java.net.ServerSocket;
+<span class="keyword">import</span> java.net.Socket;
+<span class="keyword">import</span> java.text.SimpleDateFormat;
+<span class="keyword">import</span> java.util.ArrayList;
+<span class="keyword">import</span> java.util.Date;
+<span class="keyword">import</span> java.util.LinkedList;
+
+<span class="keyword">import</span> javax.swing.JFrame;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">chatServer</span> <span class="keyword">extends</span> <span class="title">JFrame</span> </span>{
+    <span class="comment">// 声明服务器端套接字</span>
+    ServerSocket serverSocket;
+    <span class="comment">// 输入流列表集合</span>
+    ArrayList&lt;BufferedReader&gt; bReaders = <span class="keyword">new</span> ArrayList&lt;BufferedReader&gt;();
+    <span class="comment">// 输出流列表集合</span>
+    ArrayList&lt;PrintWriter&gt; pStreams = <span class="keyword">new</span> ArrayList&lt;PrintWriter&gt;();
+    <span class="comment">// 聊天信息链表集合</span>
+    LinkedList&lt;String&gt; msgList = <span class="keyword">new</span> LinkedList&lt;String&gt;();
+
+    <span class="function"><span class="keyword">public</span> <span class="title">chatServer</span><span class="params">()</span> </span>{
+        <span class="keyword">try</span> {
+            serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">28888</span>);
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+        }
+        <span class="comment">// 创建接收客户端Socket的线程实例，并启动</span>
+        <span class="keyword">new</span> getMsg().start();
+        <span class="comment">// 创建给客户端发送消息的线程实例，并启动</span>
+        <span class="keyword">new</span> SendMag().start();
+        System.out.println(<span class="string">"服务器已经启动"</span>);
+
+    }
+    <span class="comment">// 接收客户端消息线程</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">getMsg</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
+        <span class="meta">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+            <span class="comment">// TODO Auto-generated method stub</span>
+            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
+                <span class="keyword">try</span> {
+                    <span class="comment">// 接收一个客户端socket对象</span>
+                    Socket socket = serverSocket.accept();
+                    <span class="keyword">if</span> (socket != <span class="keyword">null</span>) {
+                        <span class="comment">// 获取socket对象的输入流</span>
+                        BufferedReader bReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(socket.getInputStream()));
+                        <span class="comment">// 将输入流添加入输入流列表集合中</span>
+                        bReaders.add(bReader);
+                        <span class="comment">// 开启一个线程接收该客户的聊天信息</span>
+                        <span class="keyword">new</span> getMsg1(bReader).start();
+                        <span class="comment">// 获取socket对象的输出流，并将其加入输出流列表中</span>
+                        pStreams.add(<span class="keyword">new</span> PrintWriter(socket.getOutputStream()));
+
+                    }
+                } <span class="keyword">catch</span> (Exception e) {
+                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+                }
+
+            }
+        }
+    }
+
+    <span class="comment">// 接收客户聊天信息的线程</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">getMsg1</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
+        BufferedReader bReader;
+        <span class="function"><span class="keyword">public</span> <span class="title">getMsg1</span><span class="params">(BufferedReader bReader)</span> </span>{
+            <span class="keyword">this</span>.bReader = bReader;
+        }
+        <span class="meta">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
+                <span class="keyword">try</span> {
+                    <span class="comment">// 从输入流中读取一行消息</span>
+                    String strMsg = bReader.readLine();
+                    <span class="keyword">if</span> (strMsg != <span class="keyword">null</span>) {
+                        SimpleDateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);
+                        String strTime = dateFormat.format(<span class="keyword">new</span> Date());
+                        msgList.addFirst(<span class="string">"&lt;== "</span> + strTime + <span class="string">" ==&gt;\n"</span> + strMsg);
+                    }
+                } <span class="keyword">catch</span> (Exception e) {
+                    e.printStackTrace();<span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+                }
+            }
+        }
+    }
+    <span class="comment">// 给所有客户发送聊天信息的线程</span>
+    <span class="class"><span class="keyword">class</span> <span class="title">SendMag</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{
+        <span class="meta">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
+            <span class="keyword">while</span> (<span class="keyword">this</span>.isAlive()) {
+                <span class="keyword">try</span> {
+                    <span class="comment">// 如果信息链表不为空 发送</span>
+                    <span class="keyword">if</span> (!msgList.isEmpty()) {
+                        String msg = msgList.removeLast();
+                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pStreams.size(); i++) {
+                            pStreams.get(i).println(msg);
+                            pStreams.get(i).flush();
+                        }
+                    }
+                } <span class="keyword">catch</span> (Exception e) {
+                    <span class="comment">// <span class="doctag">TODO:</span> handle exception</span>
+                }
+            }
+        }
+    }
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        <span class="keyword">new</span> chatServer();
+    }
+}
+
+
+</code></pre>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Eclipse连接MySQL数据库</title>
     <url>/2019/05/21/Eclipse%E8%BF%9E%E6%8E%A5MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/</url>
     <content><![CDATA[<p>其实很简单，但还是应该记录一下<br>参考了这个作者的<a href="http://www.cnblogs.com/fnng/archive/2011/07/18/2110023.html" target="_blank" rel="noopener">博客</a><br></p>
