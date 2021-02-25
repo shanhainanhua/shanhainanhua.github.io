@@ -7,7 +7,7 @@
 <a id="more"></a>
 <h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>ML-Agents Academy类按如下方式安排代理模拟循环：</p>
 <p>1.调用学院的<code>OnEnvironmentReset</code>委托。<br>2.为场景中的每个Agent调用<code>OnEpisodeBegin()</code>函数。<br>3.为场景中的每个Agent调用 <code>CollectObservations(VectorSensor sensor)</code>函数。<br>4.使用每个Agent的策略来决定Agent的下一个动作。<br>5.为场景中的每个Agent调用<code>OnActionReceived()</code>函数，并传入代理商策略选择的操作。<br>6.如果代理已达到其 <code>MaxStep</code> ，则调用代理的<code>OnEpisodeBegin()</code>函数。</p>
-<h2 id="命令行相关"><a href="#命令行相关" class="headerlink" title="命令行相关"></a>命令行相关</h2><p>使用mlagents-learn进行训练<br><br>相应参数：<br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令1.png"><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令2.png"><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令3.png"></p>
+<h2 id="命令行相关"><a href="#命令行相关" class="headerlink" title="命令行相关"></a>命令行相关</h2><p>使用mlagents-learn进行训练<br><br>相应参数：<br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A41.png" alt><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A42.png" alt><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A43.png" alt></p>
 <h2 id="设计Agent"><a href="#设计Agent" class="headerlink" title="设计Agent"></a>设计Agent</h2><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><p>代理扮演这观察周围环境，并决定最好的使用这些观察的行动方针的角色。通过在unity中继承Agent类来创建Agent。创建Agent的关键是你根据Agent完成任务并给予的奖励。<br><br>一个Agent将它观察到的信息传给它的Policy。之后，Policy会做出决定并且反馈相应的动作给Agent。你的Agent代码必须执行这个动作并对每个动作评估奖励值，奖励值用来探索最优的决策。<br><br>Policy从代理本身抽象出决策逻辑，因此您可以在多个代理中使用相同的策略。政策如何制定决策取决于它是什么样的政策。您可以更改策略<br>通过更改其”行为参数(Behavior Parameters)”来代理。如果您将”行为类型(Behavior Type)”设置为”仅限启发式(Heuristic Only)”，代理将使用其”启发式”方法做出决策它可以允许您手动控制代理或编写自己的策略。如果代理有一个”模型(Model)”文件，它的政策将使用神经网络”模型”作出决定。</p>
 <h3 id="Decisons"><a href="#Decisons" class="headerlink" title="Decisons"></a>Decisons</h3><p>每次代理请求时，观察-决策-行动-奖励周期都会重复一个决定。当”Agent.RequestDecision()”被调用时，代理将请求决策。如果您需要代理定期请求自行决策，添加代理游戏对象的”Decision Requester”组件。定期决策<br>间隔通常最适合基于物理的模拟。例如，机器人模拟器中的代理，必须提供关节扭矩的精细控制应该在模拟的每一步都做出决定。另一方面，一个代理，只需要作出决定时，某些游戏或模拟事件发生，应手动调用”Agent.RequestDecision()”。</p>
 <h3 id="Observations"><a href="#Observations" class="headerlink" title="Observations"></a>Observations</h3><p>要做出决策，代理必须观察其环境才能推断世界的状态。状态观察可以采取以下形式：<br></p>
@@ -324,8 +324,7 @@
 <h4 id="Value-Estimate"><a href="#Value-Estimate" class="headerlink" title="Value Estimate"></a>Value Estimate</h4><p>这些值应随着累积奖励的增加而增加。 它们对应于Agent预测自己在任何给定时间点会收到多少奖励。</p>
 <h4 id="Value-Loss"><a href="#Value-Loss" class="headerlink" title="Value Loss"></a>Value Loss</h4><p>这些价值将随着奖励的增加而增加，一旦奖励稳定就应减少。</p>
 <h2 id="实例-Gridworld"><a href="#实例-Gridworld" class="headerlink" title="实例 Gridworld"></a>实例 Gridworld</h2><p><a href="https://youtu.be/gu8HE9WKEVI" target="_blank" rel="noopener">GridWorld</a></p>
-<img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/gridworld.png">
-
+<p><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/gridworld.png" alt></p>
 <ul>
 <li>设置：经典网格世界任务的版本。场景包含代理商，目标，<br>和障碍。</li>
 <li>目标：代理商必须在网格上导航至目标，同时避免<br>障碍。</li>
@@ -346,12 +345,19 @@
 <li>基准平均奖励：0.8</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>mlagent</category>
+      </categories>
+      <tags>
+        <tag>总结</tag>
+      </tags>
   </entry>
   <entry>
     <title>c++常用函数</title>
     <url>/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<a id="more"></a>
-<p>本篇旨在记录算法学习过程中所遇所用到的c++函数及技巧 以备复习</p>
+    <content><![CDATA[<p>本篇旨在记录算法学习过程中所遇所用到的c++函数及技巧 以备复习</p>
+<a id="more"></a>
+
 <h2 id="C-String类"><a href="#C-String类" class="headerlink" title="C++ String类"></a>C++ String类</h2><h3 id="常见函数："><a href="#常见函数：" class="headerlink" title="常见函数："></a>常见函数：</h3><ul>
 <li><p>插入： insert(位置，待插入字符串)</p>
 </li>
@@ -404,8 +410,9 @@
   <entry>
     <title>c++ STL常见用法总结</title>
     <url>/2021/02/07/c++STL%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<a id="more"></a>
-<p>本篇旨在记载STL一些常见函数及用法以备记忆</p>
+    <content><![CDATA[<p>本篇旨在记载STL一些常见函数及用法以备记忆</p>
+<a id="more"></a>
+
 <h2 id="栈容器-stack"><a href="#栈容器-stack" class="headerlink" title="栈容器 stack"></a>栈容器 stack</h2><p>用法：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">头文件：#include&lt;stack&gt;</span><br></pre></td></tr></table></figure>
 <ul>
