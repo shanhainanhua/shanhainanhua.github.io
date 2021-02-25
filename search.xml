@@ -1,6 +1,430 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>mlagent学习记录</title>
+    <url>/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<p>记录mlagent相关知识</p>
+<a id="more"></a>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>ML-Agents Academy类按如下方式安排代理模拟循环：</p>
+<p>1.调用学院的<code>OnEnvironmentReset</code>委托。<br>2.为场景中的每个Agent调用<code>OnEpisodeBegin()</code>函数。<br>3.为场景中的每个Agent调用 <code>CollectObservations(VectorSensor sensor)</code>函数。<br>4.使用每个Agent的策略来决定Agent的下一个动作。<br>5.为场景中的每个Agent调用<code>OnActionReceived()</code>函数，并传入代理商策略选择的操作。<br>6.如果代理已达到其 <code>MaxStep</code> ，则调用代理的<code>OnEpisodeBegin()</code>函数。</p>
+<h2 id="命令行相关"><a href="#命令行相关" class="headerlink" title="命令行相关"></a>命令行相关</h2><p>使用mlagents-learn进行训练<br><br>相应参数：<br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令1.png"><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令2.png"><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/命令3.png"></p>
+<h2 id="设计Agent"><a href="#设计Agent" class="headerlink" title="设计Agent"></a>设计Agent</h2><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><p>代理扮演这观察周围环境，并决定最好的使用这些观察的行动方针的角色。通过在unity中继承Agent类来创建Agent。创建Agent的关键是你根据Agent完成任务并给予的奖励。<br><br>一个Agent将它观察到的信息传给它的Policy。之后，Policy会做出决定并且反馈相应的动作给Agent。你的Agent代码必须执行这个动作并对每个动作评估奖励值，奖励值用来探索最优的决策。<br><br>Policy从代理本身抽象出决策逻辑，因此您可以在多个代理中使用相同的策略。政策如何制定决策取决于它是什么样的政策。您可以更改策略<br>通过更改其”行为参数(Behavior Parameters)”来代理。如果您将”行为类型(Behavior Type)”设置为”仅限启发式(Heuristic Only)”，代理将使用其”启发式”方法做出决策它可以允许您手动控制代理或编写自己的策略。如果代理有一个”模型(Model)”文件，它的政策将使用神经网络”模型”作出决定。</p>
+<h3 id="Decisons"><a href="#Decisons" class="headerlink" title="Decisons"></a>Decisons</h3><p>每次代理请求时，观察-决策-行动-奖励周期都会重复一个决定。当”Agent.RequestDecision()”被调用时，代理将请求决策。如果您需要代理定期请求自行决策，添加代理游戏对象的”Decision Requester”组件。定期决策<br>间隔通常最适合基于物理的模拟。例如，机器人模拟器中的代理，必须提供关节扭矩的精细控制应该在模拟的每一步都做出决定。另一方面，一个代理，只需要作出决定时，某些游戏或模拟事件发生，应手动调用”Agent.RequestDecision()”。</p>
+<h3 id="Observations"><a href="#Observations" class="headerlink" title="Observations"></a>Observations</h3><p>要做出决策，代理必须观察其环境才能推断世界的状态。状态观察可以采取以下形式：<br></p>
+<ul>
+<li>Vector Observation :  由浮点数组成的数组</li>
+<li>Visual Observation :  一个或多个摄像机图像或者渲染纹理</li>
+</ul>
+<p>当你使用vector Observation时，要继承<code>Agent.CollectObservations(VectorSensor sensor)</code>方法来创建功能矢量<br><br>当你使用visual Observation时，你只需要确定哪些Unity的相机对象或渲染将提供图像，基础代理类将处理剩下的东西。你不需要使用<code>CollectObservations(VectorSensor sensor)</code>方法，除非你也同时使用了vector observation。</p>
+<h4 id="Vector-Observation-Space-Feature-Vectors"><a href="#Vector-Observation-Space-Feature-Vectors" class="headerlink" title="Vector Observation Space: Feature Vectors"></a>Vector Observation Space: Feature Vectors</h4><p>使用<code>CollectObservations(VectorSensor sensor)</code>方法来收集信息在这个函数里面使用<code>VectorSensor.AddObservation</code> 来手动添加信息。<br>例如：</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> GameObject ball;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> List&lt;<span class="keyword">float</span>&gt; state = <span class="keyword">new</span> List&lt;<span class="keyword">float</span>&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">CollectObservations</span>(<span class="params">VectorSensor sensor</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    sensor.AddObservation(gameObject.transform.rotation.z);</span><br><span class="line">    sensor.AddObservation(gameObject.transform.rotation.x);</span><br><span class="line">    sensor.AddObservation((ball.transform.position.x - gameObject.transform.position.x));</span><br><span class="line">    sensor.AddObservation((ball.transform.position.y - gameObject.transform.position.y));</span><br><span class="line">    sensor.AddObservation((ball.transform.position.z - gameObject.transform.position.z));</span><br><span class="line">    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.x);</span><br><span class="line">    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.y);</span><br><span class="line">    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.z);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当设置Agent的<code>Behavior Parameters</code>时，可以设置下面这些属性：</p>
+<ul>
+<li>Space Size： 状态大小必须匹配你之前添加信息构成的功能矢量的长度，<br>观测特征向量是浮点数列表，这意味着<br>您必须将任何其他数据类型转换为浮点数或浮点数列表。<br><br><code>VectorSensor.AddObservation</code>方法提供许多通用类型的数据载入，你可以添加整数和布尔类型的数据，也可以添加unity中的数据类型<code>Vector2</code>,<br><code>Vector3</code>, and <code>Quaternion</code>.<br>
+
+</li>
+</ul>
+<p>类型列举应以_one hot_样式进行编码。即，添加一个每个列举元素的功能载体的元素，设置将观察到的成员代表为一个的元素，并将其余部分设置为零。</p>
+<h5 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h5><p>为了在培训时取得最佳效果，您应该使培训的组件规范化。<br>功能矢量的范围[-1，+1]或[0，1]。当您使值规范化时，PPO神经网络通常可以更快地融合到解决方案。请注意，并不一定总是要的归一画到这些推荐的范围，但它是在使用神经网络时被认为是最佳实践。在您的观察组件之间的范围内变化越大，培训将更有可能受到影响。<br>为了归一化数值到值[o,1]，可以使用下面的公式</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">normalizedValue = (currentValue - minValue)/(maxValue - minValue)</span><br></pre></td></tr></table></figure>
+
+<p>旋转和角度也同样要归一化，当角度位于0到360度之间时，可以使用下面的公式</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">Quaternion rotation = transform.rotation;</span><br><span class="line">Vector3 normalized = rotation.eulerAngles / <span class="number">180.0f</span> - Vector3.one;  <span class="comment">// [-1,1]</span></span><br><span class="line">Vector3 normalized = rotation.eulerAngles / <span class="number">360.0f</span>;  <span class="comment">// [0,1]</span></span><br></pre></td></tr></table></figure>
+<p>对于可能超出[0,360]范围的角度，您可以减小角度，或者，如果转数很大，则增加最大值(maximum value).</p>
+<h4 id="Multiple-Visual-Observations"><a href="#Multiple-Visual-Observations" class="headerlink" title="Multiple Visual Observations"></a>Multiple Visual Observations</h4><p>视觉观察直接或从一个或多个中使用渲染的纹理场景中的摄影机。 该策略将纹理矢量化为3D张量可以馈入卷积神经网络（CNN）。可以将视觉观察与辅助向量观察一起使用。使用视觉观察的代理可以捕获任意复杂度的状态，并且当状态难以用数字描述时，此功能很有用。 但是，他们通常也效率较低，训练较慢，有时甚至不<br>完全成功。<br><br>视觉观察结果可以从场景中的Cameras或RenderTextures中获取。要将视觉观察添加到代理，请添加“摄像机传感器”组件或将RenderTextures传感器组件添加到代理。<br>然后拖动相机或渲染要添加到<code>Camera</code>或<code>RenderTexture</code>字段的纹理。您可以拥有多个摄像头或渲染纹理，甚至可以结合使用都附加到代理。 对于每个视觉观察，设置宽度和高度<br>图像的像素数（以像素为单位）以及观察结果是彩色还是灰度。<br><br>使用相同策略的每个代理程序必须具有相同数量的视觉观察结果，并且它们都必须具有相同的分辨率（包括它们是否为灰度）。此外，代理上的每个传感器组件都必须具有唯一的名称，以便它们可以确定性地排序（该名称对于该Agent必须是唯一的，但是多个Agent可以<br>具有相同名称的传感器组件）。<br><br>当使用<code>RenderTexture</code>视觉观察时，方便的调试功能是<br>添加一个“画布”，然后添加一个“原始图像”，并将其纹理设置为代理的<br><code>RenderTexture</code>。 这将在游戏屏幕上呈现Agent观察图像。<br><br>可以参考 <strong>GridWord</strong> 项目使用情况(官方案例)，目的是到达指定地点同时避免碰撞。</p>
+<h4 id="Raycast-Observations"><a href="#Raycast-Observations" class="headerlink" title="Raycast Observations"></a>Raycast Observations</h4><p>只需添加一个RayPerceptionSensorComponent3D（RayPerceptionSensorComponent2D）在观察过程中，几条光线（或球体，取决于设置）被投射到物理世界，被击中的物体决定了生成的观察向量。<br><br>Both sensor components have several settings:</p>
+<ul>
+<li><em>Detectable Tags</em>  对应于代理应该能够区分的对象类型的字符串列表。 例如，在WallJump示例中，我们使用“墙”，“目标”和“块”作为要检测的对象列表。</li>
+<li><em>Rays Per Direction</em> 确定投射的光线数。一缕是总是向前投射，多的光线向左右投射。</li>
+<li><em>Max Ray Degrees</em> 最外面的光线的角度（以度为单位）。 90度对应代理的左侧和右侧。.</li>
+<li><em>Sphere Cast Radius</em> 用于球体铸造的球体的大小。 如果设置到0，将使用射线代替球体。 光线可能更有效，特别是在复杂的场景中。</li>
+<li><em>Ray Length</em> 射线长度</li>
+<li><em>Observation Stacks</em>  要与转换结果“堆叠”的先前结果数。 请注意，这可以独立于“行为参数”中的“堆叠矢量”设置。</li>
+<li><em>Start Vertical Offset</em> (3D only) 射线起点的垂直偏移。</li>
+<li><em>End Vertical Offset</em> (3D only) 射线终点的垂直偏移.<br>创建的观测值的总大小为</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">（观测堆栈）*（1 + 2 *每个方向的光线）*（可检测的标签数量+ 2）</span><br><span class="line">(Observation Stacks) * (1 + 2 * Rays Per Direction) * (Num Detectable Tags + 2)</span><br></pre></td></tr></table></figure>
+<p>因此，应尽量减少射线和标签的数量，以减少使用的数据量。 请注意，这与在<br><code>Behavior Parameters</code>中状态大小无关。</p>
+<h3 id="Vector-Actions"><a href="#Vector-Actions" class="headerlink" title="Vector Actions"></a>Vector Actions</h3><p>动作是代理执行的来自策略的指令。 当学院调用时，会将操作作为参数传递给代理。使用OnActionReceived()。当您指定矢量动作空间时<br>是 <strong>Continuous</strong>，则传递给Agent的action参数是一个数组<br>长度等于<code>Vector Action Space Size</code>属性的控制信号。当您指定<strong>Discrete</strong>向量动作空间类型时，该动作参数是包含整数的数组。 每个整数都是列表或表的索引<br>命令。<br>在<strong>Discrete</strong>向量动作空间类型中，动作参数是一个索引数组。 数组中的索引数由<br>在<code>Branches Size</code>属性中定义的数决定。每个分支对应于一个动作表，您可以通过指定每个表的大小修改<code>Branches</code>属性。<br>Policy和培训算法都不知道有关该采取的行动本身的意思。训练算法只是尝试<br>动作列表中不同的值并观察随着时间的推移这些值对累积奖励的影响。因此，为Agent定义的唯一位置动作是在OnActionReceived()函数中。<br><br>例如，如果您设计了一个可以在两个维度上移动的代理，则可以使用连续或离散矢量动作。 在连续的情况下，您会将向量动作大小设置为2（每个维度一个），并且代理的策略将创建一个具有两个浮点值的操作。在离散情况下，您将使用一个大小为4的分支（每个分支一个）<br>方向），该策略将创建一个包含单个值范围从零到三的元素。 或者，您可以创建大小为2的两个分支（一个用于水平移动，一个用于垂直移动），并且该策略将创建一个包含两个元素的操作数组,值范围从零到一。<br><br>请注意，在为代理编程操作时，通常有助于使用代理的<code>Heuristic()</code>方法测试您的操作逻辑，让您映射键盘行动命令。<br>The 3DBall and Area  example environments are set up to use either the continuous or the discrete vector action spaces.</p>
+<h4 id="Continuous-Action-Space"><a href="#Continuous-Action-Space" class="headerlink" title="Continuous Action Space"></a>Continuous Action Space</h4><p>当代理使用设置为“连续”向量操作空间的策略时，传递给代理的OnActionReceived（）函数的操作参数是一个数组长度等于“矢量操作空间大小”属性值。数组中的各个值具有您赋予的任何含义.<br><br>默认情况下，我们提供的PPO算法的输出会预先钳制<code>vectorAction</code>进入[-1，1]范围。 最佳做法是手动剪辑如果您打算在您的环境中使用第三方算法，则也需要这些。</p>
+<h4 id="Discrete-Action-Space"><a href="#Discrete-Action-Space" class="headerlink" title="Discrete Action Space"></a>Discrete Action Space</h4><p>如果Agent使用 <strong>Discrete</strong>向量操作空间，则传递给代理的OnActionReceived()函数的操作参数是一个包含索引的数组。在离散向量作用空间中，<code>Branches</code>是一个<br>整数数组，每个值对应于每个分支。<br>例如，如果我们想要一个可以在平台上移动并跳跃的Agent，我们可以<br>定义两个分支（一个代表运动，一个代表跳跃），因为我们想要<br>代理能够同时移动 <strong>和</strong> 跳。 我们定义第一个分支有5种可能的动作（不要移动，左移，右移，后退，前进），第二个动作有2种可能的动作（不要跳，跳）。 这<br>OnActionReceived（）方法类似于：</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Get the action index for movement</span></span><br><span class="line"><span class="keyword">int</span> movement = Mathf.FloorToInt(act[<span class="number">0</span>]);</span><br><span class="line"><span class="comment">// Get the action index for jumping</span></span><br><span class="line"><span class="keyword">int</span> jump = Mathf.FloorToInt(act[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Look up the index in the movement action list:</span></span><br><span class="line"><span class="keyword">if</span> (movement == <span class="number">1</span>) &#123; directionX = <span class="number">-1</span>; &#125;</span><br><span class="line"><span class="keyword">if</span> (movement == <span class="number">2</span>) &#123; directionX = <span class="number">1</span>; &#125;</span><br><span class="line"><span class="keyword">if</span> (movement == <span class="number">3</span>) &#123; directionZ = <span class="number">-1</span>; &#125;</span><br><span class="line"><span class="keyword">if</span> (movement == <span class="number">4</span>) &#123; directionZ = <span class="number">1</span>; &#125;</span><br><span class="line"><span class="comment">// Look up the index in the jump action list:</span></span><br><span class="line"><span class="keyword">if</span> (jump == <span class="number">1</span> &amp;&amp; IsGrounded()) &#123; directionY = <span class="number">1</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Apply the action results to move the Agent</span></span><br><span class="line">gameObject.GetComponent&lt;Rigidbody&gt;().AddForce(</span><br><span class="line">    <span class="keyword">new</span> Vector3(</span><br><span class="line">        directionX * <span class="number">40f</span>, directionY * <span class="number">300f</span>, directionZ * <span class="number">40f</span>));</span><br></pre></td></tr></table></figure>
+<p>以上代码示例是AreaAgent的简化摘录类，离散量和连续动作空间都有。</p>
+<h5 id="Masking-Discrete-Actions"><a href="#Masking-Discrete-Actions" class="headerlink" title="Masking Discrete Actions"></a>Masking Discrete Actions</h5><p>使用离散动作时，可以指定某些动作为下一个决定是不可能采用的。 当代理受<br>神经网络控制时，代理将无法执行指定的操作。 注意当代理受Heuristic启发式控制时，代理将仍然能够决定执行屏蔽操作。 为了掩盖动作，请覆盖<code>Agent.CollectDiscreteActionMasks（）</code>虚拟方法，并在其中调用<code>DiscreteActionMasker.SetMask（）</code>：</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">CollectDiscreteActionMasks</span>(<span class="params">DiscreteActionMasker actionMasker</span>)</span>&#123;</span><br><span class="line">    actionMasker.SetMask(branch, actionIndices)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Where:</p>
+<ul>
+<li><code>branch</code> is the index (starting at 0) of the branch on which you want to mask the action</li>
+<li><code>actionIndices</code> is a list of <code>int</code> corresponding to the<br>indices of the actions that the Agent cannot perform.</li>
+</ul>
+<p>例如，如果您有一个具有2个分支的代理，并且在第一个分支<br>（分支0）有4种可能的操作：_“什么都不做” <em>，</em>“跳转” <em>，</em>“拍摄” _<br>和_“更换武器” _。 然后使用下面的代码，代理将_“ do<br>对于他的下一个决定，无“ _”或“更换武器” _（因为动作索引1和2<br>被遮罩）</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">SetMask(<span class="number">0</span>, <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>]&#123;<span class="number">1</span>,<span class="number">2</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>注意:</p>
+<ul>
+<li>You can call <code>SetMask</code> multiple times if you want to put masks on<br>multiple branches.</li>
+<li>You cannot mask all the actions of a branch.</li>
+<li>You cannot mask actions in continuous control.</li>
+</ul>
+<h3 id="Rewards"><a href="#Rewards" class="headerlink" title="Rewards"></a>Rewards</h3><p>在强化学习中，奖励是Agent做正确事情的信号。 PPO强化学习算法通过优化代理做出的选择来工作，以使代理随时间获得最高的累积奖励。 您的奖励机制越好，您的代理商将学得越好。<br><br><strong>注意:</strong><br>奖励在Agent使用经过训练的模型进行推理时不会使用，在模仿学习中也不会使用。<br>也许最好的建议是从简单开始，仅在需要时增加复杂性。 通常，您应该奖励结果，而不是您认为会导致期望结果的行动。 为了帮助您获得奖励，您可以使用Monitor类显示代理收到的累积奖励。 您甚至可以在观察代理如何累积奖励的同时，使用代理的启发式方法来控制代理。<br><br>通过调用OnActionReceived（）函数中的AddReward（）方法向代理分配奖励。 每个决策之间分配的奖励应在[-1,1]范围内。 超出此范围的值可能导致训练不稳定。 当Agent收到新决定时，<code>reward</code>值将重置为零。 如果对一个代理决策有多个对<code>AddReward（）</code>的调用，则将这些奖励加起来以评估前一个决策的质量。 有一种名为<code>SetReward()</code> ”的方法，该方法将覆盖自上一个决定以来给予代理的所有先前奖励。</p>
+<h3 id="Agent-Properties"><a href="#Agent-Properties" class="headerlink" title="Agent Properties"></a>Agent Properties</h3><ul>
+<li><code>Behavior Parameters</code> - The parameters dictating what Policy the Agent will<br>receive.<ul>
+<li><code>Behavior Name</code> - 行为的标识符。 具有相同行为名称的代理将学习相同的政策. </li>
+<li><code>Vector Observation</code><ul>
+<li><code>Space Size</code> - Agent的向量观测值的长度。</li>
+<li><code>Stacked Vectors</code> - 将被堆叠并一起用于决策的先前矢量观测的数量。 这导致矢量观察的有效大小被传递给策略为：<em>Space Size</em> x _Stacked Vectors_。</li>
+</ul>
+</li>
+<li><code>Vector Action</code><ul>
+<li><code>Space Type</code> - 对应于动作矢量是否包含单个整数（离散）或一系列实值浮点（连续）.</li>
+<li><code>Space Size</code> (Continuous) - 动作向量的长度.</li>
+<li><code>Branches</code> (Discrete) - 整数数组，定义多个并发的离散操作。 “分支”数组中的值对应于每个操作分支的可能离散值的数量。</li>
+</ul>
+</li>
+<li><code>Model</code> - 用于推理的神经网络模型（训练后获得）</li>
+<li><code>Inference Device</code> - 在推理期间使用CPU还是GPU运行模型</li>
+<li><code>Behavior Type</code> - Determines whether the Agent will do training, inference, or use its<br>Heuristic() method:<ul>
+<li><code>Default</code> - the Agent will train if they connect to a python trainer, otherwise they will perform inference.</li>
+<li><code>Heuristic Only</code> - the Agent will always use the <code>Heuristic()</code> method.</li>
+<li><code>Inference Only</code> - the Agent will always perform inference.</li>
+</ul>
+</li>
+<li><code>Team ID</code> - Used to define the team for <a href="Training-Self-Play.md">self-play</a></li>
+<li><code>Use Child Sensors</code> - Whether to use all Sensor components attached to child GameObjects of this Agent.</li>
+</ul>
+</li>
+<li><code>Max Step</code> - 每个代理的最大步骤数。 一旦这个数字到达后，代理将被重置.</li>
+</ul>
+<h2 id="训练-Agent"><a href="#训练-Agent" class="headerlink" title="训练 Agent"></a>训练 Agent</h2><p>训练过程的输出是一个包含优化后的模型文件政策。 该模型文件是TensorFlow数据图，其中包含数学训练过程中选择的最佳操作和最佳权重。 使用命令<code>mlagents-learn</code> 来训练您的代理。 此命令已安装在<code>mlagents</code>软件包。可在以下位置找到ml-agents / mlagents / trainers / learn.py。<br>可以像<code>config / trainer_config.yaml</code>这样编辑配置文件指定训练期间使用的超参数。您可以使用文本编辑器编辑此文件，以添加特定的配置<br>每个行为。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mlagents-learn &lt;trainer-config-file&gt; --env=&lt;env_name&gt; --run-id=&lt;run-identifier&gt; --train</span><br></pre></td></tr></table></figure>
+<p>在训练过程中，训练程序会定期间隔（由<code>summary_freq</code>选项指定）打印和保存更新。 保存的信息按<code>run-id</code>值分组，因此您应该为每个ID分配一个唯一的ID。<br><br>您可以在训练期间或之后通过运行以下命令使用TensorBoard查看这些统计信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">tensorboard --logdir=summaries --port 6006</span><br></pre></td></tr></table></figure>
+<p>之后本地浏览器打开 <code>http://localhost:6006</code>.<br><strong>注意：</strong><br>TensorBoard使用的默认端口是6006。如果存在现有会话在端口6006上运行，可以使用–port在开放的端口上启动新会话选项。<br><br>训练结束后，您可以在<code>models</code> 文件夹中在指定的运行ID下找到保存的模型</p>
+<h3 id="Training-Config-File"><a href="#Training-Config-File" class="headerlink" title="Training Config File"></a>Training Config File</h3><table>
+<thead>
+<tr>
+<th align="left"><strong>Setting</strong></th>
+<th align="left"><strong>Description</strong></th>
+<th align="left"><strong>Applies To Trainer*</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">batch_size</td>
+<td align="left">The number of experiences in each iteration of gradient descent.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">batches_per_epoch</td>
+<td align="left">In imitation learning, the number of batches of training examples to collect before training the model.</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">beta</td>
+<td align="left">The strength of entropy regularization.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">buffer_size</td>
+<td align="left">The number of experiences to collect before updating the policy model. In SAC, the max size of the experience buffer.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">buffer_init_steps</td>
+<td align="left">The number of experiences to collect into the buffer before updating the policy model.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">epsilon</td>
+<td align="left">Influences how rapidly the policy can evolve during training.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">hidden_units</td>
+<td align="left">The number of units in the hidden layers of the neural network.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">init_entcoef</td>
+<td align="left">How much the agent should explore in the beginning of training.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">lambd</td>
+<td align="left">The regularization parameter.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">learning_rate</td>
+<td align="left">The initial learning rate for gradient descent.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">learning_rate_schedule</td>
+<td align="left">Determines how learning rate changes over time.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">max_steps</td>
+<td align="left">The maximum number of simulation steps to run during a training session.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">memory_size</td>
+<td align="left">The size of the memory an agent must keep. Used for training with a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">normalize</td>
+<td align="left">Whether to automatically normalize observations.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">num_epoch</td>
+<td align="left">The number of passes to make through the experience buffer when performing gradient descent optimization.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">num_layers</td>
+<td align="left">The number of hidden layers in the neural network.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">behavioral_cloning</td>
+<td align="left">Use demonstrations to bootstrap the policy neural network. See <a href="Training-PPO.md#optional-behavioral-cloning-using-demonstrations">Pretraining Using Demonstrations</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">reward_signals</td>
+<td align="left">The reward signals used to train the policy. Enable Curiosity and GAIL here. See <a href="Reward-Signals.md">Reward Signals</a> for configuration options.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">save_replay_buffer</td>
+<td align="left">Saves the replay buffer when exiting training, and loads it on resume.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">sequence_length</td>
+<td align="left">Defines how long the sequences of experiences must be while training. Only used for training with a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">summary_freq</td>
+<td align="left">How often, in steps, to save training statistics. This determines the number of data points shown by TensorBoard.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">tau</td>
+<td align="left">How aggressively to update the target network used for bootstrapping value estimation in SAC.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">time_horizon</td>
+<td align="left">How many steps of experience to collect per-agent before adding it to the experience buffer.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">trainer</td>
+<td align="left">The type of training to perform: “ppo”, “sac”, “offline_bc” or “online_bc”.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">train_interval</td>
+<td align="left">How often to update the agent.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">num_update</td>
+<td align="left">Number of mini-batches to update the agent with during each update.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">use_recurrent</td>
+<td align="left">Train using a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+</tbody></table>
+<h2 id="Training-with-Proximal-Policy-Optimization"><a href="#Training-with-Proximal-Policy-Optimization" class="headerlink" title="Training with Proximal Policy Optimization"></a>Training with Proximal Policy Optimization</h2><p>ML-Agents提供一种称为近端策略优化（PPO）的强化学习算法的实现。 PPO使用神经网络来逼近理想功能，该理想功能将代理的观察结果映射到代理在给定状态下可以采取的最佳操作。 ML-Agents PPO算法在TensorFlow中实现，并在单独的Python进程中运行（通过套接字与正在运行的Unity应用程序进行通信）。成功训练强化学习模型通常涉及调整训练超参数。 本指南包含一些最佳实践，用于在默认参数似乎无法达到您想要的性能水平时调整培训过程。</p>
+<h3 id="Hyperparameters"><a href="#Hyperparameters" class="headerlink" title="Hyperparameters"></a>Hyperparameters</h3><h4 id="Reward-Signals"><a href="#Reward-Signals" class="headerlink" title="Reward Signals"></a>Reward Signals</h4><p>在强化学习中，目标是学习使奖励最大化的策略。在基础级别上，奖励是由环境给予的。 但是，我们可以想象奖励代理商各种不同的行为。 例如，我们可以奖励代理商探索新状态，而不仅仅是给出明确的奖励。 此外，我们可以混合奖励信号来帮助学习过程。<br>ML-Agents工具箱默认提供三个奖励信号：外部（环境）奖励信号，好奇心奖励信号（可用于鼓励在稀疏外部奖励环境中进行探索）和GAIL奖励信号。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">reward_signals:</span></span><br><span class="line">    <span class="attr">extrinsic:</span></span><br><span class="line">        <span class="attr">strength:</span> <span class="number">1.0</span></span><br><span class="line">        <span class="attr">gamma:</span> <span class="number">0.99</span></span><br><span class="line">    <span class="attr">curiosity:</span></span><br><span class="line">        <span class="attr">strength:</span> <span class="number">0.02</span></span><br><span class="line">        <span class="attr">gamma:</span> <span class="number">0.99</span></span><br><span class="line">        <span class="attr">encoding_size:</span> <span class="number">256</span></span><br><span class="line">    <span class="attr">gail:</span></span><br><span class="line">        <span class="attr">strength:</span> <span class="number">0.01</span></span><br><span class="line">        <span class="attr">gamma:</span> <span class="number">0.99</span></span><br><span class="line">        <span class="attr">encoding_size:</span> <span class="number">128</span></span><br><span class="line">        <span class="attr">demo_path:</span> <span class="string">Project/Assets/ML-Agents/Examples/Pyramids/Demos/ExpertPyramid.demo</span></span><br></pre></td></tr></table></figure>
+
+<p>除了任何特定于类的超参数之外，每个奖励信号还应至少定义两个参数“ strength”和“ gamma”。 请注意，要删除奖励信号，您应该从“ reward_signals”中完全删除其条目。 任何时候都应至少定义一个奖励信号。</p>
+<ul>
+<li><p>Reward Signal Types: <br><br>  Strength：Typical Range: <code>1.0</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.995</code></p>
+</li>
+<li><p>Curiosity Reward Signal: <br><br>  Strength：Typical Range: <code>0.001</code> - <code>0.1</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.995</code><br>  encoding_size:  <code>encoding_size</code>对应于固有好奇心模型使用的编码大小。此值应足够小以鼓励ICM压缩原始观察结果，但也不能太小以防止其学习区分已演示和实际行为。Default Value: <code>64</code>   。Typical Range: <code>64</code> - <code>256</code></p>
+</li>
+<li><p>GAIL Reward Signal: <br><br>  Strength：Typical Range: <code>0.01</code> - <code>1.0</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.9</code><br>  demo_path:   <code>demo_path</code>是您的.demo文件或.demo文件目录的路径。<br>  encoding_size:encoding_size对应于鉴别器使用的隐藏层的大小，该值应足够小以鼓励鉴别器压缩原始观测值，但也不能太小以防止其学习区分已证明的行为和实际行为。 大幅增加此大小也会对训练时间产生负面影响。 Default Value: <code>64</code>     Typical Range: <code>64</code> - <code>256</code></p>
+</li>
+</ul>
+<h4 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h4><p><code>lambd</code>对应于计算通用优势估算值（[GAE]（<a href="https://arxiv.org/abs/1506.02438））时使用的“" target="_blank" rel="noopener">https://arxiv.org/abs/1506.02438））时使用的“</a> lambda”参数。 这可以认为代理在计算更新的价值估算时多少依赖于其当前价值估算。 低值对应于更多地依赖于当前值估计（可能是高偏差），而高值对应于更多地依赖于在环境中接收到的实际奖励（可能是高方差）。 参数提供了两者之间的折衷，正确的值可以导致更稳定的训练过程。</p>
+<p>Typical Range: <code>0.9</code> - <code>0.95</code></p>
+<h4 id="Buffer-Size"><a href="#Buffer-Size" class="headerlink" title="Buffer Size"></a>Buffer Size</h4><p><code>buffer_size</code>对应于我们进行任何模型学习或更新之前应收集的经验（代理商的观察，行动和获得的奖励）的数量。 <strong>这应该是<code>batch_size</code></strong>的倍数。 通常，较大的<code>buffer_size</code>对应于更稳定的训练更新。</p>
+<p>Typical Range: <code>2048</code> - <code>409600</code></p>
+<h4 id="Batch-Size"><a href="#Batch-Size" class="headerlink" title="Batch Size"></a>Batch Size</h4><p><code>batch_size</code>是用于梯度下降更新的一次迭代的经验数量。 <strong>这应该始终是<code>buffer_size</code></strong>的一小部分。 如果您使用的是连续动作空间，则该值应较大（大约1000s）。 如果您使用的是离散操作空间，则该值应较小（约10s）。</p>
+<p>Typical Range (Continuous): <code>512</code> - <code>5120</code></p>
+<p>Typical Range (Discrete): <code>32</code> - <code>512</code></p>
+<h4 id="Number-of-Epochs"><a href="#Number-of-Epochs" class="headerlink" title="Number of Epochs"></a>Number of Epochs</h4><p>num_epoch是梯度下降过程中通过experience buffer的次数。 <code>batch_size</code>越大，可以接受的越大。 减少此设置将确保更新更稳定，但会降低学习速度。</p>
+<p>Typical Range: <code>3</code> - <code>10</code></p>
+<h4 id="Learning-Rate"><a href="#Learning-Rate" class="headerlink" title="Learning Rate"></a>Learning Rate</h4><p><code>learning_rate</code>对应于每个梯度下降更新步骤的强度。 如果训练不稳定，则通常应减少该奖励，并且奖励不能持续增加。</p>
+<p>Typical Range: <code>1e-5</code> - <code>1e-3</code></p>
+<h4 id="Optional-Learning-Rate-Schedule"><a href="#Optional-Learning-Rate-Schedule" class="headerlink" title="(Optional) Learning Rate Schedule"></a>(Optional) Learning Rate Schedule</h4><p>learning_rate_schedule对应于学习率随时间的变化。对于PPO，我们建议递减学习率直到max_steps以便学习更稳定地收敛。 但是，在某些情况下（例如，训练时间未知），可以禁用此功能。</p>
+<p>Options:</p>
+<ul>
+<li><code>linear</code> (default): 线性衰减<code>learning_rate</code>，在<code>max_steps</code>处达到0。</li>
+<li><code>constant</code>: 在整个训练过程中保持学习率恒定.</li>
+</ul>
+<p>Options: <code>linear</code>, <code>constant</code></p>
+<h4 id="Time-Horizon"><a href="#Time-Horizon" class="headerlink" title="Time Horizon"></a>Time Horizon</h4><p><code>time_horizon</code>对应于将每个代理添加到体验缓冲区之前收集多少个体验步骤。 在episode结束之前达到此限制时，将使用价值估算值来预测业务代表当前状态的总体预期回报。 因此，此参数在偏见程度较小但方差估计较高（较长时间范围）与偏倚较大但变化较少的估计值（较短时间范围）之间进行权衡。 如果情节中频繁获得奖励，或者情节过长，<br>数字越小越理想。 此数字应足够大，以捕获代理程序动作序列中的所有重要行为。</p>
+<p>Typical Range: <code>32</code> - <code>2048</code></p>
+<h4 id="Max-Steps"><a href="#Max-Steps" class="headerlink" title="Max Steps"></a>Max Steps</h4><p><code>max_steps</code>对应于训练过程中运行了多少步仿真（乘以跳帧）。 对于更复杂的问题，应该增加该值。</p>
+<p>Typical Range: <code>5e5</code> - <code>1e7</code></p>
+<h4 id="Beta"><a href="#Beta" class="headerlink" title="Beta"></a>Beta</h4><p><code>beta</code>对应于熵正则化的强度，这使策略“更加随机”。 这样可以确保座席在训练过程中正确探索动作空间。 增加此数量将确保采取更多随机动作。 应当对此进行调整，以使熵（可从TensorBoard测量）随着奖励的增加而缓慢减小。 如果熵下降太快，则增加<code>beta</code>。 如果熵下降太慢，则降低<code>beta</code>。.</p>
+<p>Typical Range: <code>1e-4</code> - <code>1e-2</code></p>
+<h4 id="Epsilon"><a href="#Epsilon" class="headerlink" title="Epsilon"></a>Epsilon</h4><p><code>epsilon</code> 对应于梯度下降更新期间新旧策略之间可接受的差异阈值。 将此值设置得较小将导致更稳定的更新，但也会减慢训练过程。</p>
+<p>Typical Range: <code>0.1</code> - <code>0.3</code></p>
+<h4 id="Normalize"><a href="#Normalize" class="headerlink" title="Normalize"></a>Normalize</h4><p><code>normalize</code> 对应于是否对矢量观测输入应用了归一化。 该归一化基于矢量观测值的移动平均值和方差。 规范化对于复杂的连续控制问题很有用，但对于较简单的离散控制问题则可能有害。</p>
+<h4 id="Number-of-Layers"><a href="#Number-of-Layers" class="headerlink" title="Number of Layers"></a>Number of Layers</h4><p><code>num_layers</code>对应于观察输入之后或视觉观察的CNN编码之后存在多少个隐藏层。 对于简单的问题，较少的层可能会更快更有效地进行训练。 对于更复杂的控制问题，可能需要更多的层。</p>
+<h4 id="Hidden-Units"><a href="#Hidden-Units" class="headerlink" title="Hidden Units"></a>Hidden Units</h4><p><code>hidden_units</code> 对应于神经网络的每个完全连接层中有多少个单元。 对于简单的问题，其中正确的操作是观察输入的直接组合，这应该很小。 对于动作是观察变量之间非常复杂的相互作用的问题，此值应该更大。</p>
+<p>Typical Range: <code>32</code> - <code>512</code></p>
+<h4 id="Optional-Visual-Encoder-Type"><a href="#Optional-Visual-Encoder-Type" class="headerlink" title="(Optional) Visual Encoder Type"></a>(Optional) Visual Encoder Type</h4><p><code>vis_encode_type</code>对应于用于对视觉观察进行编码的编码器类型。<br>有效选项包括：</p>
+<ul>
+<li><code>simple</code>（默认）：一个简单的编码器，由两个卷积层组成</li>
+<li><code>nature_cnn</code>：[Mnih等人提出的CNN实现]（<a href="https://www.nature.com/articles/nature14236），" target="_blank" rel="noopener">https://www.nature.com/articles/nature14236），</a><br>由三个卷积层组成</li>
+<li><code>resnet</code>：[IMPALA Resnet实施]（<a href="https://arxiv.org/abs/1802.01561），" target="_blank" rel="noopener">https://arxiv.org/abs/1802.01561），</a><br>由三层堆叠的层组成，每层有两个残余块，<br>比其他两个更大的网络。</li>
+</ul>
+<p>选项：<code>simple</code>，<code>nature_cnn</code>，<code>resnet</code></p>
+<h3 id="Optional-Recurrent-Neural-Network-Hyperparameters"><a href="#Optional-Recurrent-Neural-Network-Hyperparameters" class="headerlink" title="(Optional) Recurrent Neural Network Hyperparameters"></a>(Optional) Recurrent Neural Network Hyperparameters</h3><p>以下超参数仅在<code>use_recurrent</code>设置为true时使用</p>
+<h4 id="Sequence-Length"><a href="#Sequence-Length" class="headerlink" title="Sequence Length"></a>Sequence Length</h4><p><code>sequence_length</code> 对应于训练期间通过网络传递的经验序列的长度。 该时间应足够长，以捕获代理随时间推移可能需要记住的任何信息。 例如，如果您的Agent需要记住物体的速度，则此值可能很小。 如果您的经纪人只需要记住一集开始时只给出一次的信息，则该值应该更大。</p>
+<p>Typical Range: <code>4</code> - <code>128</code></p>
+<h4 id="Memory-Size"><a href="#Memory-Size" class="headerlink" title="Memory Size"></a>Memory Size</h4><p><code>memory_size</code>对应于用于存储策略循环神经网络隐藏状态的浮点数数组的大小。 该值必须是2的倍数，并且应该与您期望代理成功完成任务所需记住的信息量成比例。</p>
+<p>Typical Range: <code>32</code> - <code>256</code></p>
+<h3 id="Optional-Behavioral-Cloning-Using-Demonstrations"><a href="#Optional-Behavioral-Cloning-Using-Demonstrations" class="headerlink" title="(Optional) Behavioral Cloning Using Demonstrations"></a>(Optional) Behavioral Cloning Using Demonstrations</h3><p>在某些情况下，您可能想使用播放器记录的行为来引导代理策略。 这可以帮助指导代理商获得奖励。 行为克隆（BC）增加了模仿示范的训练操作，而不是试图使报酬最大化。<br>要使用BC，请在trainer_config中添加一个“ behavioral_cloning”部分。 例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">behavioral_cloning:</span><br><span class="line">    demo_path: .&#x2F;Project&#x2F;Assets&#x2F;ML-Agents&#x2F;Examples&#x2F;Pyramids&#x2F;Demos&#x2F;ExpertPyramid.demo</span><br><span class="line">    strength: 0.5</span><br><span class="line">    steps: 10000</span><br></pre></td></tr></table></figure>
+
+<p>以下是BC可用的超参数。</p>
+<h4 id="Strength"><a href="#Strength" class="headerlink" title="Strength"></a>Strength</h4><p><code>strength</code>对应于模仿的学习率相对于PPO的学习率，大致对应于我们允许BC影响政策的强度。</p>
+<p>Typical Range: <code>0.1</code> - <code>0.5</code></p>
+<h4 id="Demo-Path"><a href="#Demo-Path" class="headerlink" title="Demo Path"></a>Demo Path</h4><p><code>demo_path</code>是您的.demo文件或.demo文件目录的路径。 有关<code>.demo</code>文件的更多信息，请参见Training-Imitation-Learning.md（官方文档）。</p>
+<h4 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h4><p>在BC期间，通常希望代理在“看到”奖励后停止使用演示，并允许其优化过去的可用演示和/或泛化所提供的演示之外的内容。<br> <code>steps</code>对应于BC有效的训练步骤。 BC的学习率将逐步逐步提高。 将步骤设置为0，以在整个训练过程中持续模仿。</p>
+<h4 id="Optional-Batch-Size"><a href="#Optional-Batch-Size" class="headerlink" title="(Optional) Batch Size"></a>(Optional) Batch Size</h4><p><code>batch_size</code>是用于梯度下降更新的一次迭代的演示经验的数量。 如果未指定，则默认为为PPO定义的<code>batch_size</code>。</p>
+<p>Typical Range (Continuous): <code>512</code> - <code>5120</code></p>
+<p>Typical Range (Discrete): <code>32</code> - <code>512</code></p>
+<h4 id="Optional-Number-of-Epochs"><a href="#Optional-Number-of-Epochs" class="headerlink" title="(Optional) Number of Epochs"></a>(Optional) Number of Epochs</h4><p><code>num_epoch</code>是梯度下降过程中通过体验缓冲区的次数。 如果未指定，则默认为PPO设置的时期数。</p>
+<p>Typical Range: <code>3</code> - <code>10</code></p>
+<h4 id="Optional-Samples-Per-Update"><a href="#Optional-Samples-Per-Update" class="headerlink" title="(Optional) Samples Per Update"></a>(Optional) Samples Per Update</h4><p><code>samples_per_update</code> 是最大样本数<br>在每次模仿更新期间使用。 如果您的演示数据集非常大，则可能需要降低此值，以避免过分适合演示策略。 设置为0可在每个更新步骤训练所有演示。</p>
+<p>Default Value: <code>0</code> (all)</p>
+<p>Typical Range: Approximately equal to PPO’s <code>buffer_size</code></p>
+<h3 id="Training-Statistics"><a href="#Training-Statistics" class="headerlink" title="Training Statistics"></a>Training Statistics</h3><p>要查看训练统计信息，请使用TensorBoard。 </p>
+<h4 id="Cumulative-Reward"><a href="#Cumulative-Reward" class="headerlink" title="Cumulative Reward"></a>Cumulative Reward</h4><p>随着时间的流逝，奖励的总体趋势应持续增加。 预计会有小起起落。 根据任务的复杂性，奖励可能不会显着增加，直到进入培训过程的数百万步为止。</p>
+<h4 id="Entropy"><a href="#Entropy" class="headerlink" title="Entropy"></a>Entropy</h4><p>这对应于决策的随机性。 在训练期间，这应该持续减少。 如果它减小得太快或根本没有减小，则应调整<code>beta</code>（使用离散动作空间时）。</p>
+<h4 id="Learning-Rate-1"><a href="#Learning-Rate-1" class="headerlink" title="Learning Rate"></a>Learning Rate</h4><p>默认情况下，这会随着时间的流逝而减少，除非将<code>learning_rate_schedule</code>设置为<code>constant</code>。</p>
+<h4 id="Policy-Loss"><a href="#Policy-Loss" class="headerlink" title="Policy Loss"></a>Policy Loss</h4><p>这些值会在训练过程中振荡。 通常，它们应小于1.0。</p>
+<h4 id="Value-Estimate"><a href="#Value-Estimate" class="headerlink" title="Value Estimate"></a>Value Estimate</h4><p>这些值应随着累积奖励的增加而增加。 它们对应于Agent预测自己在任何给定时间点会收到多少奖励。</p>
+<h4 id="Value-Loss"><a href="#Value-Loss" class="headerlink" title="Value Loss"></a>Value Loss</h4><p>这些价值将随着奖励的增加而增加，一旦奖励稳定就应减少。</p>
+<h2 id="实例-Gridworld"><a href="#实例-Gridworld" class="headerlink" title="实例 Gridworld"></a>实例 Gridworld</h2><p><a href="https://youtu.be/gu8HE9WKEVI" target="_blank" rel="noopener">GridWorld</a></p>
+<img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/mlagent学习记录/gridworld.png">
+
+<ul>
+<li>设置：经典网格世界任务的版本。场景包含代理商，目标，<br>和障碍。</li>
+<li>目标：代理商必须在网格上导航至目标，同时避免<br>障碍。</li>
+<li>代理：环境包含九个具有相同行为参数的代理。</li>
+<li>Agent奖励功能：<ul>
+<li>-0.01每一步。</li>
+<li>+1.0，如果座席导航到网格的目标位置（情节结束）。</li>
+<li>-1.0，如果特工导航到障碍物（情节结束）。</li>
+</ul>
+</li>
+<li>行为参数：<ul>
+<li>向量观察空间：无</li>
+<li>向量动作空间：（离散）大小为4，对应于运动<br>基本方向。请注意，对于这种环境，<br>[动作遮罩]（Learning-Environment-Design-Agents.md＃masking-discrete-actions）<br>默认情况下处于打开状态（此选项可以切换<br>使用“ trueAgent” GameObject中的“屏蔽动作”复选框。<br>提供的经过训练的模型文件是在启用操作屏蔽的情况下生成的。</li>
+<li>视觉观察：对应于GridWorld的自顶向下视图。</li>
+</ul>
+</li>
+<li>浮动属性：三个，分别对应于网格大小，障碍物数量和<br>目标数。</li>
+<li>基准平均奖励：0.8</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>c++常用函数</title>
+    <url>/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>本篇旨在记录算法学习过程中所遇所用到的c++函数及技巧 以备复习</p>
+<h2 id="C-String类"><a href="#C-String类" class="headerlink" title="C++ String类"></a>C++ String类</h2><h3 id="常见函数："><a href="#常见函数：" class="headerlink" title="常见函数："></a>常见函数：</h3><ul>
+<li><p>插入： insert(位置，待插入字符串)</p>
+</li>
+<li><p>删除： erase(pos , len) pos  <br>表示要删除的子字符串的起始下标，len 表示要删除子字符串的长度。如果不指明 len 的话，那么直接删除从 pos 到字符串结束处的所有字符（此时 len = str.length - pos）。</p>
+</li>
+<li><p>提取字符串：string substr (size_t pos = 0, size_t len = npos) const; <br><br>pos 为要提取的子字符串的起始下标，len 为要提取的子字符串的长度。</p>
+<ul>
+<li>字符串查找<br><ol>
+<li>find()：第一个参数为待查找的子字符串，它可以是 string 字符串，也可以是C风格的字符串。第二个参数为开始查找的位置（下标）；如果不指明，则从第0个字符开始查找。</li>
+<li>rfind()：rfind() 和 find() 很类似，同样是在字符串中查找子字符串，不同的是 find() 函数从第二个参数开始往后查找，而 rfind() 函数则最多查找到第二个参数处，如果到了第二个参数所指定的下标还没有找到子字符串，则返回一个无穷大值4294967295。</li>
+<li>find_first_of():find_first_of() 函数用于查找子字符串和字符串共同具有的字符在字符串中首次出现的位置<br><br>例:<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">string s1 &#x3D; &quot;first second second third&quot;;</span><br><span class="line">string s2 &#x3D; &quot;asecond&quot;;</span><br><span class="line">int index &#x3D; s1.find_first_of(s2);</span><br><span class="line"></span><br><span class="line">运行结果：</span><br><span class="line">Found at index : 3</span><br><span class="line">本例中 s1 和 s2 共同具有的字符是 ’s’，该字符在 s1 中首次出现的下标是3，故查找结果返回3</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>数值转换 <a href="https://blog.csdn.net/tengfei461807914/article/details/52203202" target="_blank" rel="noopener">博客链接</a></p>
+<img src="/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/c++常用函数/数值转换.png">
+
+
+
+</li>
+</ul>
+<h2 id="格式化输出"><a href="#格式化输出" class="headerlink" title="格式化输出"></a>格式化输出</h2><p>%d：就是普通的输出</p>
+<p>%2d：是将数字按宽度为2，采用右对齐方式输出，若数据位数不到2位，则左边补空格</p>
+<p>%02d：和%2d差不多，只不过左边补0</p>
+<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><h3 id="判断素数"><a href="#判断素数" class="headerlink" title="判断素数"></a>判断素数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool IsPrime(int n)</span><br><span class="line">&#123;</span><br><span class="line">	if(n &lt;&#x3D; 1)&#123;</span><br><span class="line">		cout&lt;&lt;n&lt;&lt;&quot;不是素数&quot;&lt;&lt;endl; </span><br><span class="line">		return false;</span><br><span class="line">	&#125;</span><br><span class="line">    for (int i &#x3D; 2; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        if ((n % i) &#x3D;&#x3D; 0)&#123;</span><br><span class="line">            cout&lt;&lt;n&lt;&lt;&quot;不是素数&quot;&lt;&lt;endl;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    cout&lt;&lt;n&lt;&lt;&quot;是素数&quot;&lt;&lt;endl;</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="判断闰年"><a href="#判断闰年" class="headerlink" title="判断闰年"></a>判断闰年</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int isRunyear(int x)</span><br><span class="line">&#123;</span><br><span class="line">    if(x%100!&#x3D;0&amp;&amp;x%4&#x3D;&#x3D;0||x%400&#x3D;&#x3D;0)</span><br><span class="line">        return 1;</span><br><span class="line">    else</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="日期模版"><a href="#日期模版" class="headerlink" title="日期模版"></a>日期模版</h3><p>题目描述：有两个日期，求两个日期之间的天数，如果两个日期是连续的我们规定他们之间的天数为两天</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include&lt;iostream&gt;</span><br><span class="line">#include&lt;cstdio&gt;</span><br><span class="line">#include&lt;cmath&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">int isRunyear(int x)</span><br><span class="line">&#123;</span><br><span class="line">    if(x%100!&#x3D;0&amp;&amp;x%4&#x3D;&#x3D;0||x%400&#x3D;&#x3D;0)</span><br><span class="line">        return 1;</span><br><span class="line">    else</span><br><span class="line">        return 0;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;0代表不是闰年 28天  1   29天 </span><br><span class="line">int month[2][13]&#x3D;&#123;&#123;0,31,28,31,30,31,30,31,31,30,31,30,31&#125;,</span><br><span class="line">                  &#123;0,31,29,31,30,31,30,31,31,30,31,30,31&#125;&#125;;</span><br><span class="line">struct Date&#123;</span><br><span class="line">    int Day;</span><br><span class="line">    int Month;</span><br><span class="line">    int Year;</span><br><span class="line">    void nextDay()&#123;</span><br><span class="line">        Day++;</span><br><span class="line">        int isrun&#x3D;isRunyear(Year);</span><br><span class="line">        if(Day&gt;month[isrun][Month])</span><br><span class="line">        &#123;</span><br><span class="line">            Day&#x3D;1;</span><br><span class="line">            Month++;</span><br><span class="line">            if(Month&gt;12)</span><br><span class="line">            &#123;</span><br><span class="line">               Month&#x3D;1;</span><br><span class="line">               Year++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">int buf[5001][13][32]; &#x2F;&#x2F;保存预处理的天数</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    Date tmp;</span><br><span class="line">    int cnt&#x3D;0;&#x2F;&#x2F;记录天数插值</span><br><span class="line">    tmp.Year&#x3D;0;</span><br><span class="line">    tmp.Month&#x3D;1;</span><br><span class="line">    tmp.Day&#x3D;1;</span><br><span class="line">    while(tmp.Year!&#x3D;5000)</span><br><span class="line">    &#123;</span><br><span class="line">        buf[tmp.Year][tmp.Month][tmp.Day]&#x3D;cnt;</span><br><span class="line">        tmp.nextDay();</span><br><span class="line">        cnt++;</span><br><span class="line">    &#125;</span><br><span class="line">    int Y1,M1,D1;</span><br><span class="line">    int Y2,M2,D2;</span><br><span class="line">    while(scanf(&quot;%4d%2d%2d&quot;,&amp;Y1,&amp;M1,&amp;D1)!&#x3D;EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        scanf(&quot;%4d%2d%2d&quot;,&amp;Y2,&amp;M2,&amp;D2);</span><br><span class="line">        printf(&quot;%d\n&quot;,abs(buf[Y2][M2][D2]-buf[Y1][M1][D1])+1);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="判断星期几"><a href="#判断星期几" class="headerlink" title="判断星期几"></a>判断星期几</h3><p>利用基姆拉尔森计算日期公式  w=(d+2<em>m+3</em>(m+1)/5+y+y/4-y/100+y/400)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">const char * getWeekdayByYearday(int iY, int iM, int iD) </span><br><span class="line">&#123;</span><br><span class="line">    int iWeekDay &#x3D; -1; </span><br><span class="line">    if (1 &#x3D;&#x3D; iM || 2 &#x3D;&#x3D; iM) </span><br><span class="line">    &#123;   </span><br><span class="line">        iM +&#x3D; 12; </span><br><span class="line">        iY--;</span><br><span class="line">    &#125;   </span><br><span class="line">    iWeekDay &#x3D; (iD + 1 + 2 * iM + 3 * (iM + 1) &#x2F; 5 + iY + iY &#x2F; 4 - iY &#x2F; 100 + iY &#x2F; 400) % 7;</span><br><span class="line">    switch(iWeekDay)</span><br><span class="line">    &#123;   </span><br><span class="line">        case 0 : return &quot;Sunday&quot;; break;</span><br><span class="line">        case 1 : return &quot;Monday&quot;; break;</span><br><span class="line">        case 2 : return &quot;Tuesday&quot;; break;</span><br><span class="line">        case 3 : return &quot;Wednesday&quot;; break;</span><br><span class="line">        case 4 : return &quot;Thursday&quot;; break;</span><br><span class="line">        case 5 : return &quot;Friday&quot;; break;                                                             </span><br><span class="line">        case 6 : return &quot;Saturday&quot;; break;</span><br><span class="line">        default : return NULL; break;</span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    return NULL;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    int year,month,day;</span><br><span class="line">    char ch&#x3D;&#39;1&#39;;</span><br><span class="line">    while(ch !&#x3D; &#39;\033&#39;)</span><br><span class="line">    &#123; </span><br><span class="line">        printf(&quot;\n请输入日期：\n格式为：1900,1,1\n&quot;);</span><br><span class="line">        scanf(&quot;%d,%d,%d&quot;,&amp;year,&amp;month,&amp;day);</span><br><span class="line">        const char * p &#x3D; getWeekdayByYearday(year, month, day);</span><br><span class="line">        printf(&quot;WeekDay : %s\n&quot;, p);</span><br><span class="line">        ch &#x3D; getchar();</span><br><span class="line">        printf(&quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Repeater"><a href="#Repeater" class="headerlink" title="Repeater"></a>Repeater</h3><img src="/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/c++常用函数/Repeater1.png">
+<img src="/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/c++常用函数/输入.png">
+<img src="/2021/02/08/c++%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/c++常用函数/输出.png">
+
+<p>代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;cstdio&gt;</span><br><span class="line">#include &lt;cmath&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">char map[3003][3003];</span><br><span class="line">char str[6][6];</span><br><span class="line">int n;</span><br><span class="line"></span><br><span class="line">void dfs(int m, int x, int y)&#123;</span><br><span class="line">    if (m &#x3D;&#x3D; 1)&#123;</span><br><span class="line">        for (int i &#x3D; 0; i&lt;n; i++)</span><br><span class="line">            for (int j &#x3D; 0; j&lt;n; j++)</span><br><span class="line">                map[x + i][y + j] &#x3D; str[i][j];</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    int size &#x3D; (int)pow(n*1.0, m - 1);</span><br><span class="line">    for (int i &#x3D; 0; i&lt;n; i++)&#123;</span><br><span class="line">        for (int j &#x3D; 0; j&lt;n; j++)&#123;</span><br><span class="line">            if (str[i][j] !&#x3D; &#39; &#39;)</span><br><span class="line">                dfs(m - 1, x + i*size, y + j*size);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(void)&#123;</span><br><span class="line">    n &#x3D; 1;</span><br><span class="line">    while (n)&#123;</span><br><span class="line">        cin &gt;&gt; n;</span><br><span class="line">        getchar();</span><br><span class="line">        for (int i &#x3D; 0; i &lt; n; i++)&#123;</span><br><span class="line">            cin.getline(str[i],6);</span><br><span class="line">        &#125;</span><br><span class="line">        int m;</span><br><span class="line">        cin &gt;&gt; m;</span><br><span class="line">        int size &#x3D; (int)pow(n*1.0, m);</span><br><span class="line">        for (int i &#x3D; 0; i&lt;size; i++)&#123;</span><br><span class="line">            for (int j &#x3D; 0; j&lt;size; j++)</span><br><span class="line">                map[i][j] &#x3D; &#39; &#39;;</span><br><span class="line">            map[i][size] &#x3D; &#39;\0&#39;;</span><br><span class="line">        &#125;</span><br><span class="line">        dfs(m, 0, 0);</span><br><span class="line">        for (int i &#x3D; 0; i&lt;size; i++)</span><br><span class="line">            cout&lt;&lt;map[i]&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="二分搜索模版"><a href="#二分搜索模版" class="headerlink" title="二分搜索模版"></a>二分搜索模版</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">while(base&lt;&#x3D;top)</span><br><span class="line">&#123;</span><br><span class="line">    int mid&#x3D;(base+top)&#x2F;2;</span><br><span class="line">    if(a[mid].xuehao&#x3D;&#x3D;x)</span><br><span class="line">    &#123;</span><br><span class="line">        flag&#x3D;1;</span><br><span class="line">        cout&lt;&lt;a[mid].xuehao&lt;&lt;&quot; &quot;&lt;&lt;a[mid].name&lt;&lt;&quot; &quot;&lt;&lt;a[mid].xingbie&lt;&lt;&quot; &quot;&lt;&lt;a[mid].age&lt;&lt;endl;</span><br><span class="line">        break;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        if(a[mid].xuehao&gt;x)</span><br><span class="line">        &#123;</span><br><span class="line">            top&#x3D;mid-1;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            base&#x3D;mid+1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c++ STL常见用法总结</title>
+    <url>/2021/02/07/c++STL%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<a id="more"></a>
+<p>本篇旨在记载STL一些常见函数及用法以备记忆</p>
+<h2 id="栈容器-stack"><a href="#栈容器-stack" class="headerlink" title="栈容器 stack"></a>栈容器 stack</h2><p>用法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">头文件：#include&lt;stack&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>empty() 堆栈为空则返回真</li>
+<li>pop() 移除栈顶元素</li>
+<li>push() 在栈顶增加元素</li>
+<li>size() 返回栈中元素数目</li>
+<li>top() 返回栈顶元素</li>
+</ul>
+<p>初始化：    <code>stack&lt;int&gt;  s</code></p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>总结</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>关联规则挖掘系统</title>
     <url>/2020/01/13/%E5%85%B3%E8%81%94%E8%A7%84%E5%88%99%E6%8C%96%E6%8E%98%E7%B3%BB%E7%BB%9F/</url>
     <content><![CDATA[<p>这学期的大数据课设由三部分组成，记录自己负责的关联规则挖掘系统部分内容。<br><br>环境：代码由python实现，版本为3.7版本，界面设计采用tkinter，采用两种算法：Apriori和fpgrowth<br></p>
@@ -26,18 +450,25 @@
 <li>画出存储器与CPU等元件的连接图<h2 id="三、实习步骤"><a href="#三、实习步骤" class="headerlink" title="三、实习步骤"></a>三、实习步骤</h2>首先分析题目所给的电路，题目中给的ROM地址空间起始地址为4000H，地址空间为8K<em>16为，8k即2^13，即A0~A12<br><br>再分析RAM，由于RAM采用的是最后地址8K</em>16为空间，因此同样是A0~A12<br><br>题目中给定使用8086CPU，8086是16位微处理器芯片，相关信号如下：<br></li>
 </ol>
 <p><strong>CPU相关信号:</strong><br><br>ALE：ALE 地址锁存允许信号（输出），高电平有效，不能被浮空。<br>一般用它来控制地址锁存器，它在下降沿会把地址锁存器的输入信号锁定，然后地址锁存器的输出用于提供地址。<br><br>一般在T1时刻出现ALE有效的信号，将地址送人地址锁存器。<br><br>RD 读信号引脚（输出），执行一个对内存货I/O端口的读操作，到底是读取内存中的单元数据还是I/O端口中的数据，取决于M/IO信号。<br><br>WR写信号（输出），低电平有效，对存储器或I/O写操作，具体哪种操作取决于M/IO信号。<br>M/IO存储器/输入/输出控制信号（输出）若此信号为高电平，表示CPU和存储器之间进行数据传输；<br><br>若为低电平，表示CPU和输入输出设备之间进行数据传输。<br><br>DEN信号：8086 CPU中，控制信号DEN的作用是.CPU发出的数据传输有效控制信号<br><br>DT/R信号：用来控制数据传送方向，在8086系统中，通常采用8286或8287作为数据总线的驱动器，用DT/R* 信号来控制数据驱动器的数据传送方向，当DT/R* =1时，数据驱动器进行数据发送；DT/R*=0时，数据驱动器进行数据接收。<br><br>因为是16位，所以地址为A0~A15,因此可以先画出地址译码方案</p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E8%AF%91%E7%A0%81%E6%96%B9%E6%A1%88.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/地址译码方案.png">
+
 <p>A0<del>A12为真正的地址，而A15</del>A13对应于译码器的A，B，C</p>
 <p>由于ROM地址空间为8k * 16位，所以依据题意需要采用2片8k * 8为的ROM芯片构成，在此选用两片2764芯片，基本参数如下：<br><br>A0到A12为13条地址信号输入线，说明芯片容量为2的13次方，即8K<br><br>D0到D7为数据线，表示芯片的每个存储单元存放一个字节（8位二进制数）。对芯片读数时，作为输出线，对芯片编程时，作为输入线。<br><br>CE为输入信号，低电平有效。（有称作片选信号）<br><br>OE为输出允许信号，低电平有效<br></p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/ROM%E8%8A%AF%E7%89%87.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/地址译码方案.png">
+
 <p>接着分析RAM芯片，同样是采用两个芯片进行片选，选择的芯片为SRAM6164芯片：<br>为8K×8bit的CMOSRAM芯片。<br><br>WE为写信号，CS为片选信号，OE为输出允许信号，D0<del>D7为8位数据线，A0</del>A12为13根地址线</p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/RAM%E8%8A%AF%E7%89%87.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/RAM芯片.png">
+
 <p>之后按照题目说的地址锁存器采用8282，关于地址锁存器相关概念不是很清楚，查阅后发现基本概念如下：<br><br>地址锁存器是一个暂存器，它根据控制信号的状态，将总线上地址代码暂存起来。8086/8088数据和地址总线采用分时复用操作方法，即用同一总线既传输数据又传输地址。当微处理器与存储器交换信号时，首先由CPU发出存储器地址，同时发出允许锁存信号ALE给锁存器，当锁存器接到该信号后将地址/数据总线上的地址锁存在总线上，随后才能传输数据。</p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E5%9C%B0%E5%9D%80%E9%94%81%E5%AD%98%E5%99%A8.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/地址锁存器.png">
+
 <p>数据缓冲器采用8286，数据缓冲器相关概念如下：<br><br>数据缓冲器是一款具有不同传输能力元件之间通过时用来暂存这些数据的存储器。<br></p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E6%95%B0%E6%8D%AE%E7%BC%93%E5%86%B2%E5%99%A8.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/数据缓冲器.png">
+
 <p>译码器采用74ALS138，根据输入的数字量在多个输出端中选一个有效，由之前的地址译码方案可知的当Y15，Y14，Y13分别为0, 1，0时，对应ROM地址，此时译码器的Y2端有效<br>同理RAM对应111，即Y7端有效</p>
-<p><img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/%E8%AF%91%E7%A0%81%E5%99%A8.png" alt></p>
+<img src="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/计组上机总结/译码器.png">
+
+
 ]]></content>
       <categories>
         <category>计算机组成原理</category>
@@ -615,6 +1046,141 @@ war exploded模式是直接把文件夹，jsp页面，classes等等移到Tomcat�
       </categories>
   </entry>
   <entry>
+    <title>监督学习之决策树</title>
+    <url>/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/</url>
+    <content><![CDATA[<h1 id="监督学习之决策树"><a href="#监督学习之决策树" class="headerlink" title="监督学习之决策树"></a>监督学习之决策树</h1><a id="more"></a>
+<h2 id="导入包"><a href="#导入包" class="headerlink" title="导入包"></a>导入包</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> mglearn</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+
+<p>决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的 if/else 问题中进行学<br>习，并得出结论。</p>
+<p>这些问题类似于你在“20 Questions”游戏中可能会问的问题。想象一下，你想要区分下面这四种动物：熊、鹰、企鹅和海豚。你的目标是通过提出尽可能少的 if/else 问题来得到正确答案。你可能首先会问：这种动物有没有羽毛，这个问题会将可能的动物减少到只有两种。如果答案是“有”，你可以问下一个问题，帮你区分鹰和企鹅。例如，你可以问这种动物会不会飞。如果这种动物没有羽毛，那么可能是海豚或熊，所以你需要问一个问题来区分这两种动物——比如问这种动物有没有鳍。</p>
+<p>这一系列问题可以表示为一棵决策树,如下图所示</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mglearn.plots.plot_animal_tree()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_4_0.png" alt="png"></p>
+<p>在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。</p>
+<p>用机器学习的语言来说就是，为了区分四类动物（鹰、企鹅、海豚和熊），我们利用三个特征（“有没有羽毛”“会不会飞”和“有没有鳍”）来构建一个模型。我们可以利用监督学习从数据中学习模型，而无需人为构建模型。</p>
+<h2 id="1-构造决策树"><a href="#1-构造决策树" class="headerlink" title="1.构造决策树"></a>1.构造决策树</h2><p>我们在下图所示的二维分类数据集上构造决策树。这个数据集由 2 个半月形组成，每个类别都包含 50 个数据点。我们将这个数据集称为 two_moons 。</p>
+<p>学习决策树，就是学习一系列 if/else 问题，使我们能够以最快的速度得到正确答案。在机器学习中，这些问题叫作测试（不要与测试集弄混，测试集是用来测试模型泛化性能的数据）。数据通常并不是像动物的例子那样具有二元特征（是 / 否）的形式，而是表示为连续特征，比如图 2-23 所示的二维数据集。用于连续数据的测试形式是：“特征 i 的值是否大于 a ?”</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-23.png" alt></p>
+<p>为了构造决策树，算法搜遍所有可能的测试，找出对目标变量来说信息量最大的那一个。图 2-24 展示了选出的第一个测试。将数据集在 x[1]=0.0596 处垂直划分可以得到最多信息，它在最大程度上将类别 0 中的点与类别 1 中的点进行区分。顶结点（也叫根结点）表示整个数据集，包含属于类别 0 的 50 个点和属于类别 1 的 50 个点。通过测试 x[1] &lt;=0.0596 的真假来对数据集进行划分，在图中表示为一条黑线。如果测试结果为真，那么将这个点分配给左结点，左结点里包含属于类别 0 的 2 个点和属于类别 1 的 32 个点。否则将这个点分配给右结点，右结点里包含属于类别 0 的 48 个点和属于类别 1 的 18 个点。这两个结点对应于图 2-24 中的顶部区域和底部区域。尽管第一次划分已经对两个类别做了很好的区分，但底部区域仍包含属于类别 0 的点，顶部区域也仍包含属于类别 1 的点。我们可以在两个区域中重复寻找最佳测试的过程，从而构建出更准确的模型。图 2-25 展示了信息量最大的下一次划分，这次划分是基于 x[0] 做出的，分为左右两个区域</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-2425.png" alt></p>
+<p>这一递归过程生成一棵二元决策树，其中每个结点都包含一个测试。或者你可以将每个测试看成沿着一条轴对当前数据进行划分。这是一种将算法看作分层划分的观点。由于每个测试仅关注一个特征，所以划分后的区域边界始终与坐标轴平行。</p>
+<p>对数据反复进行递归划分，直到划分后的每个区域（决策树的每个叶结点）只包含单一目标值（单一类别或单一回归值）。如果树中某个叶结点所包含数据点的目标值都相同，那么这个叶结点就是纯的（pure）。这个数据集的最终划分结果见图 2-26。</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-26.png" alt></p>
+<h2 id="2-控制决策树的复杂度"><a href="#2-控制决策树的复杂度" class="headerlink" title="2.控制决策树的复杂度"></a>2.控制决策树的复杂度</h2><p>通常来说，构造决策树直到所有叶结点都是纯的叶结点，这会导致模型非常复杂，并且对训练数据高度过拟合。纯叶结点的存在说明这棵树在训练集上的精度是 100%。训练集中的每个数据点都位于分类正确的叶结点中。在图 2-26 的左图中可以看出过拟合。你可以看到，在所有属于类别 0 的点中间有一块属于类别 1 的区域。另一方面，有一小条属于类别 0 的区域，包围着最右侧属于类别 0 的那个点。这并不是人们想象中决策边界的样子，这个决策边界过于关注远离同类别其他点的单个异常点。</p>
+<p>防止过拟合有两种常见的策略：一种是及早停止树的生长，也叫预剪枝（pre-pruning）；另一种是先构造树，但随后删除或折叠信息量很少的结点，也叫后剪枝（post-pruning）或剪枝（pruning）。预剪枝的限制条件可能包括限制树的最大深度、限制叶结点的最大数目，或者规定一个结点中数据点的最小数目来防止继续划分。</p>
+<p>scikit-learn 的决策树在 DecisionTreeRegressor 类和 DecisionTreeClassifier 类中实现。scikit-learn 只实现了预剪枝，没有实现后剪枝。</p>
+<p>我们在乳腺癌数据集上更详细地看一下预剪枝的效果。和前面一样，我们导入数据集并将其分为训练集和测试集。然后利用默认设置来构建模型，默认将树完全展开（树不断分支，直到所有叶结点都是纯的）。我们固定树的 random_state ，用于在内部解决平局问题：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_breast_cancer</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">cancer=load_breast_cancer()</span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(cancer.data,cancer.target,</span><br><span class="line">                                              stratify=cancer.target,random_state=<span class="number">42</span>)</span><br><span class="line">tree=DecisionTreeClassifier(random_state=<span class="number">0</span>).fit(X_train,y_train)</span><br><span class="line">print(<span class="string">"Accuracy on training set: &#123;:.3f&#125;"</span>.format(tree.score(X_train,y_train)))</span><br><span class="line">print(<span class="string">"Accuracy on test set: &#123;:.3f&#125;"</span>.format(tree.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Accuracy on training set: 1.000
+Accuracy on test set: 0.937</code></pre><p>不出所料，训练集上的精度是 100%，这是因为叶结点都是纯的，树的深度很大，足以完美地记住训练数据的所有标签。测试集精度比之前讲过的线性模型略低，线性模型的精度约为 95%。</p>
+<p>如果我们不限制决策树的深度，它的深度和复杂度都可以变得特别大。因此，未剪枝的树容易过拟合，对新数据的泛化性能不佳。现在我们将预剪枝应用在决策树上，这可以在完美拟合训练数据之前阻止树的展开。一种选择是在到达一定深度后停止树的展开。这里我们设置 max_depth=4 ，这意味着只可以连续问 4 个问题（参见图 2-24 和图 2-26）。限制树的深度可以减少过拟合。这会降低训练集的精度，但可以提高测试集的精度：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tree=DecisionTreeClassifier(max_depth=<span class="number">4</span>,random_state=<span class="number">0</span>).fit(X_train,y_train)</span><br><span class="line">print(<span class="string">"Accuracy on training set :&#123;:.3f&#125;"</span>.format(tree.score(X_train,y_train)))</span><br><span class="line">print(<span class="string">"Accuracy on test set: &#123;:.3f&#125;"</span>.format(tree.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Accuracy on training set :0.988
+Accuracy on test set: 0.951</code></pre><h2 id="3-分析决策树"><a href="#3-分析决策树" class="headerlink" title="3.分析决策树"></a>3.分析决策树</h2><p>我们可以利用 tree 模块的 export_graphviz 函数来将树可视化。这个函数会生成一个 .dot 格式的文件，这是一种用于保存图形的文本文件格式。我们设置为结点添加颜色的选项，颜色表示每个结点中的多数类别，同时传入类别名称和特征名称，这样可以对树正确标记：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> export_graphviz</span><br><span class="line">export_graphviz(tree, out_file=<span class="string">"tree.dot"</span>, class_names=[<span class="string">"malignant"</span>,<span class="string">"benign"</span>],</span><br><span class="line">    feature_names=cancer.feature_names, impurity=<span class="literal">False</span>, filled=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们可以利用 graphviz 模块读取这个文件并将其可视化（你也可以使用任何能够读取 .dot文件的程序）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"tree.dot"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    dot_graph = f.read()</span><br><span class="line">    graphviz.Source(dot_graph).view()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C3.png" alt></p>
+<p>树的可视化有助于深入理解算法是如何进行预测的，也是易于向非专家解释的机器学习算法的优秀示例。不过，即使这里树的深度只有 4 层，也有点太大了。深度更大的树（深度为 10 并不罕见）更加难以理解。一种观察树的方法可能有用，就是找出大部分数据的实际路径。图中每个结点的 samples 给出了该结点中的样本个数， values 给出的是每个类别的样本个数。观察 worst radius &lt;= 16.795 分支右侧的子结点，我们发现它只包含8 个良性样本，但有 134 个恶性样本。树的这一侧的其余分支只是利用一些更精细的区别将这 8 个良性样本分离出来。在第一次划分右侧的 142 个样本中，几乎所有样本（132 个）最后都进入最右侧的叶结点中。</p>
+<p>再来看一下根结点的左侧子结点，对于 worst radius &gt; 16.795 ，我们得到 25 个恶性样本和 259 个良性样本。几乎所有良性样本最终都进入左数第二个叶结点中，大部分其他叶结点都只包含很少的样本。</p>
+<h2 id="4-树的特征重要性"><a href="#4-树的特征重要性" class="headerlink" title="4.树的特征重要性"></a>4.树的特征重要性</h2><p>查看整个树可能非常费劲，除此之外，我还可以利用一些有用的属性来总结树的工作原理。其中最常用的是特征重要性（feature importance），它为每个特征对树的决策的重要性进行排序。对于每个特征来说，它都是一个介于 0 和 1 之间的数字，其中 0 表示“根本没用到”，1 表示“完美预测目标值”。特征重要性的求和始终为 1：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">"Feature importances:\n&#123;&#125;"</span>.format(tree.feature_importances_))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Feature importances:
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.01019737 0.04839825
+ 0.         0.         0.0024156  0.         0.         0.
+ 0.         0.         0.72682851 0.0458159  0.         0.
+ 0.0141577  0.         0.018188   0.1221132  0.01188548 0.        ]</code></pre><p>我们可以将特征重要性可视化，与我们将线性模型的系数可视化的方法类似：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_feature_importance_cancer</span><span class="params">(model)</span>:</span></span><br><span class="line">    n_features = cancer.data.shape[<span class="number">1</span>]</span><br><span class="line">    plt.barh(range(n_features), model.feature_importances_, align=<span class="string">'center'</span>)</span><br><span class="line">    plt.yticks(np.arange(n_features), cancer.feature_names)</span><br><span class="line">    plt.xlabel(<span class="string">"Feature importance"</span>)</span><br><span class="line">    plt.ylabel(<span class="string">"Feature"</span>)</span><br><span class="line"></span><br><span class="line">plot_feature_importance_cancer(tree)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_25_0.png" alt="png"></p>
+<p>这里我们看到，顶部划分用到的特征（“worst radius”）是最重要的特征。这也证实了我们在分析树时的观察结论，即第一层划分已经将两个类别区分得很好。</p>
+<p>但是，如果某个特征的 feature_importance_ 很小，并不能说明这个特征没有提供任何信息。这只能说明该特征没有被树选中，可能是因为另一个特征也包含了同样的信息。</p>
+<p>与线性模型的系数不同，特征重要性始终为正数，也不能说明该特征对应哪个类别。特征重要性告诉我们“worst radius”（最大半径）特征很重要，但并没有告诉我们半径大表示样本是良性还是恶性。事实上，在特征和类别之间可能没有这样简单的关系，你可以在下面的例子中看出这一点</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tree=mglearn.plots.plot_tree_not_monotone()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Feature importances: [0. 1.]</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_27_1.png" alt="png"></p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C4.png" alt></p>
+<p>该图显示的是有两个特征和两个类别的数据集。这里所有信息都包含在 X[1] 中，没有用到X[0] 。但 X[1] 和输出类别之间并不是单调关系，即我们不能这么说：“较大的 X[1] 对应类别 0，较小的 X[1] 对应类别 1”（反之亦然）。</p>
+<p>虽然我们主要讨论的是用于分类的决策树，但对用于回归的决策树来说，所有内容都是类似的，在 DecisionTreeRegressor 中实现。回归树的用法和分析与分类树非常类似。但在将基于树的模型用于回归时，我们想要指出它的一个特殊性质。 DecisionTreeRegressor（以及其他所有基于树的回归模型）不能外推（extrapolate），也不能在训练数据范围之外进行预测。</p>
+<p>我们利用计算机内存（RAM）历史价格的数据集来更详细地研究这一点。下图给出了这个数据集的图像，x 轴为日期，y 轴为那一年 1 兆字节（MB）RAM 的价格：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">ram_prices=pd.read_csv(<span class="string">"data/ram_price.csv"</span>)</span><br><span class="line">plt.semilogy(ram_prices.date,ram_prices.price)</span><br><span class="line">plt.xlabel(<span class="string">'Year'</span>)</span><br><span class="line">plt.ylabel(<span class="string">"Price in $/Mbyte"</span>)</span><br><span class="line">print(help(plt.semilogy))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Help on function semilogy in module matplotlib.pyplot:
+
+semilogy(*args, **kwargs)
+    Make a plot with log scaling on the y axis.
+
+    Call signatures::
+
+        semilogy([x], y, [fmt], data=None, **kwargs)
+        semilogy([x], y, [fmt], [x2], y2, [fmt2], ..., **kwargs)
+
+    This is just a thin wrapper around `.plot` which additionally changes
+    the y-axis to log scaling. All of the concepts and parameters of plot
+    can be used here as well.
+
+    The additional parameters *basey*, *subsy* and *nonposy* control the
+    y-axis properties. They are just forwarded to `.Axes.set_yscale`.
+
+    Parameters
+    ----------
+    basey : scalar, optional, default 10
+        Base of the y logarithm.
+
+    subsy : array_like, optional
+        The location of the minor yticks. If *None*, reasonable locations
+        are automatically chosen depending on the number of decades in the
+        plot. See `.Axes.set_yscale` for details.
+
+    nonposy : {&apos;mask&apos;, &apos;clip&apos;}, optional, default &apos;mask&apos;
+        Non-positive values in y can be masked as invalid, or clipped to a
+        very small positive number.
+
+    Returns
+    -------
+    lines
+        A list of `~.Line2D` objects representing the plotted data.
+
+    Other Parameters
+    ----------------
+    **kwargs
+        All parameters supported by `.plot`.
+
+None</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_30_1.png" alt="png"></p>
+<p>注意 y 轴的对数刻度。在用对数坐标绘图时，二者的线性关系看起来非常好，所以预测应该相对比较容易，除了一些不平滑之处之外。</p>
+<p>我们将利用 2000 年前的历史数据来预测 2000 年后的价格，只用日期作为特征。我们将对比两个简单的模型： DecisionTreeRegressor 和 LinearRegression 。我们对价格取对数，使得二者关系的线性相对更好。这对 DecisionTreeRegressor 不会产生什么影响，但对LinearRegression 的影响却很大（我们将在第 4 章中进一步讨论）。训练模型并做出预测之后，我们应用指数映射来做对数变换的逆运算。为了便于可视化，我们这里对整个数据集进行预测，但如果是为了定量评估，我们将只考虑测试数据集：</p>
+<p>首先说明下np.newwaxis用法，增加一维</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x1 = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">print(<span class="string">"the shape of x1 is &#123;&#125;"</span>.format(x1.shape))</span><br><span class="line">x1_new=x1[:,np.newaxis]</span><br><span class="line">print(<span class="string">"the shape of x1 after newwaxis is &#123;&#125;"</span>.format(x1_new.shape))</span><br></pre></td></tr></table></figure>
+
+<pre><code>the shape of x1 is (5,)
+the shape of x1 after newwaxis is (5, 1)</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="comment">#利用历史数据预测2000年后的价格</span></span><br><span class="line">data_train=ram_prices[ram_prices.date&lt;<span class="number">2000</span>]</span><br><span class="line">data_test=ram_prices[ram_prices.date&gt;=<span class="number">2000</span>]</span><br><span class="line"><span class="comment">#基于日期来预测价格</span></span><br><span class="line">X_train=data_train.date[:,np.newaxis]</span><br><span class="line"><span class="comment">#利用对数变换来得到数据和目标之间更简单的关系</span></span><br><span class="line">y_train=np.log(data_train.price)</span><br><span class="line">tree=DecisionTreeRegressor().fit(X_train,y_train)</span><br><span class="line">linear_reg=LinearRegression().fit(X_train,y_train)</span><br><span class="line"><span class="comment">#对所有数据进行预测</span></span><br><span class="line">X_all=ram_prices.date[:,np.newaxis]</span><br><span class="line">pred_tree=tree.predict(X_all)</span><br><span class="line">pred_lr=linear_reg.predict(X_all)</span><br><span class="line"><span class="comment">#对数变换逆运算</span></span><br><span class="line">price_tree=np.exp(pred_tree)</span><br><span class="line">price_lr=np.exp(pred_lr)</span><br><span class="line"><span class="comment"># 将决策树和线性回归模型的预测结果与真实值进行对比</span></span><br><span class="line">plt.semilogy(data_train.date,data_train.price,label=<span class="string">"Training data"</span>)</span><br><span class="line">plt.semilogy(data_test.date,data_test.price,label=<span class="string">"Test data"</span>)</span><br><span class="line"></span><br><span class="line">plt.semilogy(ram_prices.date,price_tree,label=<span class="string">"Tree prediction"</span>)</span><br><span class="line">plt.semilogy(ram_prices.date,price_lr,label=<span class="string">"Linear prediction"</span>)</span><br><span class="line">plt.legend()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x2263aa048d0&gt;</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_34_1.png" alt="png"></p>
+<p>两个模型之间的差异非常明显。线性模型用一条直线对数据做近似，这是我们所知道的。这条线对测试数据（2000 年后的价格）给出了相当好的预测，不过忽略了训练数据和测试数据中一些更细微的变化。与之相反，树模型完美预测了训练数据。由于我们没有限制树的复杂度，因此它记住了整个数据集。但是，一旦输入超出了模型训练数据的范围，模型就只能持续预测最后一个已知数据点。树不能在训练数据的范围之外生成“新的”响应。所有基于树的模型都有这个缺点。</p>
+<h2 id="5-优点，缺点和参数"><a href="#5-优点，缺点和参数" class="headerlink" title="5.优点，缺点和参数"></a>5.优点，缺点和参数</h2><p>如前所述，控制决策树模型复杂度的参数是预剪枝参数,<br><br>它在树完全展开之前停止树的构造。<br><br>通常来说，选择一种预剪枝策略（设置 max_depth 、 max_leaf_nodes 或 min_samples_leaf ）足以防止过拟合。<br><br>与前面讨论过的许多算法相比，决策树有两个优点：<br></p>
+<ul>
+<li>得到的模型很容易可视化，非专家也很容易理解（至少对于较小的树而言）；</li>
+<li>算法完全不受数据缩放的影响。由于每个特征被单独处理，而且数据的划分也不依赖于缩放，因此决策树算法不需要特征预处理，比如归一化或标准化。<br>特别是特征的尺度完全不一样时或者二元特征和连续特征同时存在时，决策树的效果很好。<br></li>
+</ul>
+<p>决策树的主要缺点在于，即使做了预剪枝，它也经常会过拟合，泛化性能很差。<br><br>因此，在大多数应用中，往往使用下面介绍的集成方法来替代单棵决策树。</p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+  </entry>
+  <entry>
     <title>监督学习之线性模型</title>
     <url>/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h1 id="监督学习之线性模型"><a href="#监督学习之线性模型" class="headerlink" title="监督学习之线性模型"></a>监督学习之线性模型</h1><a id="more"></a>
@@ -994,141 +1560,6 @@ Intercept shape:  (3,)</code></pre><p>我们看到， coef_ 的形状是 (3, 2) 
 <p>线性模型的训练速度非常快，预测速度也很快。这种模型可以推广到非常大的数据集，对稀疏数据也很有效。如果你的数据包含数十万甚至上百万个样本，你可能需要研究如何使用 LogisticRegression 和 Ridge 模型的 solver=’sag’ 选项，在处理大型数据时，这一选项比默认值要更快。其他选项还有 SGDClassifier 类和 SGDRegressor 类，它们对本节介绍的线性模型实现了可扩展性更强的版本。</p>
 <p>线性模型的另一个优点在于，利用我们之间见过的用于回归和分类的公式，理解如何进行预测是相对比较容易的。不幸的是，往往并不完全清楚系数为什么是这样的。如果你的数据集中包含高度相关的特征，这一问题尤为突出。在这种情况下，可能很难对系数做出解释。</p>
 <p>如果<span class="mark">特征数量大于样本数量，线性模型的表现通常都很好</span>。它也常用于非常大的数据集，只是因为训练其他模型并不可行。但在更低维的空间中，其他模型的泛化性能可能更好。2.3.7 节会介绍几个线性模型不适用的例子。</p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>监督学习之决策树</title>
-    <url>/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/</url>
-    <content><![CDATA[<h1 id="监督学习之决策树"><a href="#监督学习之决策树" class="headerlink" title="监督学习之决策树"></a>监督学习之决策树</h1><a id="more"></a>
-<h2 id="导入包"><a href="#导入包" class="headerlink" title="导入包"></a>导入包</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> mglearn</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
-
-<p>决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的 if/else 问题中进行学<br>习，并得出结论。</p>
-<p>这些问题类似于你在“20 Questions”游戏中可能会问的问题。想象一下，你想要区分下面这四种动物：熊、鹰、企鹅和海豚。你的目标是通过提出尽可能少的 if/else 问题来得到正确答案。你可能首先会问：这种动物有没有羽毛，这个问题会将可能的动物减少到只有两种。如果答案是“有”，你可以问下一个问题，帮你区分鹰和企鹅。例如，你可以问这种动物会不会飞。如果这种动物没有羽毛，那么可能是海豚或熊，所以你需要问一个问题来区分这两种动物——比如问这种动物有没有鳍。</p>
-<p>这一系列问题可以表示为一棵决策树,如下图所示</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mglearn.plots.plot_animal_tree()</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_4_0.png" alt="png"></p>
-<p>在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。</p>
-<p>用机器学习的语言来说就是，为了区分四类动物（鹰、企鹅、海豚和熊），我们利用三个特征（“有没有羽毛”“会不会飞”和“有没有鳍”）来构建一个模型。我们可以利用监督学习从数据中学习模型，而无需人为构建模型。</p>
-<h2 id="1-构造决策树"><a href="#1-构造决策树" class="headerlink" title="1.构造决策树"></a>1.构造决策树</h2><p>我们在下图所示的二维分类数据集上构造决策树。这个数据集由 2 个半月形组成，每个类别都包含 50 个数据点。我们将这个数据集称为 two_moons 。</p>
-<p>学习决策树，就是学习一系列 if/else 问题，使我们能够以最快的速度得到正确答案。在机器学习中，这些问题叫作测试（不要与测试集弄混，测试集是用来测试模型泛化性能的数据）。数据通常并不是像动物的例子那样具有二元特征（是 / 否）的形式，而是表示为连续特征，比如图 2-23 所示的二维数据集。用于连续数据的测试形式是：“特征 i 的值是否大于 a ?”</p>
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-23.png" alt></p>
-<p>为了构造决策树，算法搜遍所有可能的测试，找出对目标变量来说信息量最大的那一个。图 2-24 展示了选出的第一个测试。将数据集在 x[1]=0.0596 处垂直划分可以得到最多信息，它在最大程度上将类别 0 中的点与类别 1 中的点进行区分。顶结点（也叫根结点）表示整个数据集，包含属于类别 0 的 50 个点和属于类别 1 的 50 个点。通过测试 x[1] &lt;=0.0596 的真假来对数据集进行划分，在图中表示为一条黑线。如果测试结果为真，那么将这个点分配给左结点，左结点里包含属于类别 0 的 2 个点和属于类别 1 的 32 个点。否则将这个点分配给右结点，右结点里包含属于类别 0 的 48 个点和属于类别 1 的 18 个点。这两个结点对应于图 2-24 中的顶部区域和底部区域。尽管第一次划分已经对两个类别做了很好的区分，但底部区域仍包含属于类别 0 的点，顶部区域也仍包含属于类别 1 的点。我们可以在两个区域中重复寻找最佳测试的过程，从而构建出更准确的模型。图 2-25 展示了信息量最大的下一次划分，这次划分是基于 x[0] 做出的，分为左右两个区域</p>
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-2425.png" alt></p>
-<p>这一递归过程生成一棵二元决策树，其中每个结点都包含一个测试。或者你可以将每个测试看成沿着一条轴对当前数据进行划分。这是一种将算法看作分层划分的观点。由于每个测试仅关注一个特征，所以划分后的区域边界始终与坐标轴平行。</p>
-<p>对数据反复进行递归划分，直到划分后的每个区域（决策树的每个叶结点）只包含单一目标值（单一类别或单一回归值）。如果树中某个叶结点所包含数据点的目标值都相同，那么这个叶结点就是纯的（pure）。这个数据集的最终划分结果见图 2-26。</p>
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C2-26.png" alt></p>
-<h2 id="2-控制决策树的复杂度"><a href="#2-控制决策树的复杂度" class="headerlink" title="2.控制决策树的复杂度"></a>2.控制决策树的复杂度</h2><p>通常来说，构造决策树直到所有叶结点都是纯的叶结点，这会导致模型非常复杂，并且对训练数据高度过拟合。纯叶结点的存在说明这棵树在训练集上的精度是 100%。训练集中的每个数据点都位于分类正确的叶结点中。在图 2-26 的左图中可以看出过拟合。你可以看到，在所有属于类别 0 的点中间有一块属于类别 1 的区域。另一方面，有一小条属于类别 0 的区域，包围着最右侧属于类别 0 的那个点。这并不是人们想象中决策边界的样子，这个决策边界过于关注远离同类别其他点的单个异常点。</p>
-<p>防止过拟合有两种常见的策略：一种是及早停止树的生长，也叫预剪枝（pre-pruning）；另一种是先构造树，但随后删除或折叠信息量很少的结点，也叫后剪枝（post-pruning）或剪枝（pruning）。预剪枝的限制条件可能包括限制树的最大深度、限制叶结点的最大数目，或者规定一个结点中数据点的最小数目来防止继续划分。</p>
-<p>scikit-learn 的决策树在 DecisionTreeRegressor 类和 DecisionTreeClassifier 类中实现。scikit-learn 只实现了预剪枝，没有实现后剪枝。</p>
-<p>我们在乳腺癌数据集上更详细地看一下预剪枝的效果。和前面一样，我们导入数据集并将其分为训练集和测试集。然后利用默认设置来构建模型，默认将树完全展开（树不断分支，直到所有叶结点都是纯的）。我们固定树的 random_state ，用于在内部解决平局问题：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_breast_cancer</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">cancer=load_breast_cancer()</span><br><span class="line">X_train,X_test,y_train,y_test=train_test_split(cancer.data,cancer.target,</span><br><span class="line">                                              stratify=cancer.target,random_state=<span class="number">42</span>)</span><br><span class="line">tree=DecisionTreeClassifier(random_state=<span class="number">0</span>).fit(X_train,y_train)</span><br><span class="line">print(<span class="string">"Accuracy on training set: &#123;:.3f&#125;"</span>.format(tree.score(X_train,y_train)))</span><br><span class="line">print(<span class="string">"Accuracy on test set: &#123;:.3f&#125;"</span>.format(tree.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Accuracy on training set: 1.000
-Accuracy on test set: 0.937</code></pre><p>不出所料，训练集上的精度是 100%，这是因为叶结点都是纯的，树的深度很大，足以完美地记住训练数据的所有标签。测试集精度比之前讲过的线性模型略低，线性模型的精度约为 95%。</p>
-<p>如果我们不限制决策树的深度，它的深度和复杂度都可以变得特别大。因此，未剪枝的树容易过拟合，对新数据的泛化性能不佳。现在我们将预剪枝应用在决策树上，这可以在完美拟合训练数据之前阻止树的展开。一种选择是在到达一定深度后停止树的展开。这里我们设置 max_depth=4 ，这意味着只可以连续问 4 个问题（参见图 2-24 和图 2-26）。限制树的深度可以减少过拟合。这会降低训练集的精度，但可以提高测试集的精度：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tree=DecisionTreeClassifier(max_depth=<span class="number">4</span>,random_state=<span class="number">0</span>).fit(X_train,y_train)</span><br><span class="line">print(<span class="string">"Accuracy on training set :&#123;:.3f&#125;"</span>.format(tree.score(X_train,y_train)))</span><br><span class="line">print(<span class="string">"Accuracy on test set: &#123;:.3f&#125;"</span>.format(tree.score(X_test,y_test)))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Accuracy on training set :0.988
-Accuracy on test set: 0.951</code></pre><h2 id="3-分析决策树"><a href="#3-分析决策树" class="headerlink" title="3.分析决策树"></a>3.分析决策树</h2><p>我们可以利用 tree 模块的 export_graphviz 函数来将树可视化。这个函数会生成一个 .dot 格式的文件，这是一种用于保存图形的文本文件格式。我们设置为结点添加颜色的选项，颜色表示每个结点中的多数类别，同时传入类别名称和特征名称，这样可以对树正确标记：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> export_graphviz</span><br><span class="line">export_graphviz(tree, out_file=<span class="string">"tree.dot"</span>, class_names=[<span class="string">"malignant"</span>,<span class="string">"benign"</span>],</span><br><span class="line">    feature_names=cancer.feature_names, impurity=<span class="literal">False</span>, filled=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-
-<p>我们可以利用 graphviz 模块读取这个文件并将其可视化（你也可以使用任何能够读取 .dot文件的程序）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> graphviz</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"tree.dot"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    dot_graph = f.read()</span><br><span class="line">    graphviz.Source(dot_graph).view()</span><br></pre></td></tr></table></figure>
-
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C3.png" alt></p>
-<p>树的可视化有助于深入理解算法是如何进行预测的，也是易于向非专家解释的机器学习算法的优秀示例。不过，即使这里树的深度只有 4 层，也有点太大了。深度更大的树（深度为 10 并不罕见）更加难以理解。一种观察树的方法可能有用，就是找出大部分数据的实际路径。图中每个结点的 samples 给出了该结点中的样本个数， values 给出的是每个类别的样本个数。观察 worst radius &lt;= 16.795 分支右侧的子结点，我们发现它只包含8 个良性样本，但有 134 个恶性样本。树的这一侧的其余分支只是利用一些更精细的区别将这 8 个良性样本分离出来。在第一次划分右侧的 142 个样本中，几乎所有样本（132 个）最后都进入最右侧的叶结点中。</p>
-<p>再来看一下根结点的左侧子结点，对于 worst radius &gt; 16.795 ，我们得到 25 个恶性样本和 259 个良性样本。几乎所有良性样本最终都进入左数第二个叶结点中，大部分其他叶结点都只包含很少的样本。</p>
-<h2 id="4-树的特征重要性"><a href="#4-树的特征重要性" class="headerlink" title="4.树的特征重要性"></a>4.树的特征重要性</h2><p>查看整个树可能非常费劲，除此之外，我还可以利用一些有用的属性来总结树的工作原理。其中最常用的是特征重要性（feature importance），它为每个特征对树的决策的重要性进行排序。对于每个特征来说，它都是一个介于 0 和 1 之间的数字，其中 0 表示“根本没用到”，1 表示“完美预测目标值”。特征重要性的求和始终为 1：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">"Feature importances:\n&#123;&#125;"</span>.format(tree.feature_importances_))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Feature importances:
-[0.         0.         0.         0.         0.         0.
- 0.         0.         0.         0.         0.01019737 0.04839825
- 0.         0.         0.0024156  0.         0.         0.
- 0.         0.         0.72682851 0.0458159  0.         0.
- 0.0141577  0.         0.018188   0.1221132  0.01188548 0.        ]</code></pre><p>我们可以将特征重要性可视化，与我们将线性模型的系数可视化的方法类似：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_feature_importance_cancer</span><span class="params">(model)</span>:</span></span><br><span class="line">    n_features = cancer.data.shape[<span class="number">1</span>]</span><br><span class="line">    plt.barh(range(n_features), model.feature_importances_, align=<span class="string">'center'</span>)</span><br><span class="line">    plt.yticks(np.arange(n_features), cancer.feature_names)</span><br><span class="line">    plt.xlabel(<span class="string">"Feature importance"</span>)</span><br><span class="line">    plt.ylabel(<span class="string">"Feature"</span>)</span><br><span class="line"></span><br><span class="line">plot_feature_importance_cancer(tree)</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_25_0.png" alt="png"></p>
-<p>这里我们看到，顶部划分用到的特征（“worst radius”）是最重要的特征。这也证实了我们在分析树时的观察结论，即第一层划分已经将两个类别区分得很好。</p>
-<p>但是，如果某个特征的 feature_importance_ 很小，并不能说明这个特征没有提供任何信息。这只能说明该特征没有被树选中，可能是因为另一个特征也包含了同样的信息。</p>
-<p>与线性模型的系数不同，特征重要性始终为正数，也不能说明该特征对应哪个类别。特征重要性告诉我们“worst radius”（最大半径）特征很重要，但并没有告诉我们半径大表示样本是良性还是恶性。事实上，在特征和类别之间可能没有这样简单的关系，你可以在下面的例子中看出这一点</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tree=mglearn.plots.plot_tree_not_monotone()</span><br></pre></td></tr></table></figure>
-
-<pre><code>Feature importances: [0. 1.]</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_27_1.png" alt="png"></p>
-<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5C4.png" alt></p>
-<p>该图显示的是有两个特征和两个类别的数据集。这里所有信息都包含在 X[1] 中，没有用到X[0] 。但 X[1] 和输出类别之间并不是单调关系，即我们不能这么说：“较大的 X[1] 对应类别 0，较小的 X[1] 对应类别 1”（反之亦然）。</p>
-<p>虽然我们主要讨论的是用于分类的决策树，但对用于回归的决策树来说，所有内容都是类似的，在 DecisionTreeRegressor 中实现。回归树的用法和分析与分类树非常类似。但在将基于树的模型用于回归时，我们想要指出它的一个特殊性质。 DecisionTreeRegressor（以及其他所有基于树的回归模型）不能外推（extrapolate），也不能在训练数据范围之外进行预测。</p>
-<p>我们利用计算机内存（RAM）历史价格的数据集来更详细地研究这一点。下图给出了这个数据集的图像，x 轴为日期，y 轴为那一年 1 兆字节（MB）RAM 的价格：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">ram_prices=pd.read_csv(<span class="string">"data/ram_price.csv"</span>)</span><br><span class="line">plt.semilogy(ram_prices.date,ram_prices.price)</span><br><span class="line">plt.xlabel(<span class="string">'Year'</span>)</span><br><span class="line">plt.ylabel(<span class="string">"Price in $/Mbyte"</span>)</span><br><span class="line">print(help(plt.semilogy))</span><br></pre></td></tr></table></figure>
-
-<pre><code>Help on function semilogy in module matplotlib.pyplot:
-
-semilogy(*args, **kwargs)
-    Make a plot with log scaling on the y axis.
-
-    Call signatures::
-
-        semilogy([x], y, [fmt], data=None, **kwargs)
-        semilogy([x], y, [fmt], [x2], y2, [fmt2], ..., **kwargs)
-
-    This is just a thin wrapper around `.plot` which additionally changes
-    the y-axis to log scaling. All of the concepts and parameters of plot
-    can be used here as well.
-
-    The additional parameters *basey*, *subsy* and *nonposy* control the
-    y-axis properties. They are just forwarded to `.Axes.set_yscale`.
-
-    Parameters
-    ----------
-    basey : scalar, optional, default 10
-        Base of the y logarithm.
-
-    subsy : array_like, optional
-        The location of the minor yticks. If *None*, reasonable locations
-        are automatically chosen depending on the number of decades in the
-        plot. See `.Axes.set_yscale` for details.
-
-    nonposy : {&apos;mask&apos;, &apos;clip&apos;}, optional, default &apos;mask&apos;
-        Non-positive values in y can be masked as invalid, or clipped to a
-        very small positive number.
-
-    Returns
-    -------
-    lines
-        A list of `~.Line2D` objects representing the plotted data.
-
-    Other Parameters
-    ----------------
-    **kwargs
-        All parameters supported by `.plot`.
-
-None</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_30_1.png" alt="png"></p>
-<p>注意 y 轴的对数刻度。在用对数坐标绘图时，二者的线性关系看起来非常好，所以预测应该相对比较容易，除了一些不平滑之处之外。</p>
-<p>我们将利用 2000 年前的历史数据来预测 2000 年后的价格，只用日期作为特征。我们将对比两个简单的模型： DecisionTreeRegressor 和 LinearRegression 。我们对价格取对数，使得二者关系的线性相对更好。这对 DecisionTreeRegressor 不会产生什么影响，但对LinearRegression 的影响却很大（我们将在第 4 章中进一步讨论）。训练模型并做出预测之后，我们应用指数映射来做对数变换的逆运算。为了便于可视化，我们这里对整个数据集进行预测，但如果是为了定量评估，我们将只考虑测试数据集：</p>
-<p>首先说明下np.newwaxis用法，增加一维</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x1 = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">print(<span class="string">"the shape of x1 is &#123;&#125;"</span>.format(x1.shape))</span><br><span class="line">x1_new=x1[:,np.newaxis]</span><br><span class="line">print(<span class="string">"the shape of x1 after newwaxis is &#123;&#125;"</span>.format(x1_new.shape))</span><br></pre></td></tr></table></figure>
-
-<pre><code>the shape of x1 is (5,)
-the shape of x1 after newwaxis is (5, 1)</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="comment">#利用历史数据预测2000年后的价格</span></span><br><span class="line">data_train=ram_prices[ram_prices.date&lt;<span class="number">2000</span>]</span><br><span class="line">data_test=ram_prices[ram_prices.date&gt;=<span class="number">2000</span>]</span><br><span class="line"><span class="comment">#基于日期来预测价格</span></span><br><span class="line">X_train=data_train.date[:,np.newaxis]</span><br><span class="line"><span class="comment">#利用对数变换来得到数据和目标之间更简单的关系</span></span><br><span class="line">y_train=np.log(data_train.price)</span><br><span class="line">tree=DecisionTreeRegressor().fit(X_train,y_train)</span><br><span class="line">linear_reg=LinearRegression().fit(X_train,y_train)</span><br><span class="line"><span class="comment">#对所有数据进行预测</span></span><br><span class="line">X_all=ram_prices.date[:,np.newaxis]</span><br><span class="line">pred_tree=tree.predict(X_all)</span><br><span class="line">pred_lr=linear_reg.predict(X_all)</span><br><span class="line"><span class="comment">#对数变换逆运算</span></span><br><span class="line">price_tree=np.exp(pred_tree)</span><br><span class="line">price_lr=np.exp(pred_lr)</span><br><span class="line"><span class="comment"># 将决策树和线性回归模型的预测结果与真实值进行对比</span></span><br><span class="line">plt.semilogy(data_train.date,data_train.price,label=<span class="string">"Training data"</span>)</span><br><span class="line">plt.semilogy(data_test.date,data_test.price,label=<span class="string">"Test data"</span>)</span><br><span class="line"></span><br><span class="line">plt.semilogy(ram_prices.date,price_tree,label=<span class="string">"Tree prediction"</span>)</span><br><span class="line">plt.semilogy(ram_prices.date,price_lr,label=<span class="string">"Linear prediction"</span>)</span><br><span class="line">plt.legend()</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>&lt;matplotlib.legend.Legend at 0x2263aa048d0&gt;</code></pre><p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%5Coutput_34_1.png" alt="png"></p>
-<p>两个模型之间的差异非常明显。线性模型用一条直线对数据做近似，这是我们所知道的。这条线对测试数据（2000 年后的价格）给出了相当好的预测，不过忽略了训练数据和测试数据中一些更细微的变化。与之相反，树模型完美预测了训练数据。由于我们没有限制树的复杂度，因此它记住了整个数据集。但是，一旦输入超出了模型训练数据的范围，模型就只能持续预测最后一个已知数据点。树不能在训练数据的范围之外生成“新的”响应。所有基于树的模型都有这个缺点。</p>
-<h2 id="5-优点，缺点和参数"><a href="#5-优点，缺点和参数" class="headerlink" title="5.优点，缺点和参数"></a>5.优点，缺点和参数</h2><p>如前所述，控制决策树模型复杂度的参数是预剪枝参数,<br><br>它在树完全展开之前停止树的构造。<br><br>通常来说，选择一种预剪枝策略（设置 max_depth 、 max_leaf_nodes 或 min_samples_leaf ）足以防止过拟合。<br><br>与前面讨论过的许多算法相比，决策树有两个优点：<br></p>
-<ul>
-<li>得到的模型很容易可视化，非专家也很容易理解（至少对于较小的树而言）；</li>
-<li>算法完全不受数据缩放的影响。由于每个特征被单独处理，而且数据的划分也不依赖于缩放，因此决策树算法不需要特征预处理，比如归一化或标准化。<br>特别是特征的尺度完全不一样时或者二元特征和连续特征同时存在时，决策树的效果很好。<br></li>
-</ul>
-<p>决策树的主要缺点在于，即使做了预剪枝，它也经常会过拟合，泛化性能很差。<br><br>因此，在大多数应用中，往往使用下面介绍的集成方法来替代单棵决策树。</p>
 ]]></content>
       <categories>
         <category>机器学习</category>
@@ -1736,15 +2167,18 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
     <url>/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>排序算法是最基本的算法，本文使用语言为C/C++<br><br>详细了解参考以下链接：<br><br><a href="https://github.com/hustcc/JS-Sorting-Algorithm" target="_blank" rel="noopener">十大排序算法</a><br><br>个人认为应该牢记的是归并排序，快速排序，基本的冒泡排序以及sort()函数的使用方法，这些是在比赛和做题时经常遇到的。</p>
 <a id="more"></a>
-<h1 id="各排序算法分析"><a href="#各排序算法分析" class="headerlink" title="各排序算法分析"></a>各排序算法分析</h1><p><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%5Csort.png" alt="排序算法分析"></p>
+<h1 id="各排序算法分析"><a href="#各排序算法分析" class="headerlink" title="各排序算法分析"></a>各排序算法分析</h1><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/基本排序算法/sort.png">
+
 <h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>是稳定的排序算法，适用于大规模的基本有序的数据<br></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>不断地划分区间，一分二，二分四，直到最后一个小数组只有一个元素，然后开始逐层向上合并，合并时要按想要的顺序(从小到大，或是从大到小)进行选择然后合并，因此要用到递归<br><br>原理动图如下：<br></p>
-<p><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%5CmergeSort.gif" alt="归并排序"></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>不断地划分区间，一分二，二分四，直到最后一个小数组只有一个元素，然后开始逐层向上合并，合并时要按想要的顺序(从小到大，或是从大到小)进行选择然后合并，因此要用到递归<br></p>
+<p>原理动图如下：<br></p>
+<img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/基本排序算法/mergeSort.gif">
+
 <p>算法采用C++实现：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="comment">//合并函数</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Merge</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> L,<span class="keyword">int</span> mid,<span class="keyword">int</span> R)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> len=R-L+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> *t=<span class="keyword">new</span> <span class="keyword">int</span> [len+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> i=L,j=mid+<span class="number">1</span>,k=<span class="number">1</span>;</span><br><span class="line">    <span class="comment">//比较，选择小的一个</span></span><br><span class="line">    <span class="keyword">while</span>(i&lt;=mid&amp;&amp;j&lt;=R)</span><br><span class="line">    &#123;</span><br><span class="line">        t[k++]=a[i]&lt;a[j]?a[i++]:a[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//比较完后如果有剩余元素，都添加进数组中</span></span><br><span class="line">    <span class="keyword">while</span>(i&lt;=mid)</span><br><span class="line">    &#123;</span><br><span class="line">        t[k++]=a[i++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(j&lt;=R)</span><br><span class="line">    &#123;</span><br><span class="line">        t[k++]=a[j++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> m=L;m&lt;=R;m++)</span><br><span class="line">    &#123;</span><br><span class="line">        a[m]=t[m-L+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">delete</span> [] t;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//用来递归成小区间进行排序</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">MergeSort</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> L,<span class="keyword">int</span> R)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(L&gt;=R)<span class="comment">//这个条件不能忘记，否则会死循环</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> mid=(L+R+<span class="number">0.5</span>)/<span class="number">2</span>;</span><br><span class="line">        MergeSort(a,L,mid);</span><br><span class="line">        MergeSort(a,mid+<span class="number">1</span>,R);</span><br><span class="line">        Merge(a,L,mid,R);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"input num of items:"</span>;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line">    <span class="keyword">int</span> *a=<span class="keyword">new</span> <span class="keyword">int</span>[n+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;a[i];</span><br><span class="line">    MergeSort(a,<span class="number">1</span>,n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">delete</span> [] a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>对完全无序的数据执行结果最优<br></p>
-<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>在一组数据中选择一个基准数，一个左标记，一个右标记，将所有比这个数小的数放在左边，比这个数大的数放在其右侧，不断重复此过程，直至左标记与右标记重合，最后让基准数归位。<br>原理的动图如下：<br><br><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%5CquickSort.gif" alt="原理动图"></p>
+<h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>在一组数据中选择一个基准数，一个左标记，一个右标记，将所有比这个数小的数放在左边，比这个数大的数放在其右侧，不断重复此过程，直至左标记与右标记重合，最后让基准数归位。<br>原理的动图如下：<br><br><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/基本排序算法/quickSort.gif"></p>
 <p>用C++实现：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *x,<span class="keyword">int</span> *y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp=*x;</span><br><span class="line">    *x=*y;</span><br><span class="line">    *y=temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> L,<span class="keyword">int</span> R)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> base=a[L];</span><br><span class="line">    <span class="keyword">while</span>(L&lt;R)  </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">//从右标记开始先找，之后左标记找，然后交换</span></span><br><span class="line">        <span class="keyword">while</span>(R&gt;L&amp;&amp;a[R]&gt;base)</span><br><span class="line">        R--;</span><br><span class="line">        <span class="keyword">while</span>(L&lt;R&amp;&amp;a[L]&lt;base)</span><br><span class="line">        L++;</span><br><span class="line">        swap(a[R],a[L]);</span><br><span class="line">    &#125;</span><br><span class="line">    a[L]=base;<span class="comment">//基准数归位</span></span><br><span class="line">    <span class="keyword">return</span> L;<span class="comment">//返回这个基准数的位置，之后排序它左右的两个小区间</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">QuickSort</span><span class="params">(<span class="keyword">int</span> a[],<span class="keyword">int</span> L,<span class="keyword">int</span> R)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(L&gt;=R) <span class="comment">//这个条件不能忘记，否则会死循环</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">int</span> mid=sort(a,L,R);</span><br><span class="line">    QuickSort(a,L,mid<span class="number">-1</span>);<span class="comment">//排序左区间</span></span><br><span class="line">    QuickSort(a,mid+<span class="number">1</span>,R);<span class="comment">//排序右区间</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> N;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;N;</span><br><span class="line">    <span class="keyword">int</span> *a=<span class="keyword">new</span> <span class="keyword">int</span>[N+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;a[i];</span><br><span class="line">    QuickSort(a,<span class="number">1</span>,N);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=N;i++)</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;a[i]&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">delete</span> [] a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1761,7 +2195,8 @@ y_test shape: (38,)</code></pre><h2 id="3-观察数据"><a href="#3-观察数据
 <p>第一种用法：直接比较<br><br>第二种：传入一个返回值为布尔类型的比较函数，用来进行比较<br></p>
 </li>
 </ul>
-<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>原理：前后两个元素进行比较<br><br>原理动图：<br><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%5CbubbleSort.gif" alt="冒泡排序"><br>采用C++实现情况如下：</p>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>原理：前后两个元素进行比较<br><br>原理动图：<br><img src="/2019/09/26/%E5%9F%BA%E6%9C%AC%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/基本排序算法/bubbleSort.gif"></p>
+<p>采用C++实现情况如下：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *x, <span class="keyword">int</span> *y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> t = *x;</span><br><span class="line">    *x = *y;</span><br><span class="line">    *y = t;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    <span class="keyword">int</span> *a = <span class="keyword">new</span> <span class="keyword">int</span>[n + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; a[i];</span><br><span class="line">    <span class="comment">//最外面代表一共要进行n-1趟排序，第n趟时实际已经排好了</span></span><br><span class="line">    <span class="comment">//j&lt;=n-i是因为每一趟排序最后都会累积一个排好的数，可见图</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n - i; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (a[j] &gt; a[j + <span class="number">1</span>])</span><br><span class="line">                swap(a[j], a[j+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; a[i] &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">delete</span>[] a;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
