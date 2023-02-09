@@ -23,14 +23,14 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="shader：着色器  GPU流水线上一些可高度编程的阶段，而由着色器编译出来的最终代码是会在 GPU上运行的（对于固定管线的渲染来说，着色器有时等同于一些特定的渲染设置); 有一些特定类型的着色器，如顶点着色器、片元着色器等; 依靠着色器我们可以控制流水线中的渲染细节,例如用顶点着色器来进行顶点变换以及传递数据，用片元着色器来进行逐像素的渲染。  渲染流水线:  输入是一个虚拟摄像机、一些光源、">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/shader%E5%9F%BA%E7%A1%80/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
-<meta property="og:image" content="http://example.com/shader%E5%9F%BA%E7%A1%80/gpu%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
+<meta property="og:image" content="http://example.com/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
+<meta property="og:image" content="http://example.com/gpu%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
 <meta property="article:published_time" content="2023-02-09T08:24:07.000Z">
-<meta property="article:modified_time" content="2023-02-09T09:17:13.278Z">
+<meta property="article:modified_time" content="2023-02-09T09:56:37.340Z">
 <meta property="article:author" content="wantong">
 <meta property="article:tag" content="shader">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/shader%E5%9F%BA%E7%A1%80/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
+<meta name="twitter:image" content="http://example.com/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG">
   
   
   
@@ -286,7 +286,7 @@
 <h1 id="渲染流水线"><a href="#渲染流水线" class="headerlink" title="渲染流水线: "></a>渲染流水线: <br></h1><ul>
 <li>输入是一个虚拟摄像机、一些光源、一些shader以及纹理</li>
 <li>输出渲染一张二维纹理</li>
-<li>分为三个阶段：<strong>应用阶段(Application Stage)<strong>、</strong>几何阶段(Geometry Stage)<strong>、</strong>光栅化阶段(Rasterizer Stage)</strong><br><img src="/shader%E5%9F%BA%E7%A1%80/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG" srcset="/img/loading.gif" lazyload></li>
+<li>分为三个阶段：<strong>应用阶段(Application Stage)<strong>、</strong>几何阶段(Geometry Stage)<strong>、</strong>光栅化阶段(Rasterizer Stage)</strong><br><img src="/%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG" srcset="/img/loading.gif" lazyload></li>
 </ul>
 <p><strong>应用阶段</strong>：</p>
 <ol>
@@ -314,7 +314,7 @@
 <li>光栅化的任务主要是决定每个渲染图元中的哪些像素应该被绘制在屏幕上。</li>
 <li>它需要对上一个阶段得到的逐顶点数据（例如纹理坐标、顶点颜色等)进行插值，然后再进行逐像素处理。</li>
 </ul>
-<h1 id="GPU流水线"><a href="#GPU流水线" class="headerlink" title="GPU流水线"></a>GPU流水线</h1><p><img src="/shader%E5%9F%BA%E7%A1%80/gpu%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG" srcset="/img/loading.gif" lazyload><br>GPU的渲染流水线实现。颜色表示了不同阶段的可配置性或可编程性:绿色表示该流水线阶段是完全可编程控制的，黄色表示该流水线阶段可以配置但不是可编程的，蓝色表示该流水线阶段是由GPU固定实现的，开发者没有任何控制权。实线表示该Shader必须由开发者编程实现，虚线表示该Shader是可选的</p>
+<h1 id="GPU流水线"><a href="#GPU流水线" class="headerlink" title="GPU流水线"></a>GPU流水线</h1><p><img src="/gpu%E6%B5%81%E6%B0%B4%E7%BA%BF.PNG" srcset="/img/loading.gif" lazyload><br>GPU的渲染流水线实现。颜色表示了不同阶段的可配置性或可编程性:绿色表示该流水线阶段是完全可编程控制的，黄色表示该流水线阶段可以配置但不是可编程的，蓝色表示该流水线阶段是由GPU固定实现的，开发者没有任何控制权。实线表示该Shader必须由开发者编程实现，虚线表示该Shader是可选的</p>
 
                 
               </div>
