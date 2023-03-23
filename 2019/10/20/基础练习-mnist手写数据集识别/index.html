@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础练习-mnist手写数据集识别">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_2.png">
+<meta property="article:published_time" content="2019-10-20T07:09:46.000Z">
+<meta property="article:modified_time" content="2023-03-23T05:59:20.903Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png">
+  
+  
+  
+  <title>基础练习-mnist手写数据集识别 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基础练习-mnist手写数据集识别"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          42 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基础练习-mnist手写数据集识别</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>照着书实现了一下mnist手写数据集识别这个深度学习中的”hello,world”</p>
+<span id="more"></span>
+<h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><p>第一层接收输入信号，最后一层返回输出信号，这些网络通常都是前馈神经网络<br><br>传递函数：最常用的一种传递函数就是sigmoid函数，值域为(0,1）<br><br>一般情况下，前馈神经网络的最后一层会采用一个softmax函数，这样可以方便地用后验概率解释网络的输出</p>
+<h1 id="MNIST手写数字数据集"><a href="#MNIST手写数字数据集" class="headerlink" title="MNIST手写数字数据集"></a>MNIST手写数字数据集</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">from</span> tensorflow.examples.tutorials.mnist <span class="hljs-keyword">import</span> input_data<br>%matplotlib inline<br>mnist_data=input_data.read_data_sets(<span class="hljs-string">&quot;Data/data&quot;</span>,one_hot=<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;输入数据:&#x27;</span>,mnist_data.train.images)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;输入数据的shape&#x27;</span>,mnist_data.train.images.shape)<br><span class="hljs-keyword">import</span> pylab<br>im=mnist_data.train.images[<span class="hljs-number">1</span>]<br>im=im.reshape(-<span class="hljs-number">1</span>,<span class="hljs-number">28</span>)<br>pylab.imshow(im)<br>pylab.show()<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Extracting Data/data\train-images-idx3-ubyte.gz
+Extracting Data/data\train-labels-idx1-ubyte.gz
+Extracting Data/data\t10k-images-idx3-ubyte.gz
+Extracting Data/data\t10k-labels-idx1-ubyte.gz
+输入数据: [[0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ ...
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]]
+输入数据的shape (55000, 784)
+</code></pre>
+<p><img src="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_3_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>mnist数据集 输入图片是个550000x784的矩阵，第一个维度代表图片索引，第二个<br>维度代表图像像素，28x28像素的图片，共有10个类别<br><br>所以先创建一个[None,784]的占位符x和一个[None,10]的占位符y</p>
+<p>交叉熵可在神经网络(机器学习)中作为损失函数，p表示真实标记的分布，q则为训练后的模型的预测标记分布，交叉熵损失函数可以衡量p与q的相似性。交叉熵作为损失函数还有一个好处是使用sigmoid函数在梯度下降时能避免均方误差损失函数学习速率降低的问题，因为学习速率可以被输出的误差所控制。 [</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-keyword">from</span> tensorflow.examples.tutorials.mnist <span class="hljs-keyword">import</span> input_data<br>mnist=input_data.read_data_sets(<span class="hljs-string">&quot;Data/data/&quot;</span>,one_hot=<span class="hljs-literal">True</span>)<br><span class="hljs-keyword">import</span> pylab<br>tf.reset_default_graph()<br>x=tf.placeholder(tf.float32,[<span class="hljs-literal">None</span>,<span class="hljs-number">784</span>])<br>y=tf.placeholder(tf.float32,[<span class="hljs-literal">None</span>,<span class="hljs-number">10</span>])<br><span class="hljs-comment">#定义学习参数</span><br>W=tf.Variable(tf.random_normal([<span class="hljs-number">784</span>,<span class="hljs-number">10</span>])) <span class="hljs-comment">#W设为随机值</span><br>b=tf.Variable(tf.zeros([<span class="hljs-number">10</span>]))<span class="hljs-comment">#b设为0</span><br><span class="hljs-comment">#构建模型</span><br>pred=tf.nn.softmax(tf.matmul(x,W)+b)<span class="hljs-comment">#softmax分类</span><br><span class="hljs-comment">#定义反向传播结构，进行优化</span><br><span class="hljs-comment">#损失函数</span><br>cost=tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred),reduction_indices=<span class="hljs-number">1</span>))<br><span class="hljs-comment">#定义参数</span><br>learning_rate=<span class="hljs-number">0.01</span><br><span class="hljs-comment">#使用梯度下降优化器</span><br>optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)<br><span class="hljs-comment">#开始训练模型</span><br><span class="hljs-comment">#定义训练迭代次数</span><br>training_epochs=<span class="hljs-number">25</span><br><span class="hljs-comment">#定义在训练过程中一次取100条数据进行训练</span><br>batch_size=<span class="hljs-number">100</span><br><span class="hljs-comment">#显示训练中间状态的间隔</span><br>display_step=<span class="hljs-number">1</span><br><br><span class="hljs-comment">#保存模型</span><br>saver=tf.train.Saver()<br>model_path=<span class="hljs-string">&quot;log/521model.ckpt&quot;</span><br><br><span class="hljs-comment">#启动session</span><br><span class="hljs-keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="hljs-literal">True</span>)) <span class="hljs-keyword">as</span> sess:<br>        sess.run(tf.global_variables_initializer())<br>        <span class="hljs-comment">#启动循环开始训练</span><br>        <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(training_epochs):<br>            avg_cost=<span class="hljs-number">0.0</span><br>            total_batch=<span class="hljs-built_in">int</span>(mnist.train.num_examples/batch_size)<br>            <span class="hljs-comment">#循环所有数据集</span><br>            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(total_batch):<br>                batch_xs,batch_ys=mnist.train.next_batch(batch_size)<br>                <span class="hljs-comment">#运行优化器</span><br>                [opti,c]=sess.run([optimizer,cost],feed_dict=&#123;x:batch_xs,y:batch_ys&#125;)<br>                <span class="hljs-comment">#计算平均loss值</span><br>                avg_cost+=c/total_batch<br>                <span class="hljs-comment">#显示训练中的详细信息</span><br>            <span class="hljs-keyword">if</span> (epoch+<span class="hljs-number">1</span>)%display_step==<span class="hljs-number">0</span>:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Epoch:&quot;</span>,<span class="hljs-string">&quot;%04d&quot;</span> % (epoch+<span class="hljs-number">1</span>),<span class="hljs-string">&quot;cost=&quot;</span>,<span class="hljs-string">&quot;&#123;:.9f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(avg_cost))<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Finshed!&quot;</span>)<br>        <span class="hljs-comment">#保存模型</span><br>        save_path=saver.save(sess,model_path)<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Model saved in file:&#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(save_path))<br><span class="hljs-keyword">if</span> tf.test.gpu_device_name():<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Default GPU Device:&#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(tf.test.gpu_device_name()))<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;Please install GPU version or TF&#x27;</span>)<br><br><span class="hljs-comment">#读取模型并将两张图片放进去让模型预测结果</span><br><br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Starting 2nd session...&quot;</span>)<br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    <span class="hljs-comment">#初始化变量</span><br>    sess.run(tf.global_variables_initializer())<br>    <span class="hljs-comment">#恢复模型变量</span><br>    saver.restore(sess,model_path)<br>    <span class="hljs-comment">#测试 model</span><br>    correct_prediction=tf.equal(tf.arg_max(pred,<span class="hljs-number">1</span>),tf.arg_max(y,<span class="hljs-number">1</span>))<br>    <span class="hljs-comment">#计算准确率</span><br>    accuracy=tf.reduce_mean(tf.cast(correct_prediction,tf.float32))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span>,accuracy.<span class="hljs-built_in">eval</span>(&#123;x:mnist.test.images,y:mnist.test.labels&#125;))<br>    output=tf.arg_max(pred,<span class="hljs-number">1</span>)<br>    output = tf.argmax(pred, <span class="hljs-number">1</span>)<br>    batch_xs, batch_ys = mnist.train.next_batch(<span class="hljs-number">2</span>)<br>    outputval,predv = sess.run([output,pred], feed_dict=&#123;x: batch_xs&#125;)<br>    <span class="hljs-built_in">print</span>(outputval,predv,batch_ys)<br>    im = batch_xs[<span class="hljs-number">0</span>]<br>    im = im.reshape(-<span class="hljs-number">1</span>,<span class="hljs-number">28</span>)<br>    pylab.imshow(im)<br>    pylab.show()<br>    im = batch_xs[<span class="hljs-number">1</span>]<br>    im = im.reshape(-<span class="hljs-number">1</span>,<span class="hljs-number">28</span>)<br>    pylab.imshow(im)<br>    pylab.show()<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Extracting Data/data/train-images-idx3-ubyte.gz
+Extracting Data/data/train-labels-idx1-ubyte.gz
+Extracting Data/data/t10k-images-idx3-ubyte.gz
+Extracting Data/data/t10k-labels-idx1-ubyte.gz
+Epoch: 0001 cost= 8.901484704
+Epoch: 0002 cost= 4.491928911
+Epoch: 0003 cost= 3.105935341
+Epoch: 0004 cost= 2.460903181
+Epoch: 0005 cost= 2.088093793
+Epoch: 0006 cost= 1.843727299
+Epoch: 0007 cost= 1.670136872
+Epoch: 0008 cost= 1.539499564
+Epoch: 0009 cost= 1.437489002
+Epoch: 0010 cost= 1.355080850
+Epoch: 0011 cost= 1.287055298
+Epoch: 0012 cost= 1.229517875
+Epoch: 0013 cost= 1.180266858
+Epoch: 0014 cost= 1.137388955
+Epoch: 0015 cost= 1.099723647
+Epoch: 0016 cost= 1.066415745
+Epoch: 0017 cost= 1.036452132
+Epoch: 0018 cost= 1.009471819
+Epoch: 0019 cost= 0.985050059
+Epoch: 0020 cost= 0.962679997
+Epoch: 0021 cost= 0.942112822
+Epoch: 0022 cost= 0.923188624
+Epoch: 0023 cost= 0.905731321
+Epoch: 0024 cost= 0.889469135
+Epoch: 0025 cost= 0.874153477
+Finshed!
+Model saved in file:log/521model.ckpt
+Default GPU Device:/device:GPU:0
+Starting 2nd session...
+INFO:tensorflow:Restoring parameters from log/521model.ckpt
+Accuracy: 0.8259
+[2 8] [[5.4470024e-06 1.0342207e-14 9.9999440e-01 8.0820775e-12 4.5177516e-12
+  3.1603236e-16 6.3706992e-08 3.8312063e-15 7.3337933e-11 3.1762011e-18]
+ [2.8309601e-04 9.6081327e-05 1.4640624e-03 3.5183481e-10 1.6233769e-03
+  3.4435538e-03 1.4779908e-02 9.2782180e-08 9.7314465e-01 5.1651290e-03]] [[0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 0.]]
+</code></pre>
+<p><img src="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p><img src="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/output_6_2.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基础练习-mnist手写数据集识别</div>
+      <div>https://shanhainanhua.github.io/2019/10/20/基础练习-mnist手写数据集识别/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/20/%E5%8D%95%E4%B8%AA%E7%A5%9E%E7%BB%8F%E5%85%83/" title="单个神经元">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">单个神经元</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" title="TensorFlow编程基础">
+                        <span class="hidden-mobile">TensorFlow编程基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

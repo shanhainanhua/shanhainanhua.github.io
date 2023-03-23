@@ -1,0 +1,733 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本次主要是为了跑书上的代码，了解struts2框架的基本使用，因此代码都是直接复制粘贴，主要讨论的是配置问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDEA搭建web项目相关问题">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="本次主要是为了跑书上的代码，了解struts2框架的基本使用，因此代码都是直接复制粘贴，主要讨论的是配置问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE3.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/kaishi1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%BC%80%E5%A7%8B2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%9B%AE%E5%BD%95.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/pom.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A21.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A22.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A23.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%AE%8C.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%A0%87%E8%AE%B0java.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAjava%E4%BB%A3%E7%A0%81.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/java%E6%96%87%E4%BB%B6.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAstrutsxml.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAstrutsxml2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%B7%BB%E5%8A%A0jsp.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E4%BF%AE%E6%94%B9class%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%84.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E4%BF%AE%E6%94%B9class%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%842.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/Artifactsputinto.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/putinto%E5%90%8E.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/AddConfiguration.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%82%B9%E5%87%BB%E5%8A%A0%E5%8F%B7.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat3.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E8%BF%90%E8%A1%8C2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%BC%96%E8%AF%91.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/2.png">
+<meta property="article:published_time" content="2019-10-19T06:46:07.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:04:55.003Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE.png">
+  
+  
+  
+  <title>IDEA搭建web项目相关问题 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="IDEA搭建web项目相关问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          73 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">IDEA搭建web项目相关问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本次主要是为了跑书上的代码，了解struts2框架的基本使用，因此代码都是直接复制粘贴，主要讨论的是配置问题</p>
+<span id="more"></span>
+
+<p>使用maven创建项目，好处是可以由maven下载相关包，无需自己导入下载<br></p>
+<ol>
+<li><p>首先创建项目：选择maven-勾选Create from archetype-选择底下的webapp-然后点击next<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>接着项目命名随意,点击next<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE2.png" srcset="/img/loading.gif" lazyload> </p>
+</li>
+<li><p>然后注意修改setting.xml文件<br>笔者这里是自己的setting.xml文件<br>修改方法参见这里：<br><br>修改maven镜像：<br><a target="_blank" rel="noopener" href="https://jiangyuesong.me/2016/11/07/maven-intellij-change-mirrors/">https://jiangyuesong.me/2016/11/07/maven-intellij-change-mirrors/</a><br><br>原因是之前提到了 maven会自己下载所需包，但是有些包下载过慢，因此需要换用国内镜像<br><br>至于local repository所选位置可自定义，或默认并无影响<br><br>最后点击next-finish即完成创建<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE3.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>创建完后，显示如下：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/kaishi1.png" srcset="/img/loading.gif" lazyload><br>选择ok<br>然后会有提示出来，在右下角<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%BC%80%E5%A7%8B2.png" srcset="/img/loading.gif" lazyload><br>选择enable auto import，这就是maven在帮我们自动配置<br><br>如果之前没有修改镜像的话，这一步会特别慢，因此要注意<br></p>
+</li>
+<li><p>auto import后文件目录显示如下<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%9B%AE%E5%BD%95.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ol>
+<p>在此对文件夹进行相应说明：<br>(<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/bbc0640276cf">原文链接</a>)</p>
+<ul>
+<li>.idea：是IDEA自动生成 ，.idea文件夹来存放项目的配置信息。其中包括版本控制信息、历史记录等等。如果你不小心删除它，下次它还会自动生成。</li>
+<li>src：项目的资源总目录，基本所有的操作都在这个文件夹里面进行。</li>
+<li>main：和src基本作用差不多</li>
+<li>webapp：这是前端部分，可以在这个目录下创建css、js等文件夹用于存放前端的一些静态文件。以及创建JSP等网页文件。</li>
+<li>WEB-INF：WEB-INF是Java的WEB应用的安全目录。所谓安全就是客户端无法访问，只有服务端可以访问的目录。如果想在页面中直接访问其中的文件，必须通过web.xml文件对要访问的文件进行相应映射才能访问。</li>
+<li>web.xml：web.xml的作用很大，是用来沟通后端的桥梁，这里可以配置一些信息，比如哪些是网站入口（index.jsp）,声明404网页等等，以及声明哪些是后端的配置文件。整个web项目就是这样像纽带一样构建起来的。</li>
+<li>pom.xml：pom.xml主要描述了项目的maven坐标，包依赖关系。我们不需要在手动下载一些jar包，然后手动依赖。只要遵循它规则，他会自动帮我们下载依赖，是不是很方便！！！</li>
+</ul>
+<ol start="6">
+<li><p>修改pom.xml,web.xml<br>打开pom.xml文件，找到dependencies标签<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/pom.png" srcset="/img/loading.gif" lazyload><br>在标签添加依赖，添加方法很简单，你的项目用到了什么jar包你就去这个网站上进行搜索：<br><a target="_blank" rel="noopener" href="https://mvnrepository.com/">https://mvnrepository.com</a><br><br>进行搜索：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A21.png" srcset="/img/loading.gif" lazyload><br>选择相应包:<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A22.png" srcset="/img/loading.gif" lazyload><br>复制框中代码：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%90%9C%E7%B4%A23.png" srcset="/img/loading.gif" lazyload><br>粘贴到dependencies标签下：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96.png" srcset="/img/loading.gif" lazyload><br>之后要等一会自动配置完后<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%AE%8C.png" srcset="/img/loading.gif" lazyload><br>由于本次创建是为了跑项目，项目中用到了struts2框架，因此我们才用了struts2相关包，自己应该根据实际需求自己判断添加哪些dependency<br></p>
+</li>
+<li><p>创建文件夹<br>在WEB-INF下创建classes文件夹用来存放编译后输出的classes文件<br><br>在main下新建java用来存放java代码,并将这个java文件夹标记为Sources Root<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%A0%87%E8%AE%B0java.png" srcset="/img/loading.gif" lazyload><br>关于idea不同文件夹标记及含义问题如下：</p>
+</li>
+</ol>
+<ul>
+<li>Source roots (or source folders)<br>通过将文件夹加入这种类别，来告诉IntelliJ IDEA，这个文件夹和它的子文件夹中包含源码，在构建工程时，需要作为一部分被编译进去。</li>
+<li>Test source roots (or test source folders; shown as rootTest)<br>这个类型的文件夹也用于存放源码，不过是测试的源码（比如单元测试）。test source 文件夹可以帮助你将测试代码和产品代码分离开。</li>
+<li>Resource roots<br>该类文件夹用于存放你的应用中需要用到的资源文件（如：图片、xml或者properties配置文件等）。<br>在构建过程中，resources文件夹中的内容均会按照原文件的样子被复制到输出文件夹。和sources文件夹一样，你可以定制你的resources文件夹的结构。你也可以指定你的resources文件夹中的文件被拷贝到输出文件的哪个文件夹中。</li>
+</ul>
+<p>ps：<br></p>
+<ul>
+<li>默认情况下，工程编译后，resources中的文件和文件夹会被放置在和源码编译后相同的文件夹中，所以如果在源码中以相对路径读取resources中的配置文件时，可认为src中的java文件夹和resources为同一个根目录。</li>
+<li>Test resource roots<br>只有在java模式中可以使用）用于存放测试源码中关联的资源文件。除此之外，和resource文件夹没有区别。</li>
+</ul>
+<ol start="8">
+<li>之后在java文件中创建新的class文件，右击——New-Java Class<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAjava%E4%BB%A3%E7%A0%81.png" srcset="/img/loading.gif" lazyload> 如果没有java Class选项，那就是上一步没做对<br>根据要运行的项目，我创建了两个java文件<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/java%E6%96%87%E4%BB%B6.png" srcset="/img/loading.gif" lazyload><br>代码如下：<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">import</span> com.opensymphony.xwork2.Action;<br><span class="hljs-keyword">import</span> com.opensymphony.xwork2.ActionInvocation;<br><span class="hljs-keyword">import</span> com.opensymphony.xwork2.interceptor.AbstractInterceptor;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyInterceptor</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-type">String</span> <span class="hljs-title">intercept</span><span class="hljs-params">(ActionInvocation arg0)</span> throws Exception</span>&#123;<br>        <span class="hljs-comment">//得到StrutsAction类对象</span><br>        StrutsAction action=(StrutsAction)arg0.<span class="hljs-built_in">getAction</span>();<br>        <span class="hljs-comment">//如果Action类中的name属性的值为&quot;hello&quot;，返回错误页面</span><br>        <span class="hljs-keyword">if</span>(action.<span class="hljs-built_in">getName</span>().<span class="hljs-built_in">equals</span>(<span class="hljs-string">&quot;hello&quot;</span>))&#123;<br>            <span class="hljs-keyword">return</span> Action.ERROR;<br>        &#125;<br>        <span class="hljs-comment">//继续执行其他拦截器或Action类中的方法</span><br>        <span class="hljs-keyword">return</span> arg0.<span class="hljs-built_in">invoke</span>();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ol>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> java.<span class="hljs-property">util</span>.<span class="hljs-property">Map</span>;<br><span class="hljs-keyword">import</span> com.<span class="hljs-property">opensymphony</span>.<span class="hljs-property">xwork2</span>.<span class="hljs-property">ActionContext</span>;<br><span class="hljs-keyword">import</span> com.<span class="hljs-property">opensymphony</span>.<span class="hljs-property">xwork2</span>.<span class="hljs-property">ActionSupport</span>;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StrutsAction</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">ActionSupport</span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-title class_">String</span> name;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">getName</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> name;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">setName</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> name</span>) &#123;<br>        <span class="hljs-variable language_">this</span>.<span class="hljs-property">name</span>=name;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title class_">String</span> <span class="hljs-title function_">execute</span>() throws <span class="hljs-title class_">Exception</span>&#123;<br>        <span class="hljs-keyword">if</span>(!name.<span class="hljs-title function_">equals</span>(<span class="hljs-string">&quot;HelloWorld&quot;</span>))&#123;<br>            <span class="hljs-title class_">Map</span> request=(<span class="hljs-title class_">Map</span>)<span class="hljs-title class_">ActionContext</span>.<span class="hljs-title function_">getContext</span>().<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;request&quot;</span>);<br>            request.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-title function_">getName</span>());<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;success&quot;</span>;<br>        &#125;<br>        <span class="hljs-keyword">else</span><br>        &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;error&quot;</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">validate</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-comment">//如果姓名为空，则把错误信息添加到Action类的fieldErrors</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getName</span>()==<span class="hljs-literal">null</span>||<span class="hljs-variable language_">this</span>.<span class="hljs-title function_">getName</span>().<span class="hljs-title function_">trim</span>().<span class="hljs-title function_">equals</span>(<span class="hljs-string">&quot;&quot;</span>))&#123;<br>            <span class="hljs-title function_">addFieldError</span>(<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;姓名是必须的！&quot;</span>);           <span class="hljs-comment">//把错误信息保存起来</span><br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ol start="9">
+<li>配置web.xml<br>修改文本.xml内容如下：</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">web-app</span> <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://java.sun.com/xml/ns/javaee&quot;</span> <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd&quot;</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;3.0&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>struts2<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-class</span>&gt;</span>org.apache.struts2.dispatcher.FilterDispatcher<span class="hljs-tag">&lt;/<span class="hljs-name">filter-class</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter-mapping</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>struts2<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">url-pattern</span>&gt;</span>/*<span class="hljs-tag">&lt;/<span class="hljs-name">url-pattern</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">filter-mapping</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">welcome-file-list</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">welcome-file</span>&gt;</span>index.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">welcome-file</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">welcome-file-list</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>struts2_1<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-class</span>&gt;</span>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-class</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter-mapping</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>struts2_1<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">url-pattern</span>&gt;</span>*.action<span class="hljs-tag">&lt;/<span class="hljs-name">url-pattern</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">filter-mapping</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">web-app</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ol start="10">
+<li><p>在创建的classes文件夹下新建struts.xml<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAstrutsxml.png" srcset="/img/loading.gif" lazyload><br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E5%88%9B%E5%BB%BAstrutsxml2.png" srcset="/img/loading.gif" lazyload><br>修改其中内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">struts</span> <span class="hljs-keyword">PUBLIC</span></span><br><span class="hljs-meta">        <span class="hljs-string">&quot;-//Apache Software Foundation//DTD Struts Configuration 2.0//EN&quot;</span></span><br><span class="hljs-meta">        <span class="hljs-string">&quot;http://struts.apache.org/dtds/struts-2.0.dtd&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">struts</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">package</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;default&quot;</span> <span class="hljs-attr">extends</span>=<span class="hljs-string">&quot;struts-default&quot;</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">interceptors</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">interceptor</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;myInterceptor&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;MyInterceptor&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">interceptor</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">interceptors</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">default-interceptor-ref</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">default-interceptor-ref</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;struts&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;StrutsAction&quot;</span> &gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">result</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;success&quot;</span>&gt;</span>/welcome.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">result</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">result</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;error&quot;</span>&gt;</span>/hello.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">result</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">result</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;input&quot;</span>&gt;</span>/hello.jsp<span class="hljs-tag">&lt;/<span class="hljs-name">result</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">interceptor-ref</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;defaultStack&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">interceptor-ref</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">interceptor-ref</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;myInterceptor&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">interceptor-ref</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">action</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">package</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">struts</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>在index.jsp的位置添加并修改文件<br>最后共有三个jsp文件 index.jsp,hello.jsp,welcome.jsp<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E6%B7%BB%E5%8A%A0jsp.png" srcset="/img/loading.gif" lazyload><br>index.jsp不变<br><br>hello.jsp代码如下：</p>
+<figure class="highlight vbscript-html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs vbscript-html"><span class="language-vbscript">&lt;%@ page language=<span class="hljs-string">&quot;java&quot;</span> import=<span class="hljs-string">&quot;java.util.*&quot;</span> pageEncoding=<span class="hljs-string">&quot;utf-8&quot;</span>%&gt;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="language-vbscript">&lt;%</span><br><span class="language-vbscript">String path = <span class="hljs-built_in">request</span>.getContextPath();</span><br><span class="language-vbscript">String basePath = <span class="hljs-built_in">request</span>.getScheme()+<span class="hljs-string">&quot;://&quot;</span>+<span class="hljs-built_in">request</span>.getServerName()+<span class="hljs-string">&quot;:&quot;</span>+<span class="hljs-built_in">request</span>.getServerPort()+path+<span class="hljs-string">&quot;/&quot;</span>;</span><br><span class="language-vbscript">%&gt;</span><span class="language-xml"></span><br><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">HTML</span> <span class="hljs-keyword">PUBLIC</span> <span class="hljs-string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">base</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;</span></span></span><span class="language-vbscript">&lt;%=basePath%&gt;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br><span class="language-xml">    </span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>实例5-1：struts2应用<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="language-xml">    </span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;pragma&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;no-cache&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;cache-control&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;no-cache&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;expires&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;</span>    </span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;keywords&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;keyword1,keyword2,keyword3&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;This is my page&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-comment">&lt;!--</span></span><br><span class="hljs-comment"><span class="language-xml">	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;</span></span><br><span class="hljs-comment"><span class="language-xml">	--&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">  </span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;struts.action&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span></span><br><span class="language-xml">    	请输入姓名:<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;name&quot;</span>/&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span></span><br><span class="language-xml">    	<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;提交&quot;</span>/&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"></span><br></code></pre></td></tr></table></figure>
+<p>welcome.jsp代码如下：</p>
+<figure class="highlight vbscript-html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs vbscript-html"><span class="language-vbscript">&lt;%@ page language=<span class="hljs-string">&quot;java&quot;</span> import=<span class="hljs-string">&quot;java.util.*&quot;</span> pageEncoding=<span class="hljs-string">&quot;utf-8&quot;</span>%&gt;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="language-vbscript">&lt;%</span><br><span class="language-vbscript">String path = <span class="hljs-built_in">request</span>.getContextPath();</span><br><span class="language-vbscript">String basePath = <span class="hljs-built_in">request</span>.getScheme()+<span class="hljs-string">&quot;://&quot;</span>+<span class="hljs-built_in">request</span>.getServerName()+<span class="hljs-string">&quot;:&quot;</span>+<span class="hljs-built_in">request</span>.getServerPort()+path+<span class="hljs-string">&quot;/&quot;</span>;</span><br><span class="language-vbscript">%&gt;</span><span class="language-xml"></span><br><span class="language-xml"></span><span class="language-vbscript">&lt;%@ taglib prefix=<span class="hljs-string">&quot;s&quot;</span> uri=<span class="hljs-string">&quot;/struts-tags&quot;</span> %&gt;</span><span class="language-xml"></span><br><span class="language-xml"><span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-keyword">HTML</span> <span class="hljs-keyword">PUBLIC</span> <span class="hljs-string">&quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot;</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">base</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;</span></span></span><span class="language-vbscript">&lt;%=basePath%&gt;</span><span class="language-xml"><span class="hljs-tag"><span class="hljs-string">&quot;</span>&gt;</span></span><br><span class="language-xml">    </span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>实例5-1：struts2应用<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span></span><br><span class="language-xml">    </span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;pragma&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;no-cache&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;cache-control&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;no-cache&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;expires&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;</span>    </span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;keywords&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;keyword1,keyword2,keyword3&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;description&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;This is my page&quot;</span>&gt;</span></span><br><span class="language-xml">	<span class="hljs-comment">&lt;!--</span></span><br><span class="hljs-comment"><span class="language-xml">	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;</span></span><br><span class="hljs-comment"><span class="language-xml">	--&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span></span><br><span class="language-xml">  </span><br><span class="language-xml">  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml">    hello<span class="hljs-tag">&lt;<span class="hljs-name">s:property</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;#request.name&quot;</span>/&gt;</span></span><br><span class="language-xml">  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span></span><br><span class="language-xml"><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></span><br><span class="language-xml"></span><br><span class="language-xml"></span><br></code></pre></td></tr></table></figure></li>
+<li><p>更改配置<br>点击File-Project Structure或者快捷键ctrl+alt+shift+s 来打开面板<br>点击module-path修改编译的class文件输出路径<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E4%BF%AE%E6%94%B9class%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%84.png" srcset="/img/loading.gif" lazyload><br>修改为：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E4%BF%AE%E6%94%B9class%E8%BE%93%E5%87%BA%E8%B7%AF%E5%BE%842.png" srcset="/img/loading.gif" lazyload><br>都输出到建立的classes文件下，同时struts.xml也在这个文件下</p>
+</li>
+<li><p>进行运行前的服务器配置<br>同样是打开structure面板<br>修改Artifacts,点击exploded的选项，然后在如图所示的位置上右击，put into Output Root<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/Artifactsputinto.png" srcset="/img/loading.gif" lazyload><br>结果如下：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/putinto%E5%90%8E.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>添加tomcat服务器<br>首先点击右上角Add Configuration添加配置<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/AddConfiguration.png" srcset="/img/loading.gif" lazyload><br>点击加号<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%82%B9%E5%87%BB%E5%8A%A0%E5%8F%B7.png" srcset="/img/loading.gif" lazyload><br>选择tomcat-local(需要自己下载tomcat，本文不提)<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat.png" srcset="/img/loading.gif" lazyload><br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat2.png" srcset="/img/loading.gif" lazyload><br>采取默认设置，点击右下角的fix,添加exploded（也可以通过Deployment添加)<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/tomcat3.png" srcset="/img/loading.gif" lazyload><br>这里说一下exploded和普通的区别：</p>
+<blockquote>
+<p>war模式：将web工程以war包的形式上传到服务器<br>war exploed模式：将web工程以当前文件夹的位置关系上传到服务器<br>war模式这种可以称之为是发布模式，看名字也知道，这是先打包war包，再发布；<br>war exploded模式是直接把文件夹，jsp页面，classes等等移到Tomcat部署文件夹里面，进行加载部署。因此这种方式支持热部署，一般在开发的时候也是用这种方式。<br>在平时开发的时候，使用热部署的话，应该对Tomcat进行相应的设置，这样的话修改的jsp界面什么的东西才可以及时的显示出来</p>
+</blockquote>
+</li>
+<li><p>运行<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E8%BF%90%E8%A1%8C2.png" srcset="/img/loading.gif" lazyload><br>首先点击项目上的小锤按钮进行编译,<br>编译后classes文件夹下如下：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/%E7%BC%96%E8%AF%91.png" srcset="/img/loading.gif" lazyload><br>然后点击箭头进行运行<br>结果如下：<br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/1.png" srcset="/img/loading.gif" lazyload><br><img src="/2019/10/19/IDEA%E6%90%AD%E5%BB%BAweb%E9%A1%B9%E7%9B%AE%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/2.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>IDEA搭建web项目相关问题</div>
+      <div>https://shanhainanhua.github.io/2019/10/19/IDEA搭建web项目相关问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月19日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0Apriori%E7%AE%97%E6%B3%95/" title="编程实现Apriori算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">编程实现Apriori算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/06/python%E5%B8%B8%E7%94%A8%E5%BA%93%E6%80%BB%E7%BB%93/" title="python常用库总结">
+                        <span class="hidden-mobile">python常用库总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

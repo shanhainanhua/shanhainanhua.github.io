@@ -1,0 +1,691 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="涉及机试中涉及的一系列数学问题，包括数位拆解、分解素因数等高频知识点，以及最小公倍数，最大公约数的基本方法，高精度整数运算的实现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法之数学问题">
+<meta property="og:url" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="涉及机试中涉及的一系列数学问题，包括数位拆解、分解素因数等高频知识点，以及最小公倍数，最大公约数的基本方法，高精度整数运算的实现。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E7%B4%A0%E6%95%B0%E7%AD%9B.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E5%88%86%E8%A7%A3%E7%B4%A0%E5%9B%A0%E6%95%B0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E6%95%B4%E9%99%A4%E9%97%AE%E9%A2%98.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E5%BF%AB%E9%80%9F%E5%B9%82.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/n%E7%9A%84%E9%98%B6%E4%B9%98.png">
+<meta property="article:published_time" content="2021-03-01T11:36:37.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:03:14.265Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="总结">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2.png">
+  
+  
+  
+  <title>算法之数学问题 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="算法之数学问题"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          49 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法之数学问题</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>涉及机试中涉及的一系列数学问题，包括数位拆解、分解素因数等高频知识点，以及最小公倍数，最大公约数的基本方法，高精度整数运算的实现。</p>
+<span id="more"></span>
+
+<h1 id="进制转换"><a href="#进制转换" class="headerlink" title="进制转换"></a>进制转换</h1><p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">#include &lt;bits/stdc++.h&gt;</span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-title">std</span>;<br><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">main</span>()</span><br>&#123;<br>    <span class="hljs-built_in">int</span> a,b;<br>    <span class="hljs-built_in">string</span> n;<br>    <span class="hljs-keyword">while</span>(cin&gt;&gt;a&gt;&gt;n&gt;&gt;b)<br>    &#123;<br>        <span class="hljs-built_in">long</span> num=<span class="hljs-number">0</span>;<br>        <span class="hljs-built_in">string</span> result=<span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">while</span>(n[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;0&#x27;</span>)<br>            n=n.substr(<span class="hljs-number">1</span>);<br>        <span class="hljs-built_in">int</span> k=<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=n.length()<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;--i)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(n[i]&gt;=<span class="hljs-string">&#x27;0&#x27;</span>&amp;&amp;n[i]&lt;=<span class="hljs-string">&#x27;9&#x27;</span>)<br>                num+=(n[i]-<span class="hljs-string">&#x27;0&#x27;</span>)*k;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(n[i]&gt;=<span class="hljs-string">&#x27;a&#x27;</span>&amp;&amp;n[i]&lt;=<span class="hljs-string">&#x27;z&#x27;</span>)<br>                num+=(n[i]-<span class="hljs-string">&#x27;a&#x27;</span>+<span class="hljs-number">10</span>)*k;<br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(n[i]&gt;=<span class="hljs-string">&#x27;A&#x27;</span>&amp;&amp;n[i]&lt;=<span class="hljs-string">&#x27;Z&#x27;</span>)<br>                num+=(n[i]-<span class="hljs-string">&#x27;A&#x27;</span>+<span class="hljs-number">10</span>)*k;<br>            k*=a;<br>        &#125;<br>        <span class="hljs-keyword">while</span>(num!=<span class="hljs-number">0</span>)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(num%b&lt;=<span class="hljs-number">9</span>)<br>                result=to_string(num%b)+result;<br>            <span class="hljs-keyword">else</span><br>                result=<span class="hljs-built_in">string</span>(<span class="hljs-number">1</span>,num%b<span class="hljs-number">-10</span>+<span class="hljs-string">&#x27;A&#x27;</span>)+result;<br>            num/=b;<br>        &#125;<br>        cout&lt;&lt;result&lt;&lt;endl;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="最大公约数-GCD"><a href="#最大公约数-GCD" class="headerlink" title="最大公约数 GCD"></a>最大公约数 GCD</h1><p>求a,b的最大公约数：</p>
+<ol>
+<li>如果a,b全为0，则它们的最大公约数不存在</li>
+<li>若a,b其中之一为零，它们的最大公约数为a,b中非0的那个</li>
+<li>若a,b都不为0  则使a&#x3D;b;b&#x3D;a%b;  然后重复该过程</li>
+</ol>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">gcd</span><span class="hljs-params">(<span class="hljs-keyword">int</span> a,<span class="hljs-keyword">int</span> b)</span></span><br><span class="hljs-function"></span>&#123;   <br>    <span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> a;<br>    <span class="hljs-keyword">else</span> <span class="hljs-function"><span class="hljs-keyword">return</span> <span class="hljs-title">gcd</span><span class="hljs-params">(b,a%b)</span></span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h1 id="最小公倍数-LCM"><a href="#最小公倍数-LCM" class="headerlink" title="最小公倍数 LCM"></a>最小公倍数 LCM</h1><p>a,b两数的最小公倍数为两数的乘积除以它们的最大公约数</p>
+<h1 id="素数"><a href="#素数" class="headerlink" title="素数"></a>素数</h1><p>合数是指在大于1的整数中除了能被1和本身整除外，还能被其他数（0除外）整除的数。与之相对的是质数（素数），而1既不属于质数也不属于合数。最小的合数是4。其中，完全数与相亲数是以它为基础的。</p>
+<h2 id="素数筛"><a href="#素数筛" class="headerlink" title="素数筛"></a>素数筛</h2><p>若一个数不是素数，则必存在一个小于它的素数为其的因数。在我们获得一个素数时，将它的所有倍数均标记为非素数，这样当我们遍历到一个数时，它没有被任何小于它的素数标记为非素数，则确定其为素数。</p>
+<p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E7%B4%A0%E6%95%B0%E7%AD%9B.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><br><span class="hljs-meta">#include&lt;iostream&gt;</span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-title">std</span>;<br><span class="hljs-built_in">int</span> prime[<span class="hljs-number">10000</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-built_in">int</span> primesize=<span class="hljs-number">0</span>;<br><span class="hljs-built_in">bool</span> mark[<span class="hljs-number">10001</span>];<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span>()</span><br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">1</span>;i&lt;<span class="hljs-number">10001</span>;i++)<br>        mark[i]=<span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">2</span>;i&lt;=<span class="hljs-number">10000</span>;i++)&#123;<br>        <span class="hljs-keyword">if</span>(mark[i]==<span class="hljs-literal">true</span>)<br>            <span class="hljs-keyword">continue</span>;<br>        prime[primesize++]=i;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> j=i*i;j&lt;=<span class="hljs-number">10000</span>;j+=i)<br>            mark[j]=<span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">main</span>()</span><br>&#123;<br>    <span class="hljs-keyword">init</span>();<br>    <span class="hljs-built_in">int</span> n;<br>    <span class="hljs-keyword">while</span>(cin&gt;&gt;n)<br>    &#123;<br>        <span class="hljs-built_in">bool</span> flag=<span class="hljs-literal">false</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;primesize;i++)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(prime[i]&lt;n&amp;&amp;prime[i]%<span class="hljs-number">10</span>==<span class="hljs-number">1</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span>(flag==<span class="hljs-literal">false</span>)<br>                &#123;<br>                    flag=<span class="hljs-literal">true</span>;<br>                    cout&lt;&lt;prime[i];<br>                &#125;<br>                <span class="hljs-keyword">else</span>&#123;<br>                    cout&lt;&lt;<span class="hljs-string">&quot; &quot;</span>&lt;&lt;prime[i];<br>                &#125;<br>            &#125; <br>        &#125;<br>        cout&lt;&lt;endl;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="分解素因数"><a href="#分解素因数" class="headerlink" title="分解素因数"></a>分解素因数</h2><p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E5%88%86%E8%A7%A3%E7%B4%A0%E5%9B%A0%E6%95%B0.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">#include&lt;iostream&gt;</span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-title">std</span>;<br><span class="hljs-built_in">int</span> prime[<span class="hljs-number">100000</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-built_in">int</span> primesize;<br><span class="hljs-built_in">bool</span> mark[<span class="hljs-number">100001</span>];<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span>()</span><br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100001</span>;i++)<br>        mark[i]=<span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">2</span>;i&lt;=<span class="hljs-number">100000</span>;i++)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(mark[i])<br>            <span class="hljs-keyword">continue</span>;<br>        prime[primesize++]=i;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> j=i*i;j&lt;=<span class="hljs-number">100000</span>;j+=i)<br>            mark[j]=<span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">main</span>()</span><br>&#123;<br>    <span class="hljs-keyword">init</span>();<br>    <span class="hljs-built_in">int</span> N;<br>    <span class="hljs-keyword">while</span>(cin&gt;&gt;N)<br>    &#123;<br>         <span class="hljs-built_in">int</span> ansPrime[<span class="hljs-number">30</span>];<span class="hljs-comment">//按顺序保存分解出的素因数</span><br>         <span class="hljs-built_in">int</span> ansSize=<span class="hljs-number">0</span>;<span class="hljs-comment">//分解出素因数的个数</span><br>         <span class="hljs-built_in">int</span> ansNum[<span class="hljs-number">30</span>]; <span class="hljs-comment">//保存分解出的素因数对应的幂指数</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;primesize;i++)<br>        &#123;<br>            <span class="hljs-keyword">if</span>(N%prime[i]==<span class="hljs-number">0</span>)&#123; <span class="hljs-comment">//若该素数能整除分解数</span><br>                ansPrime[ansSize]=prime[i];<span class="hljs-comment">//则该素数为其素因数</span><br>                ansNum[ansSize]=<span class="hljs-number">0</span>;<span class="hljs-comment">//初始化幂指数为0</span><br>                <span class="hljs-keyword">while</span>(N%prime[i]==<span class="hljs-number">0</span>)<br>                &#123;<br>                    ansNum[ansSize]++;<br>                    N/=prime[i];<br>                &#125;<br>                ansSize++;<br>                <span class="hljs-keyword">if</span>(N==<span class="hljs-number">1</span>) <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(N!=<span class="hljs-number">1</span>)&#123;<br>            ansPrime[ansSize]=N;<span class="hljs-comment">//若测试所有素因数，n仍未被分解至1，则剩余的因数一定是N一个大于100000的素因数</span><br>            ansNum[ansSize++]=<span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-built_in">int</span> ans=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;ansSize;i++)&#123;<br>            ans+=ansNum[i]; <br>        &#125;<br>        cout&lt;&lt;ans&lt;&lt;endl;<br>        <br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="阶乘的素因数分解"><a href="#阶乘的素因数分解" class="headerlink" title="阶乘的素因数分解"></a>阶乘的素因数分解</h2><p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E6%95%B4%E9%99%A4%E9%97%AE%E9%A2%98.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> a,n;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;a)!=EOF)&#123;<br>        <span class="hljs-type">int</span> count1[<span class="hljs-number">1010</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-type">int</span> count2[<span class="hljs-number">1010</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;<br>            <span class="hljs-type">int</span> t=n;<br>            <span class="hljs-keyword">while</span>(t)&#123;<br>                count1[i]+=t/i;<br>                t=t/i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-type">int</span> ans=<span class="hljs-number">233333333</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=a;i++)&#123;<br>            <span class="hljs-keyword">while</span>(a%i==<span class="hljs-number">0</span>)&#123;<br>                count2[i]++;<br>                a/=i;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(count2[i]==<span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-keyword">if</span>(count1[i]/count2[i]&lt;ans)<br>                ans=count1[i]/count2[i];<br>        &#125;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,ans);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125; <br><br></code></pre></td></tr></table></figure>
+
+<p>使用素数筛</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 1010</span><br><span class="hljs-type">int</span> prime[N];<br><span class="hljs-type">int</span> primesize;<br><span class="hljs-type">bool</span> mark[N];<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;N;i++)<br>        mark[i]=<span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;N;i++)&#123;<br>        <span class="hljs-keyword">if</span>(mark[i]==<span class="hljs-literal">true</span>) <span class="hljs-keyword">continue</span>;<br>        <span class="hljs-keyword">else</span>&#123;<br>            prime[primesize++]=i;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=i*i;j&lt;N;j+=i)<br>                mark[j]=<span class="hljs-literal">true</span>;<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-built_in">init</span>();<br>    <span class="hljs-type">int</span> a,n;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>,&amp;n,&amp;a)!=EOF)&#123;<br>        <span class="hljs-type">int</span> count1[N]=&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-type">int</span> count2[N]=&#123;<span class="hljs-number">0</span>&#125;;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;primesize;i++)&#123;<br>            <span class="hljs-type">int</span> t=n;<br>            <span class="hljs-keyword">while</span>(t)&#123;<br>                count1[i]+=t/prime[i];<br>                t/=prime[i];<br>            &#125;<br>        &#125;<br>        <span class="hljs-type">int</span> ans=<span class="hljs-number">233333333</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;primesize;i++)&#123;<br>            <span class="hljs-keyword">while</span>(a%prime[i]==<span class="hljs-number">0</span>)&#123;<br>                count2[i]++;<br>                a/=prime[i];<br>            &#125;<br>            <span class="hljs-keyword">if</span>(count2[i]==<span class="hljs-number">0</span>) <span class="hljs-keyword">continue</span>;<br>            <span class="hljs-keyword">if</span>(count1[i]/count2[i]&lt;ans)<br>                ans=count1[i]/count2[i];<br>        &#125;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,ans);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="二分求幂"><a href="#二分求幂" class="headerlink" title="二分求幂"></a>二分求幂</h1><h2 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a>快速幂</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/harington/article/details/87602682">csdn相关介绍博客</a></p>
+<p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/%E5%BF%AB%E9%80%9F%E5%B9%82.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">binaryPow</span><span class="hljs-params">(<span class="hljs-type">int</span> a,<span class="hljs-type">int</span> b)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> ans=<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span>(b)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(b%<span class="hljs-number">2</span>!=<span class="hljs-number">0</span>)  <span class="hljs-comment">//对应二进制位为1  可以写成b&amp;1 取二进制最后一位</span><br>           ans*=a;  <span class="hljs-comment">//累乘至结果</span><br>        a*=a;       <span class="hljs-comment">//准备</span><br>        b/=<span class="hljs-number">2</span>;       <span class="hljs-comment">//可以写成b&gt;&gt;1</span><br>    &#125;<br>    <span class="hljs-keyword">return</span> ans;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> a,b;<br>    <span class="hljs-keyword">while</span>(cin&gt;&gt;a&gt;&gt;b)<br>    &#123;<br>       cout&lt;&lt;<span class="hljs-built_in">binaryPow</span>(a,b)&lt;&lt;endl;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+<h2 id="矩阵快速幂"><a href="#矩阵快速幂" class="headerlink" title="矩阵快速幂"></a>矩阵快速幂</h2><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> N=<span class="hljs-number">10</span>;<br><span class="hljs-built_in">int</span> tmp[N][N];<br><span class="hljs-built_in">void</span> multi(<span class="hljs-built_in">int</span> a[][N],<span class="hljs-built_in">int</span> b[][N],<span class="hljs-built_in">int</span> n)<br>&#123;<br>    memset(tmp,<span class="hljs-number">0</span>,sizeof tmp);<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> j=<span class="hljs-number">0</span>;j&lt;n;j++)<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> k=<span class="hljs-number">0</span>;k&lt;n;k++)<br>        tmp[i][j]+=a[i][k]*b[k][j];<br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;n;i++)<br>        <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> j=<span class="hljs-number">0</span>;j&lt;n;j++)<br>        a[i][j]=tmp[i][j];<br>&#125;<br><span class="hljs-built_in">int</span> res[N][N];<br><span class="hljs-built_in">void</span> Pow(<span class="hljs-built_in">int</span> a[][N],<span class="hljs-built_in">int</span> n)<br>&#123;<br>    memset(res,<span class="hljs-number">0</span>,sizeof res);<span class="hljs-comment">//n是幂，N是矩阵大小</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;N;i++) res[i][i]=<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">while</span>(n)<br>    &#123;<br>        <span class="hljs-keyword">if</span>(n&amp;<span class="hljs-number">1</span>)<br>            multi(res,a,N);<span class="hljs-comment">//res=res*a;复制直接在multi里面实现了；</span><br>        multi(a,a,N);<span class="hljs-comment">//a=a*a</span><br>        n&gt;&gt;=<span class="hljs-number">1</span>;<br>    &#125;<br><br>————————————————<br>版权声明：本文为CSDN博主「wust_wenhao」的原创文章，遵循CC <span class="hljs-number">4.0</span> BY-SA版权协议，转载请附上原文出处链接及本声明。<br>原文链接：https:<span class="hljs-comment">//blog.csdn.net/wust_zzwh/article/details/52058209</span><br><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="高精度整数"><a href="#高精度整数" class="headerlink" title="高精度整数"></a>高精度整数</h1><p>计算n的阶乘</p>
+<p><img src="/2021/03/01/%E7%AE%97%E6%B3%95%E4%B9%8B%E6%95%B0%E5%AD%A6%E9%97%AE%E9%A2%98/n%E7%9A%84%E9%98%B6%E4%B9%98.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">int</span> res[<span class="hljs-number">3000</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> N;<br>    <span class="hljs-keyword">while</span>(cin&gt;&gt;N)<br>    &#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">3000</span>;i++) res[i]=<span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> size=<span class="hljs-number">0</span>;res[size++]=<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">2</span>;i&lt;=N;i++)<br>        &#123;<br>            <span class="hljs-type">int</span> jinwei=<span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;j&lt;size;j++)<br>            &#123;<br>                res[j]=(res[j]*i+jinwei);<br>                <span class="hljs-keyword">if</span>(res[j]&gt;<span class="hljs-number">9</span>)<br>                &#123;<br>                    jinwei=res[j]/<span class="hljs-number">10</span>;<br>                    res[j]%=<span class="hljs-number">10</span>;<br>                &#125;     <br>                <span class="hljs-keyword">else</span> jinwei=<span class="hljs-number">0</span>;<br>            &#125;<br>            <span class="hljs-keyword">while</span>(jinwei)&#123;<br>                res[size++]=jinwei%<span class="hljs-number">10</span>;<br>                jinwei/=<span class="hljs-number">10</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=size<span class="hljs-number">-1</span>;i&gt;=<span class="hljs-number">0</span>;i--)<br>            cout&lt;&lt;res[i];<br>        cout&lt;&lt;endl;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%80%BB%E7%BB%93/">#总结</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>算法之数学问题</div>
+      <div>https://shanhainanhua.github.io/2021/03/01/算法之数学问题/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年3月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/08/%E6%90%9C%E7%B4%A2/" title="搜索">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">搜索</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/" title="数据结构相关算法">
+                        <span class="hidden-mobile">数据结构相关算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

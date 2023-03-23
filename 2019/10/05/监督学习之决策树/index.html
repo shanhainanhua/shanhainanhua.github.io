@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="监督学习之决策树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监督学习之决策树">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="监督学习之决策树">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_4_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-23.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-2425.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-26.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/3.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_25_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_27_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/4.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_30_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_34_1.png">
+<meta property="article:published_time" content="2019-10-05T07:33:44.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:01:19.220Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_4_0.png">
+  
+  
+  
+  <title>监督学习之决策树 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="监督学习之决策树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          76 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">监督学习之决策树</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="监督学习之决策树"><a href="#监督学习之决策树" class="headerlink" title="监督学习之决策树"></a>监督学习之决策树</h1><span id="more"></span>
+<h2 id="导入包"><a href="#导入包" class="headerlink" title="导入包"></a>导入包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> mglearn<br><span class="hljs-keyword">import</span> os<br>%matplotlib inline<br></code></pre></td></tr></table></figure>
+
+<p>决策树是广泛用于分类和回归任务的模型。本质上，它从一层层的 if&#x2F;else 问题中进行学<br>习，并得出结论。</p>
+<p>这些问题类似于你在“20 Questions”游戏中可能会问的问题。想象一下，你想要区分下面这四种动物：熊、鹰、企鹅和海豚。你的目标是通过提出尽可能少的 if&#x2F;else 问题来得到正确答案。你可能首先会问：这种动物有没有羽毛，这个问题会将可能的动物减少到只有两种。如果答案是“有”，你可以问下一个问题，帮你区分鹰和企鹅。例如，你可以问这种动物会不会飞。如果这种动物没有羽毛，那么可能是海豚或熊，所以你需要问一个问题来区分这两种动物——比如问这种动物有没有鳍。</p>
+<p>这一系列问题可以表示为一棵决策树,如下图所示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">mglearn.plots.plot_animal_tree()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_4_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>在这张图中，树的每个结点代表一个问题或一个包含答案的终结点（也叫叶结点）。树的边将问题的答案与将问的下一个问题连接起来。</p>
+<p>用机器学习的语言来说就是，为了区分四类动物（鹰、企鹅、海豚和熊），我们利用三个特征（“有没有羽毛”“会不会飞”和“有没有鳍”）来构建一个模型。我们可以利用监督学习从数据中学习模型，而无需人为构建模型。</p>
+<h2 id="1-构造决策树"><a href="#1-构造决策树" class="headerlink" title="1.构造决策树"></a>1.构造决策树</h2><p>我们在下图所示的二维分类数据集上构造决策树。这个数据集由 2 个半月形组成，每个类别都包含 50 个数据点。我们将这个数据集称为 two_moons 。</p>
+<p>学习决策树，就是学习一系列 if&#x2F;else 问题，使我们能够以最快的速度得到正确答案。在机器学习中，这些问题叫作测试（不要与测试集弄混，测试集是用来测试模型泛化性能的数据）。数据通常并不是像动物的例子那样具有二元特征（是 &#x2F; 否）的形式，而是表示为连续特征，比如图 2-23 所示的二维数据集。用于连续数据的测试形式是：“特征 i 的值是否大于 a ?”</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-23.png" srcset="/img/loading.gif" lazyload></p>
+<p>为了构造决策树，算法搜遍所有可能的测试，找出对目标变量来说信息量最大的那一个。图 2-24 展示了选出的第一个测试。将数据集在 x[1]&#x3D;0.0596 处垂直划分可以得到最多信息，它在最大程度上将类别 0 中的点与类别 1 中的点进行区分。顶结点（也叫根结点）表示整个数据集，包含属于类别 0 的 50 个点和属于类别 1 的 50 个点。通过测试 x[1] &lt;&#x3D;0.0596 的真假来对数据集进行划分，在图中表示为一条黑线。如果测试结果为真，那么将这个点分配给左结点，左结点里包含属于类别 0 的 2 个点和属于类别 1 的 32 个点。否则将这个点分配给右结点，右结点里包含属于类别 0 的 48 个点和属于类别 1 的 18 个点。这两个结点对应于图 2-24 中的顶部区域和底部区域。尽管第一次划分已经对两个类别做了很好的区分，但底部区域仍包含属于类别 0 的点，顶部区域也仍包含属于类别 1 的点。我们可以在两个区域中重复寻找最佳测试的过程，从而构建出更准确的模型。图 2-25 展示了信息量最大的下一次划分，这次划分是基于 x[0] 做出的，分为左右两个区域</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-2425.png" srcset="/img/loading.gif" lazyload></p>
+<p>这一递归过程生成一棵二元决策树，其中每个结点都包含一个测试。或者你可以将每个测试看成沿着一条轴对当前数据进行划分。这是一种将算法看作分层划分的观点。由于每个测试仅关注一个特征，所以划分后的区域边界始终与坐标轴平行。</p>
+<p>对数据反复进行递归划分，直到划分后的每个区域（决策树的每个叶结点）只包含单一目标值（单一类别或单一回归值）。如果树中某个叶结点所包含数据点的目标值都相同，那么这个叶结点就是纯的（pure）。这个数据集的最终划分结果见图 2-26。</p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/2-26.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="2-控制决策树的复杂度"><a href="#2-控制决策树的复杂度" class="headerlink" title="2.控制决策树的复杂度"></a>2.控制决策树的复杂度</h2><p>通常来说，构造决策树直到所有叶结点都是纯的叶结点，这会导致模型非常复杂，并且对训练数据高度过拟合。纯叶结点的存在说明这棵树在训练集上的精度是 100%。训练集中的每个数据点都位于分类正确的叶结点中。在图 2-26 的左图中可以看出过拟合。你可以看到，在所有属于类别 0 的点中间有一块属于类别 1 的区域。另一方面，有一小条属于类别 0 的区域，包围着最右侧属于类别 0 的那个点。这并不是人们想象中决策边界的样子，这个决策边界过于关注远离同类别其他点的单个异常点。</p>
+<p>防止过拟合有两种常见的策略：一种是及早停止树的生长，也叫预剪枝（pre-pruning）；另一种是先构造树，但随后删除或折叠信息量很少的结点，也叫后剪枝（post-pruning）或剪枝（pruning）。预剪枝的限制条件可能包括限制树的最大深度、限制叶结点的最大数目，或者规定一个结点中数据点的最小数目来防止继续划分。</p>
+<p>scikit-learn 的决策树在 DecisionTreeRegressor 类和 DecisionTreeClassifier 类中实现。scikit-learn 只实现了预剪枝，没有实现后剪枝。</p>
+<p>我们在乳腺癌数据集上更详细地看一下预剪枝的效果。和前面一样，我们导入数据集并将其分为训练集和测试集。然后利用默认设置来构建模型，默认将树完全展开（树不断分支，直到所有叶结点都是纯的）。我们固定树的 random_state ，用于在内部解决平局问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> DecisionTreeClassifier<br><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_breast_cancer<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br>cancer=load_breast_cancer()<br>X_train,X_test,y_train,y_test=train_test_split(cancer.data,cancer.target,<br>                                              stratify=cancer.target,random_state=<span class="hljs-number">42</span>)<br>tree=DecisionTreeClassifier(random_state=<span class="hljs-number">0</span>).fit(X_train,y_train)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy on training set: &#123;:.3f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(tree.score(X_train,y_train)))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy on test set: &#123;:.3f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(tree.score(X_test,y_test)))<br><br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Accuracy on training set: 1.000
+Accuracy on test set: 0.937
+</code></pre>
+<p>不出所料，训练集上的精度是 100%，这是因为叶结点都是纯的，树的深度很大，足以完美地记住训练数据的所有标签。测试集精度比之前讲过的线性模型略低，线性模型的精度约为 95%。</p>
+<p>如果我们不限制决策树的深度，它的深度和复杂度都可以变得特别大。因此，未剪枝的树容易过拟合，对新数据的泛化性能不佳。现在我们将预剪枝应用在决策树上，这可以在完美拟合训练数据之前阻止树的展开。一种选择是在到达一定深度后停止树的展开。这里我们设置 max_depth&#x3D;4 ，这意味着只可以连续问 4 个问题（参见图 2-24 和图 2-26）。限制树的深度可以减少过拟合。这会降低训练集的精度，但可以提高测试集的精度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">tree=DecisionTreeClassifier(max_depth=<span class="hljs-number">4</span>,random_state=<span class="hljs-number">0</span>).fit(X_train,y_train)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy on training set :&#123;:.3f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(tree.score(X_train,y_train)))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy on test set: &#123;:.3f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(tree.score(X_test,y_test)))<br>      <br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Accuracy on training set :0.988
+Accuracy on test set: 0.951
+</code></pre>
+<h2 id="3-分析决策树"><a href="#3-分析决策树" class="headerlink" title="3.分析决策树"></a>3.分析决策树</h2><p>我们可以利用 tree 模块的 export_graphviz 函数来将树可视化。这个函数会生成一个 .dot 格式的文件，这是一种用于保存图形的文本文件格式。我们设置为结点添加颜色的选项，颜色表示每个结点中的多数类别，同时传入类别名称和特征名称，这样可以对树正确标记：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> export_graphviz<br>export_graphviz(tree, out_file=<span class="hljs-string">&quot;tree.dot&quot;</span>, class_names=[<span class="hljs-string">&quot;malignant&quot;</span>,<span class="hljs-string">&quot;benign&quot;</span>],<br>    feature_names=cancer.feature_names, impurity=<span class="hljs-literal">False</span>, filled=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+
+<p>我们可以利用 graphviz 模块读取这个文件并将其可视化（你也可以使用任何能够读取 .dot文件的程序）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> graphviz<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;tree.dot&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    dot_graph = f.read()<br>    graphviz.Source(dot_graph).view()<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/3.png" srcset="/img/loading.gif" lazyload></p>
+<p>树的可视化有助于深入理解算法是如何进行预测的，也是易于向非专家解释的机器学习算法的优秀示例。不过，即使这里树的深度只有 4 层，也有点太大了。深度更大的树（深度为 10 并不罕见）更加难以理解。一种观察树的方法可能有用，就是找出大部分数据的实际路径。图中每个结点的 samples 给出了该结点中的样本个数， values 给出的是每个类别的样本个数。观察 worst radius &lt;&#x3D; 16.795 分支右侧的子结点，我们发现它只包含8 个良性样本，但有 134 个恶性样本。树的这一侧的其余分支只是利用一些更精细的区别将这 8 个良性样本分离出来。在第一次划分右侧的 142 个样本中，几乎所有样本（132 个）最后都进入最右侧的叶结点中。</p>
+<p>再来看一下根结点的左侧子结点，对于 worst radius &gt; 16.795 ，我们得到 25 个恶性样本和 259 个良性样本。几乎所有良性样本最终都进入左数第二个叶结点中，大部分其他叶结点都只包含很少的样本。</p>
+<h2 id="4-树的特征重要性"><a href="#4-树的特征重要性" class="headerlink" title="4.树的特征重要性"></a>4.树的特征重要性</h2><p>查看整个树可能非常费劲，除此之外，我还可以利用一些有用的属性来总结树的工作原理。其中最常用的是特征重要性（feature importance），它为每个特征对树的决策的重要性进行排序。对于每个特征来说，它都是一个介于 0 和 1 之间的数字，其中 0 表示“根本没用到”，1 表示“完美预测目标值”。特征重要性的求和始终为 1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Feature importances:\n&#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(tree.feature_importances_))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Feature importances:
+[0.         0.         0.         0.         0.         0.
+ 0.         0.         0.         0.         0.01019737 0.04839825
+ 0.         0.         0.0024156  0.         0.         0.
+ 0.         0.         0.72682851 0.0458159  0.         0.
+ 0.0141577  0.         0.018188   0.1221132  0.01188548 0.        ]
+</code></pre>
+<p>我们可以将特征重要性可视化，与我们将线性模型的系数可视化的方法类似：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_feature_importance_cancer</span>(<span class="hljs-params">model</span>):<br>    n_features = cancer.data.shape[<span class="hljs-number">1</span>]<br>    plt.barh(<span class="hljs-built_in">range</span>(n_features), model.feature_importances_, align=<span class="hljs-string">&#x27;center&#x27;</span>)<br>    plt.yticks(np.arange(n_features), cancer.feature_names)<br>    plt.xlabel(<span class="hljs-string">&quot;Feature importance&quot;</span>)<br>    plt.ylabel(<span class="hljs-string">&quot;Feature&quot;</span>)<br><br>plot_feature_importance_cancer(tree)<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_25_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>这里我们看到，顶部划分用到的特征（“worst radius”）是最重要的特征。这也证实了我们在分析树时的观察结论，即第一层划分已经将两个类别区分得很好。</p>
+<p>但是，如果某个特征的 feature_importance_ 很小，并不能说明这个特征没有提供任何信息。这只能说明该特征没有被树选中，可能是因为另一个特征也包含了同样的信息。</p>
+<p>与线性模型的系数不同，特征重要性始终为正数，也不能说明该特征对应哪个类别。特征重要性告诉我们“worst radius”（最大半径）特征很重要，但并没有告诉我们半径大表示样本是良性还是恶性。事实上，在特征和类别之间可能没有这样简单的关系，你可以在下面的例子中看出这一点</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">tree=mglearn.plots.plot_tree_not_monotone()<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Feature importances: [0. 1.]
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_27_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/4.png" srcset="/img/loading.gif" lazyload></p>
+<p>该图显示的是有两个特征和两个类别的数据集。这里所有信息都包含在 X[1] 中，没有用到X[0] 。但 X[1] 和输出类别之间并不是单调关系，即我们不能这么说：“较大的 X[1] 对应类别 0，较小的 X[1] 对应类别 1”（反之亦然）。</p>
+<p>虽然我们主要讨论的是用于分类的决策树，但对用于回归的决策树来说，所有内容都是类似的，在 DecisionTreeRegressor 中实现。回归树的用法和分析与分类树非常类似。但在将基于树的模型用于回归时，我们想要指出它的一个特殊性质。 DecisionTreeRegressor（以及其他所有基于树的回归模型）不能外推（extrapolate），也不能在训练数据范围之外进行预测。</p>
+<p>我们利用计算机内存（RAM）历史价格的数据集来更详细地研究这一点。下图给出了这个数据集的图像，x 轴为日期，y 轴为那一年 1 兆字节（MB）RAM 的价格：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br>ram_prices=pd.read_csv(<span class="hljs-string">&quot;data/ram_price.csv&quot;</span>)<br>plt.semilogy(ram_prices.date,ram_prices.price)<br>plt.xlabel(<span class="hljs-string">&#x27;Year&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;Price in $/Mbyte&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">help</span>(plt.semilogy))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Help on function semilogy in module matplotlib.pyplot:
+
+semilogy(*args, **kwargs)
+    Make a plot with log scaling on the y axis.
+    
+    Call signatures::
+    
+        semilogy([x], y, [fmt], data=None, **kwargs)
+        semilogy([x], y, [fmt], [x2], y2, [fmt2], ..., **kwargs)
+    
+    This is just a thin wrapper around `.plot` which additionally changes
+    the y-axis to log scaling. All of the concepts and parameters of plot
+    can be used here as well.
+    
+    The additional parameters *basey*, *subsy* and *nonposy* control the
+    y-axis properties. They are just forwarded to `.Axes.set_yscale`.
+    
+    Parameters
+    ----------
+    basey : scalar, optional, default 10
+        Base of the y logarithm.
+    
+    subsy : array_like, optional
+        The location of the minor yticks. If *None*, reasonable locations
+        are automatically chosen depending on the number of decades in the
+        plot. See `.Axes.set_yscale` for details.
+    
+    nonposy : &#123;&#39;mask&#39;, &#39;clip&#39;&#125;, optional, default &#39;mask&#39;
+        Non-positive values in y can be masked as invalid, or clipped to a
+        very small positive number.
+    
+    Returns
+    -------
+    lines
+        A list of `~.Line2D` objects representing the plotted data.
+    
+    Other Parameters
+    ----------------
+    **kwargs
+        All parameters supported by `.plot`.
+
+None
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_30_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>注意 y 轴的对数刻度。在用对数坐标绘图时，二者的线性关系看起来非常好，所以预测应该相对比较容易，除了一些不平滑之处之外。</p>
+<p>我们将利用 2000 年前的历史数据来预测 2000 年后的价格，只用日期作为特征。我们将对比两个简单的模型： DecisionTreeRegressor 和 LinearRegression 。我们对价格取对数，使得二者关系的线性相对更好。这对 DecisionTreeRegressor 不会产生什么影响，但对LinearRegression 的影响却很大（我们将在第 4 章中进一步讨论）。训练模型并做出预测之后，我们应用指数映射来做对数变换的逆运算。为了便于可视化，我们这里对整个数据集进行预测，但如果是为了定量评估，我们将只考虑测试数据集：</p>
+<p>首先说明下np.newwaxis用法，增加一维</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">x1 = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>])<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;the shape of x1 is &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(x1.shape))<br>x1_new=x1[:,np.newaxis]<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;the shape of x1 after newwaxis is &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(x1_new.shape))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">the shape of x1 is (5,)
+the shape of x1 after newwaxis is (5, 1)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.tree <span class="hljs-keyword">import</span> DecisionTreeRegressor<br><span class="hljs-keyword">from</span> sklearn.linear_model <span class="hljs-keyword">import</span> LinearRegression<br><span class="hljs-comment">#利用历史数据预测2000年后的价格</span><br>data_train=ram_prices[ram_prices.date&lt;<span class="hljs-number">2000</span>]<br>data_test=ram_prices[ram_prices.date&gt;=<span class="hljs-number">2000</span>]<br><span class="hljs-comment">#基于日期来预测价格</span><br>X_train=data_train.date[:,np.newaxis]<br><span class="hljs-comment">#利用对数变换来得到数据和目标之间更简单的关系</span><br>y_train=np.log(data_train.price)<br>tree=DecisionTreeRegressor().fit(X_train,y_train)<br>linear_reg=LinearRegression().fit(X_train,y_train)<br><span class="hljs-comment">#对所有数据进行预测</span><br>X_all=ram_prices.date[:,np.newaxis]<br>pred_tree=tree.predict(X_all)<br>pred_lr=linear_reg.predict(X_all)<br><span class="hljs-comment">#对数变换逆运算</span><br>price_tree=np.exp(pred_tree)<br>price_lr=np.exp(pred_lr)<br><span class="hljs-comment"># 将决策树和线性回归模型的预测结果与真实值进行对比</span><br>plt.semilogy(data_train.date,data_train.price,label=<span class="hljs-string">&quot;Training data&quot;</span>)<br>plt.semilogy(data_test.date,data_test.price,label=<span class="hljs-string">&quot;Test data&quot;</span>)<br><br>plt.semilogy(ram_prices.date,price_tree,label=<span class="hljs-string">&quot;Tree prediction&quot;</span>)<br>plt.semilogy(ram_prices.date,price_lr,label=<span class="hljs-string">&quot;Linear prediction&quot;</span>)<br>plt.legend()<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code class="hljs">&lt;matplotlib.legend.Legend at 0x2263aa048d0&gt;
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/output_34_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>两个模型之间的差异非常明显。线性模型用一条直线对数据做近似，这是我们所知道的。这条线对测试数据（2000 年后的价格）给出了相当好的预测，不过忽略了训练数据和测试数据中一些更细微的变化。与之相反，树模型完美预测了训练数据。由于我们没有限制树的复杂度，因此它记住了整个数据集。但是，一旦输入超出了模型训练数据的范围，模型就只能持续预测最后一个已知数据点。树不能在训练数据的范围之外生成“新的”响应。所有基于树的模型都有这个缺点。</p>
+<h2 id="5-优点，缺点和参数"><a href="#5-优点，缺点和参数" class="headerlink" title="5.优点，缺点和参数"></a>5.优点，缺点和参数</h2><p>如前所述，控制决策树模型复杂度的参数是预剪枝参数,<br><br>它在树完全展开之前停止树的构造。<br><br>通常来说，选择一种预剪枝策略（设置 max_depth 、 max_leaf_nodes 或 min_samples_leaf ）足以防止过拟合。<br><br>与前面讨论过的许多算法相比，决策树有两个优点：<br></p>
+<ul>
+<li>得到的模型很容易可视化，非专家也很容易理解（至少对于较小的树而言）；</li>
+<li>算法完全不受数据缩放的影响。由于每个特征被单独处理，而且数据的划分也不依赖于缩放，因此决策树算法不需要特征预处理，比如归一化或标准化。<br>特别是特征的尺度完全不一样时或者二元特征和连续特征同时存在时，决策树的效果很好。<br></li>
+</ul>
+<p>决策树的主要缺点在于，即使做了预剪枝，它也经常会过拟合，泛化性能很差。<br><br>因此，在大多数应用中，往往使用下面介绍的集成方法来替代单棵决策树。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>监督学习之决策树</div>
+      <div>https://shanhainanhua.github.io/2019/10/05/监督学习之决策树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/05/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" title="深度学习相关概念">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">深度学习相关概念</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" title="监督学习之线性模型">
+                        <span class="hidden-mobile">监督学习之线性模型</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

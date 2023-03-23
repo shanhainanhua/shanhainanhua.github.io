@@ -1,0 +1,661 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结课上讲的决策树基本概念以及采用ID3算法实现决策树">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ID3实现决策树">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="总结课上讲的决策树基本概念以及采用ID3算法实现决策树">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/%E5%86%B3%E7%AD%96%E6%A0%91.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/output.png">
+<meta property="article:published_time" content="2019-10-23T11:48:21.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:04:47.504Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/%E5%86%B3%E7%AD%96%E6%A0%91.png">
+  
+  
+  
+  <title>ID3实现决策树 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ID3实现决策树"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ID3实现决策树</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结课上讲的决策树基本概念以及采用ID3算法实现决策树</p>
+<span id="more"></span>
+
+
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h2><p>决策树是一种类似于流程图的数结构，其中每个内部节点表示在一个属性上的测试，每个分支代表该测试的一个输出，每一个叶节点存放一个类标号，最顶层是根节点。</p>
+<h2 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39521554/article/details/80559531">此段原文链接</a></p>
+<blockquote>
+<p>事实上，熵的英文原文为entropy，最初由德国物理学家鲁道夫·克劳修斯提出，其表达式为：entropy,它表示一个系系统在不受外部干扰时，其内部最稳定的状态。后来一中国学者翻译entropy时，考虑到entropy是能量Q跟温度T的商，且跟火有关，便把entropy形象的翻译成“熵”。我们知道，任何粒子的常态都是随机运动，也就是”无序运动”，如果让粒子呈现”有序化”，必须耗费能量。所以，温度（热能）可以被看作”有序化”的一种度量，而”熵”可以看作是”无序化”的度量。如果没有外部能量输入，封闭系统趋向越来越混乱（熵越来越大）。比如，如果房间无人打扫，不可能越来越干净（有序化），只可能越来越乱（无序化）。而要让一个系统变得更有序，必须有外部能量的输入。1948年，香农Claude E. Shannon引入信息（熵），将其定义为离散随机事件的出现概率。一个系统越是有序，信息熵就越低；反之，一个系统越是混乱，信息熵就越高。所以说，信息熵可以被认为是系统有序化程度的一个度量。</p>
+</blockquote>
+<p>熵越大，就意味着混杂度越大，越难以区分，因此决策树要选取熵小的作为根节点</p>
+<p>公式：<br>entropy(S)&#x3D;$\sum_{i&#x3D;0}^N {Pi*\log_2 Pi}$<br><br><br>Pi为概率</p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>用来衡量熵的期望减少值<br>分类前的信息熵减去分类后的信息熵<br><br>公式：gain(S,A)&#x3D;entropy(S)-entropy(S,A)<br><br>信息增益越大，熵的减小量越大，节点更纯</p>
+<p>entropy(S,A)含义：<br><br>设属性A将S划分为m份，根据A划分的子集的熵或期望信息<br><br>entropy(S,A)&#x3D;$\sum_{i&#x3D;0}^m {|Si| \over |S|}*entropy(Si)$ <br><br>(Si表示根据属性A划分的S的第i个字集,|S|和|Si|分别表示S中，Si中的样本数目)</p>
+<h1 id="构建决策树"><a href="#构建决策树" class="headerlink" title="构建决策树"></a>构建决策树</h1><p>代码实现(<a target="_blank" rel="noopener" href="https://blog.csdn.net/leaf_zizi/article/details/82848682">原文链接</a>)</p>
+<p><img src="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/%E5%86%B3%E7%AD%96%E6%A0%91.png" srcset="/img/loading.gif" lazyload></p>
+<p>建树</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> log<br><span class="hljs-keyword">import</span> operator<br> <br><span class="hljs-comment"># 计算信息熵</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calcShannonEnt</span>(<span class="hljs-params">dataSet</span>):<br>    numEntries = <span class="hljs-built_in">len</span>(dataSet)  <span class="hljs-comment"># 样本数</span><br>    labelCounts = &#123;&#125;<br>    <span class="hljs-keyword">for</span> featVec <span class="hljs-keyword">in</span> dataSet:  <span class="hljs-comment"># 遍历每个样本</span><br>        currentLabel = featVec[-<span class="hljs-number">1</span>]  <span class="hljs-comment"># 当前样本的类别</span><br>        <span class="hljs-keyword">if</span> currentLabel <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> labelCounts.keys():  <span class="hljs-comment"># 生成类别字典</span><br>            labelCounts[currentLabel] = <span class="hljs-number">0</span><br>        labelCounts[currentLabel] += <span class="hljs-number">1</span><br>    shannonEnt = <span class="hljs-number">0.0</span><br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> labelCounts:  <span class="hljs-comment"># 计算信息熵</span><br>        prob = <span class="hljs-built_in">float</span>(labelCounts[key]) / numEntries<br>        shannonEnt = shannonEnt - prob * log(prob, <span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">return</span> shannonEnt<br> <br> <br><span class="hljs-comment"># 划分数据集，axis:按第几个属性划分，value:要返回的子集对应的属性值</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">splitDataSet</span>(<span class="hljs-params">dataSet, axis, value</span>):<br>    retDataSet = []<br>    featVec = []<br>    <span class="hljs-keyword">for</span> featVec <span class="hljs-keyword">in</span> dataSet:<br>        <span class="hljs-keyword">if</span> featVec[axis] == value:<br>            reducedFeatVec = featVec[:axis]<br>            reducedFeatVec.extend(featVec[axis + <span class="hljs-number">1</span>:])<br>            retDataSet.append(reducedFeatVec)<br>    <span class="hljs-keyword">return</span> retDataSet<br> <br> <br><span class="hljs-comment"># 选择最好的数据集划分方式</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">chooseBestFeatureToSplit</span>(<span class="hljs-params">dataSet</span>):<br>    numFeatures = <span class="hljs-built_in">len</span>(dataSet[<span class="hljs-number">0</span>]) - <span class="hljs-number">1</span>  <span class="hljs-comment"># 属性的个数</span><br>    baseEntropy = calcShannonEnt(dataSet)<br>    bestInfoGain = <span class="hljs-number">0.0</span><br>    bestFeature = -<span class="hljs-number">1</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(numFeatures):  <span class="hljs-comment"># 对每个属性技术信息增益</span><br>        featList = [example[i] <span class="hljs-keyword">for</span> example <span class="hljs-keyword">in</span> dataSet]<br>        uniqueVals = <span class="hljs-built_in">set</span>(featList)  <span class="hljs-comment"># 该属性的取值集合</span><br>        newEntropy = <span class="hljs-number">0.0</span><br>        <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> uniqueVals: <span class="hljs-comment"># 对每一种取值计算信息增益</span><br>            subDataSet = splitDataSet(dataSet, i, value)<br>            prob = <span class="hljs-built_in">len</span>(subDataSet) / <span class="hljs-built_in">float</span>(<span class="hljs-built_in">len</span>(dataSet))<br>            newEntropy += prob * calcShannonEnt(subDataSet)<br>        infoGain = baseEntropy - newEntropy<br>        <span class="hljs-keyword">if</span> (infoGain &gt; bestInfoGain):  <span class="hljs-comment"># 选择信息增益最大的属性</span><br>            bestInfoGain = infoGain<br>            bestFeature = i<br>    <span class="hljs-keyword">return</span> bestFeature<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">majorityCnt</span>(<span class="hljs-params">classList</span>):<br>    classCount = &#123;&#125;<br>    <span class="hljs-keyword">for</span> vote <span class="hljs-keyword">in</span> classList:<br>        <span class="hljs-keyword">if</span> vote <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> classCount.keys(): classCount[vote] = <span class="hljs-number">0</span><br>        classCount[vote] += <span class="hljs-number">1</span><br>    sortedClassCount = <span class="hljs-built_in">sorted</span>(classCount.iteritems(),<br>                              key=operator.itemgetter(<span class="hljs-number">1</span>), reverse=<span class="hljs-literal">True</span>)<br>    <span class="hljs-keyword">return</span> sortedClassCount[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>]<br> <br> <br><span class="hljs-comment"># 递归构建决策树</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">createTree</span>(<span class="hljs-params">dataSet, labels</span>):<br>    classList = [example[-<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> example <span class="hljs-keyword">in</span> dataSet]  <span class="hljs-comment"># 类别向量</span><br>    <span class="hljs-keyword">if</span> classList.count(classList[<span class="hljs-number">0</span>]) == <span class="hljs-built_in">len</span>(classList):  <span class="hljs-comment"># 如果只有一个类别，返回</span><br>        <span class="hljs-keyword">return</span> classList[<span class="hljs-number">0</span>]<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(dataSet[<span class="hljs-number">0</span>]) == <span class="hljs-number">1</span>:  <span class="hljs-comment"># 如果所有特征都被遍历完了，返回出现次数最多的类别</span><br>        <span class="hljs-keyword">return</span> majorityCnt(classList)<br>    bestFeat = chooseBestFeatureToSplit(dataSet)  <span class="hljs-comment"># 最优划分属性的索引</span><br>    bestFeatLabel = labels[bestFeat]  <span class="hljs-comment"># 最优划分属性的标签</span><br>    myTree = &#123;bestFeatLabel: &#123;&#125;&#125;<br>    <span class="hljs-keyword">del</span> (labels[bestFeat])  <span class="hljs-comment"># 已经选择的特征不再参与分类</span><br>    featValues = [example[bestFeat] <span class="hljs-keyword">for</span> example <span class="hljs-keyword">in</span> dataSet]<br>    uniqueValue = <span class="hljs-built_in">set</span>(featValues)  <span class="hljs-comment"># 该属性所有可能取值，也就是节点的分支</span><br>    <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> uniqueValue:  <span class="hljs-comment"># 对每个分支，递归构建树</span><br>        subLabels = labels[:]<br>        myTree[bestFeatLabel][value] = createTree(<br>            splitDataSet(dataSet, bestFeat, value), subLabels)<br>    <span class="hljs-keyword">return</span> myTree<br></code></pre></td></tr></table></figure>
+
+<p>画图</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><br><span class="hljs-comment"># 定义文本框和箭头格式</span><br>decisionNode = <span class="hljs-built_in">dict</span>(boxstyle=<span class="hljs-string">&quot;round4&quot;</span>, color=<span class="hljs-string">&#x27;#3366FF&#x27;</span>)  <span class="hljs-comment">#定义判断结点形态</span><br>leafNode = <span class="hljs-built_in">dict</span>(boxstyle=<span class="hljs-string">&quot;circle&quot;</span>, color=<span class="hljs-string">&#x27;#FF6633&#x27;</span>)  <span class="hljs-comment">#定义叶结点形态</span><br>arrow_args = <span class="hljs-built_in">dict</span>(arrowstyle=<span class="hljs-string">&quot;&lt;-&quot;</span>, color=<span class="hljs-string">&#x27;g&#x27;</span>)  <span class="hljs-comment">#定义箭头</span><br><br><span class="hljs-comment">#绘制带箭头的注释</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plotNode</span>(<span class="hljs-params">nodeTxt, centerPt, parentPt, nodeType</span>):<br>    createPlot.ax1.annotate(nodeTxt, xy=parentPt, xycoords=<span class="hljs-string">&#x27;axes fraction&#x27;</span>,<br>                            xytext=centerPt, textcoords=<span class="hljs-string">&#x27;axes fraction&#x27;</span>,<br>                            va=<span class="hljs-string">&quot;center&quot;</span>, ha=<span class="hljs-string">&quot;center&quot;</span>, bbox=nodeType, arrowprops=arrow_args)<br><br><br><span class="hljs-comment">#计算叶结点数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getNumLeafs</span>(<span class="hljs-params">myTree</span>):<br>    numLeafs = <span class="hljs-number">0</span><br>    firstStr = <span class="hljs-built_in">list</span>(myTree.keys())[<span class="hljs-number">0</span>]<br>    secondDict = myTree[firstStr]<br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> secondDict.keys():<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(secondDict[key]).__name__ == <span class="hljs-string">&#x27;dict&#x27;</span>:<br>            numLeafs += getNumLeafs(secondDict[key])<br>        <span class="hljs-keyword">else</span>:<br>            numLeafs += <span class="hljs-number">1</span><br>    <span class="hljs-keyword">return</span> numLeafs<br><br><br><span class="hljs-comment">#计算树的层数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">getTreeDepth</span>(<span class="hljs-params">myTree</span>):<br>    maxDepth = <span class="hljs-number">0</span><br>    firstStr = <span class="hljs-built_in">list</span>(myTree.keys())[<span class="hljs-number">0</span>]<br>    secondDict = myTree[firstStr]<br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> secondDict.keys():<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(secondDict[key]).__name__ == <span class="hljs-string">&#x27;dict&#x27;</span>:<br>            thisDepth = <span class="hljs-number">1</span> + getTreeDepth(secondDict[key])<br>        <span class="hljs-keyword">else</span>:<br>            thisDepth = <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> thisDepth &gt; maxDepth:<br>            maxDepth = thisDepth<br>    <span class="hljs-keyword">return</span> maxDepth<br><br><br><span class="hljs-comment">#在父子结点间填充文本信息</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plotMidText</span>(<span class="hljs-params">cntrPt, parentPt, txtString</span>):<br>    xMid = (parentPt[<span class="hljs-number">0</span>] - cntrPt[<span class="hljs-number">0</span>]) / <span class="hljs-number">2.0</span> + cntrPt[<span class="hljs-number">0</span>]<br>    yMid = (parentPt[<span class="hljs-number">1</span>] - cntrPt[<span class="hljs-number">1</span>]) / <span class="hljs-number">2.0</span> + cntrPt[<span class="hljs-number">1</span>]<br>    createPlot.ax1.text(xMid, yMid, txtString, va=<span class="hljs-string">&quot;center&quot;</span>, ha=<span class="hljs-string">&quot;center&quot;</span>, rotation=<span class="hljs-number">30</span>)<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plotTree</span>(<span class="hljs-params">myTree, parentPt, nodeTxt</span>):<br>    numLeafs = getNumLeafs(myTree)<br>    depth = getTreeDepth(myTree)<br>    firstStr = <span class="hljs-built_in">list</span>(myTree.keys())[<span class="hljs-number">0</span>]<br>    cntrPt = (plotTree.xOff + (<span class="hljs-number">1.0</span> + <span class="hljs-built_in">float</span>(numLeafs)) / <span class="hljs-number">2.0</span> / plotTree.totalW, plotTree.yOff)<br>    plotMidText(cntrPt, parentPt, nodeTxt)  <span class="hljs-comment">#在父子结点间填充文本信息</span><br>    plotNode(firstStr, cntrPt, parentPt, decisionNode)  <span class="hljs-comment">#绘制带箭头的注释</span><br>    secondDict = myTree[firstStr]<br>    plotTree.yOff = plotTree.yOff - <span class="hljs-number">1.0</span> / plotTree.totalD<br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> secondDict.keys():<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(secondDict[key]).__name__ == <span class="hljs-string">&#x27;dict&#x27;</span>:<br>            plotTree(secondDict[key], cntrPt, <span class="hljs-built_in">str</span>(key))<br>        <span class="hljs-keyword">else</span>:<br>            plotTree.xOff = plotTree.xOff + <span class="hljs-number">1.0</span> / plotTree.totalW<br>            plotNode(secondDict[key], (plotTree.xOff, plotTree.yOff), cntrPt, leafNode)<br>            plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, <span class="hljs-built_in">str</span>(key))<br>    plotTree.yOff = plotTree.yOff + <span class="hljs-number">1.0</span> / plotTree.totalD<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">createPlot</span>(<span class="hljs-params">inTree</span>):<br>    fig = plt.figure(<span class="hljs-number">1</span>, facecolor=<span class="hljs-string">&#x27;white&#x27;</span>)<br>    fig.clf()<br>    axprops = <span class="hljs-built_in">dict</span>(xticks=[], yticks=[])<br>    createPlot.ax1 = plt.subplot(<span class="hljs-number">111</span>, frameon=<span class="hljs-literal">False</span>, **axprops)<br>    plotTree.totalW = <span class="hljs-built_in">float</span>(getNumLeafs(inTree))<br>    plotTree.totalD = <span class="hljs-built_in">float</span>(getTreeDepth(inTree))<br>    plotTree.xOff = -<span class="hljs-number">0.5</span> / plotTree.totalW;<br>    plotTree.yOff = <span class="hljs-number">1.0</span>;<br>    plotTree(inTree, (<span class="hljs-number">0.5</span>, <span class="hljs-number">1.0</span>), <span class="hljs-string">&#x27;&#x27;</span>)<br>    plt.show()<br><br></code></pre></td></tr></table></figure>
+
+<p>测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">classify</span>(<span class="hljs-params">inputTree, featLabels, testVec</span>):<br>    firstStr = <span class="hljs-built_in">list</span>(inputTree.keys())[<span class="hljs-number">0</span>]  <span class="hljs-comment"># 根节点</span><br>    secondDict = inputTree[firstStr]<br>    featIndex = featLabels.index(firstStr)  <span class="hljs-comment"># 跟节点对应的属性</span><br>    classLabel = <span class="hljs-literal">None</span><br>    <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> secondDict.keys():  <span class="hljs-comment"># 对每个分支循环</span><br>        <span class="hljs-keyword">if</span> testVec[featIndex] == key:  <span class="hljs-comment"># 测试样本进入某个分支</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-built_in">type</span>(secondDict[key]).__name__ == <span class="hljs-string">&#x27;dict&#x27;</span>:  <span class="hljs-comment"># 该分支不是叶子节点，递归</span><br>                classLabel = classify(secondDict[key], featLabels, testVec)<br>            <span class="hljs-keyword">else</span>:  <span class="hljs-comment"># 如果是叶子， 返回结果</span><br>                classLabel = secondDict[key]<br>    <span class="hljs-keyword">return</span> classLabel<br></code></pre></td></tr></table></figure>
+
+<p>主函数执行</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> json<br><span class="hljs-keyword">import</span> csv<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">load_data</span>(<span class="hljs-params">filename</span>):<br>    lines = csv.reader(<span class="hljs-built_in">open</span>(filename, <span class="hljs-string">&quot;rt&quot;</span>,encoding=<span class="hljs-string">&#x27;utf-8-sig&#x27;</span>))<br>    dataset = <span class="hljs-built_in">list</span>(lines)<br>    <span class="hljs-keyword">return</span> dataset<br><br>filename=<span class="hljs-string">&quot;G:/学习/课程相关/大三/大数据挖掘/上机/4/thisdata.csv&quot;</span> <br>listWm = load_data(filename)<br>labels = [<span class="hljs-string">&#x27;Outlook&#x27;</span>, <span class="hljs-string">&#x27;Temperature&#x27;</span>, <span class="hljs-string">&#x27;Humidity&#x27;</span>, <span class="hljs-string">&#x27;Windy&#x27;</span>]<br>Trees = createTree(listWm, labels)<br>createPlot(Trees)<br>labels = [<span class="hljs-string">&#x27;Outlook&#x27;</span>, <span class="hljs-string">&#x27;Temperature&#x27;</span>, <span class="hljs-string">&#x27;Humidity&#x27;</span>, <span class="hljs-string">&#x27;Windy&#x27;</span>]<br>testData = [<span class="hljs-string">&#x27;Rain&#x27;</span>, <span class="hljs-string">&#x27;Cool&#x27;</span>, <span class="hljs-string">&#x27;High&#x27;</span>, <span class="hljs-string">&#x27;Not&#x27;</span>]<br>testClass = classify(Trees, labels, testData)<br><span class="hljs-built_in">print</span>(testClass)<br><br></code></pre></td></tr></table></figure>
+<p><img src="/2019/10/23/ID3%E5%AE%9E%E7%8E%B0%E5%86%B3%E7%AD%96%E6%A0%91/output.png" srcset="/img/loading.gif" lazyload><br>输出结果:No</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%E5%8F%8A%E5%BA%94%E7%94%A8/" class="category-chain-item">大数据挖掘及应用</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ID3实现决策树</div>
+      <div>https://shanhainanhua.github.io/2019/10/23/ID3实现决策树/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/11/03/%E8%AE%A1%E7%BB%84%E4%B8%8A%E6%9C%BA%E6%80%BB%E7%BB%93/" title="计组上机总结">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计组上机总结</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/23/Python%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" title="Python日常问题总结">
+                        <span class="hidden-mobile">Python日常问题总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

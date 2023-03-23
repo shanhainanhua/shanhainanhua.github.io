@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="监督学习之k近邻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监督学习之k近邻">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="监督学习之k近邻">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_3_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_5_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_11_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_12_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_15_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_18_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_20_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_29_1.png">
+<meta property="article:published_time" content="2019-10-05T07:32:44.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:02:03.852Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_3_0.png">
+  
+  
+  
+  <title>监督学习之k近邻 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="监督学习之k近邻"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          52 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">监督学习之k近邻</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="监督学习之k近邻"><a href="#监督学习之k近邻" class="headerlink" title="监督学习之k近邻"></a>监督学习之k近邻</h1><span id="more"></span>
+<h2 id="所需要的所有包"><a href="#所需要的所有包" class="headerlink" title="所需要的所有包"></a>所需要的所有包</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> mglearn<br>%matplotlib inline<br><span class="hljs-comment"># 由于 %matplotlib inline 的存在，当输入plt.plot(x,y_1)后，不必再输入 plt.show()</span><br><span class="hljs-comment">#图像将自动显示出来</span><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-k近邻分类"><a href="#1-k近邻分类" class="headerlink" title="1.k近邻分类"></a>1.k近邻分类</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> mglearn<br>%matplotlib inline<br>mglearn.plots.plot_knn_classification(n_neighbors=<span class="hljs-number">1</span>)<br><br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_3_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>除了仅考虑最近邻，我还可以考虑任意个（k 个）邻居。这也是 k 近邻算法名字的来历。在考虑多于一个邻居的情况时，我们<span class="burk">用“投票法”（voting）来指定标签</span>。也就是说，对于每个测试点，我们数一数多少个邻居属于类别 0，多少个邻居属于类别 1。然后将出现<span class="mark">次数更多的类别（也就是 k 个近邻中占多数的类别）作为预测结果</span>。下面的例子（图 2-5）用到了 3 个近邻：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">mglearn.plots.plot_knn_classification(n_neighbors=<span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_5_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>通过scikit-learn来应用k近邻算法</p>
+<ul>
+<li>导入类并将其实例化。这时可以设定参数，如邻居的个数</li>
+<li>利用训练集对这个分类器进行拟合</li>
+<li>调用 predict 方法来对测试数据进行预测</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br>X,y=mglearn.datasets.make_forge()<br>X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=<span class="hljs-number">0</span>)<br><br><span class="hljs-keyword">from</span> sklearn.neighbors <span class="hljs-keyword">import</span> KNeighborsClassifier<br>clf=KNeighborsClassifier(n_neighbors=<span class="hljs-number">3</span>)<br>clf.fit(X_train,y_train)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Test set predictions: &#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(clf.predict(X_test)))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Test set accuracy: &#123;:.2f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(clf.score(X_test,y_test)))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Test set predictions: [1 0 1 0 1 0 0]
+Test set accuracy: 0.86
+</code></pre>
+<h2 id="2-分析KNeighborsClassifier"><a href="#2-分析KNeighborsClassifier" class="headerlink" title="2.分析KNeighborsClassifier"></a>2.分析KNeighborsClassifier</h2><p>对于二维数据集，我们还可以在 xy 平面上画出所有可能的测试点的预测结果。我们根据平面中每个点所属的类别对平面进行着色。这样可以查看决策边界（decision boundary），即算法对类别 0 和类别 1 的分界线。</p>
+<p>zip() 函数用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。<br><br>zip 方法在 Python 2 和 Python 3 中的不同：在 Python 3.x 中为了减少内存，zip() 返回的是一个对象。如需展示列表，需手动 list() 转换。</p>
+<p>subplots参数与subplots相似。<br><br>两者都可以规划figure划分为n个子图，但每条subplot命令只会创建一个子图，而一条subplots就可以将所有子图创建好。<br><br>subplots用法示例如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br> <br>x = np.arange(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)<br><span class="hljs-comment">#划分子图</span><br>fig,axes=plt.subplots(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)<br>ax1=axes[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]<br>ax2=axes[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>]<br>ax3=axes[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>]<br>ax4=axes[<span class="hljs-number">1</span>,<span class="hljs-number">1</span>]<br> <br><span class="hljs-comment">#作图1</span><br>ax1.plot(x, x)<br><span class="hljs-comment">#作图2</span><br>ax2.plot(x, -x)<br><span class="hljs-comment">#作图3</span><br>ax3.plot(x, x ** <span class="hljs-number">2</span>)<br>ax3.grid(color=<span class="hljs-string">&#x27;r&#x27;</span>, linestyle=<span class="hljs-string">&#x27;--&#x27;</span>, linewidth=<span class="hljs-number">1</span>,alpha=<span class="hljs-number">0.3</span>)<br><span class="hljs-comment">#作图4</span><br>ax4.plot(x, np.log(x))<br>plt.show()<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_11_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python">fig,axes=plt.subplots(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,figsize=(<span class="hljs-number">10</span>,<span class="hljs-number">3</span>))<br><span class="hljs-keyword">for</span> n_neighbors,ax <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>([<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">9</span>],axes):<br>    clf=KNeighborsClassifier(n_neighbors=n_neighbors).fit(X,y)<br>    mglearn.plots.plot_2d_separator(clf,X,fill=<span class="hljs-literal">True</span>,eps=<span class="hljs-number">0.5</span>,ax=ax,alpha=<span class="hljs-number">.4</span>)<br>    mglearn.discrete_scatter(X[:,<span class="hljs-number">0</span>],X[:,<span class="hljs-number">1</span>],y,ax=ax)<br>    ax.set_title(<span class="hljs-string">&quot;&#123;&#125; neighbor(s)&quot;</span>.<span class="hljs-built_in">format</span>(n_neighbors))<br>    ax.set_xlabel(<span class="hljs-string">&quot;feature 0&quot;</span>)<br>    ax.set_ylabel(<span class="hljs-string">&quot;feature 1&quot;</span>)<br>axes[<span class="hljs-number">0</span>].legend(loc=<span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code class="hljs">&lt;matplotlib.legend.Legend at 0x242302ba9b0&gt;
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_12_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>用单一邻居绘制的决策边界紧跟着训练数据。随着邻居个数越来越多，决策边界也越来越平滑。更平滑的边界对应更简单的模型。换句话说，使用更少的邻居对应更高的模型复杂度，而使用更多的邻居对应更低的模型复杂度。假如考虑极端情况，即邻居个数等于训练集中所有数据点的个数，那么每个测试点的邻居都完全相同（即所有训练点），所有预测结果也完全相同（即训练集中出现次数最多的类别）。</p>
+<p>在现实世界的乳腺癌数据集上进行研究，证实模型复杂度和泛化能力的关系</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.datasets <span class="hljs-keyword">import</span> load_breast_cancer<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> neighbors<br>cancer=load_breast_cancer()  <span class="hljs-comment">#加载癌症数据集</span><br>X_train,X_test,y_train,y_test=train_test_split(cancer.data,cancer.target,<br>                                                stratify=cancer.target,random_state=<span class="hljs-number">66</span>)<br><br>training_accuracy=[]<br>test_accuracy=[]<br><br><span class="hljs-comment">#neighbors取值从1到10</span><br>neighbors_settings=<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">11</span>)<br><br><span class="hljs-keyword">for</span> n_neighbors <span class="hljs-keyword">in</span> neighbors_settings:<br>    clf=KNeighborsClassifier(n_neighbors=n_neighbors)<br>    clf.fit(X_train,y_train)<br>    training_accuracy.append(clf.score(X_train,y_train))<br>    test_accuracy.append(clf.score(X_test,y_test))<br>    <br>plt.plot(neighbors_settings,training_accuracy,label=<span class="hljs-string">&quot;trainning accuracy&quot;</span>)<br>plt.plot(neighbors_settings,test_accuracy,label=<span class="hljs-string">&quot;test_accuracy&quot;</span>)<br>plt.ylabel(<span class="hljs-string">&quot;Accuracy&quot;</span>)<br>plt.xlabel(<span class="hljs-string">&quot;n_neighbors&quot;</span>)<br>plt.legend()<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code class="hljs">&lt;matplotlib.legend.Legend at 0x24230a4b5c0&gt;
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_15_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>仅考虑单一近邻时，训练集上的预测结果十分完美。但随着邻居个数的增多，模型变得更简单，训练集精度也随之下降。单一邻居时的测试集精度比使用更多邻居时要低，这表示单一近邻的模型过于复杂。与之相反，当考虑 10 个邻居时，模型又过于简单，性能甚至变得更差。最佳性能在中间的某处，邻居个数大约为 6。不过最好记住这张图的坐标轴刻度。最差的性能约为 88% 的精度，这个结果仍然可以接受。</p>
+<h2 id="3-K近邻回归"><a href="#3-K近邻回归" class="headerlink" title="3.K近邻回归"></a>3.K近邻回归</h2><p>k近邻算法还可以用于回归(把邻居的平均值赋给目标)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">mglearn.plots.plot_knn_regression(n_neighbors=<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_18_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>用多个近邻进行回归,预测结果为这些邻居的平均值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">mglearn.plots.plot_knn_regression(n_neighbors=<span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_20_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>用于回归的k近邻算法在sklearn的KNeighborsRegressor类中实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn.neighbors <span class="hljs-keyword">import</span> KNeighborsRegressor<br>X,y=mglearn.datasets.make_wave(n_samples=<span class="hljs-number">40</span>)<br><span class="hljs-comment"># 划分训练数据集</span><br>X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=<span class="hljs-number">0</span>)<br><span class="hljs-comment"># 实例化模型，邻居设定为3</span><br>reg=KNeighborsRegressor(n_neighbors=<span class="hljs-number">3</span>)<br><span class="hljs-comment"># 拟合模型</span><br>reg.fit(X_train,y_train)<br><br><br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code class="hljs">KNeighborsRegressor(algorithm=&#39;auto&#39;, leaf_size=30, metric=&#39;minkowski&#39;,
+                    metric_params=None, n_jobs=None, n_neighbors=3, p=2,
+                    weights=&#39;uniform&#39;)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Test set predictions:\n&#123;&#125;&quot;</span>.<span class="hljs-built_in">format</span>(reg.predict(X_test)))<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Test set R^2:&#123;:.2f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(reg.score(X_test,y_test)))<br><br><br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Test set predictions:
+[-0.05396539  0.35686046  1.13671923 -1.89415682 -1.13881398 -1.63113382
+  0.35686046  0.91241374 -0.44680446 -1.13881398]
+Test set R^2:0.83
+</code></pre>
+<p>可以用score方法来评估模型，对于回归问题，这一方法返回的是$R^2$分数，也叫做决定系数，是回归模型预测的优度度量，位于0到1之间，1完美预测，0对于常数模型，即总是预测训练集响应(y_train)的平均值</p>
+<h2 id="4-分析KNeigborsRegressor"><a href="#4-分析KNeigborsRegressor" class="headerlink" title="4.分析KNeigborsRegressor"></a>4.分析KNeigborsRegressor</h2><p>对于我们的一维数据集，可以查看所有特征取值对应的预测结果（图 2-10）。为了便于绘<br>图，我们创建一个由许多点组成的测试数据集</p>
+<p>np reshape  array  linespace 用法：<br>numpy.arange(n).reshape(a, b); 依次生成n个自然数，并且以a行b列的数组形式显示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-built_in">print</span>(np.array([<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>]).reshape(<span class="hljs-number">3</span>,<span class="hljs-number">1</span>))<br><br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">[[1]
+ [1]
+ [1]]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">print</span>(np.linspace(<span class="hljs-number">1</span>,<span class="hljs-number">100</span>,<span class="hljs-number">2</span>).reshape(<span class="hljs-number">2</span>,-<span class="hljs-number">1</span>))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">[[  1.]
+ [100.]]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python">fig,axes=plt.subplots(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,figsize=(<span class="hljs-number">15</span>,<span class="hljs-number">4</span>))<br><span class="hljs-comment">#创建1000个数据点，在-3和3之间均匀分布</span><br>line=np.linspace(-<span class="hljs-number">3</span>,<span class="hljs-number">3</span>,<span class="hljs-number">1000</span>).reshape(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> n_neighbors,ax <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>([<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">9</span>],axes):<br>    reg=KNeighborsRegressor(n_neighbors=n_neighbors)<br>    reg.fit(X_train,y_train)<br>    ax.plot(line,reg.predict(line))<br>    ax.plot(X_train,y_train,<span class="hljs-string">&#x27;^&#x27;</span>,c=mglearn.cm2(<span class="hljs-number">0</span>),markersize=<span class="hljs-number">8</span>)<br>    ax.plot(X_test,y_test,<span class="hljs-string">&#x27;v&#x27;</span>,c=mglearn.cm2(<span class="hljs-number">1</span>),markersize=<span class="hljs-number">8</span>)<br>    ax.set_title(<br>    <span class="hljs-string">&quot;&#123;&#125; neighbor(s) \n train score:&#123;:.2f&#125; test_score: &#123;:.2f&#125;&quot;</span>.<span class="hljs-built_in">format</span>(<br>    n_neighbors,reg.score(X_train,y_train),reg.score(X_test,y_test)))<br>    ax.set_xlabel(<span class="hljs-string">&quot;Feature&quot;</span>)<br>    ax.set_ylabel(<span class="hljs-string">&quot;Target&quot;</span>)<br>axes[<span class="hljs-number">0</span>].legend([<span class="hljs-string">&quot;Model predictions&quot;</span>,<span class="hljs-string">&quot;Training data/target&quot;</span>,<br>               <span class="hljs-string">&quot;Test data/target&quot;</span>],loc=<span class="hljs-string">&quot;best&quot;</span>)<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+<pre><code class="hljs">&lt;matplotlib.legend.Legend at 0x2422e47e5c0&gt;
+</code></pre>
+<p><img src="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8Bk%E8%BF%91%E9%82%BB/output_29_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>从图中可以看出，仅使用单一邻居，训练集中的每个点都对预测结果有显著影响，预测结果的图像经过所有数据点。这导致预测结果非常不稳定。考虑更多的邻居之后，预测结果变得更加平滑，但对训练数据的拟合也不好。</p>
+<h2 id="5-优点，缺点和参数"><a href="#5-优点，缺点和参数" class="headerlink" title="5.优点，缺点和参数"></a>5.优点，缺点和参数</h2><p>一般来说， KNeighbors 分类器有 2 个重要参数：邻居个数与数据点之间距离的度量方法。在实践中，使用较小的邻居个数（比如 3 个或 5 个）往往可以得到比较好的结果，但你应该调节这个参数。选择合适的距离度量方法超出了本书的范围。默认使用欧式距离，它在许多情况下的效果都很好。</p>
+<p>k-NN 的优点之一就是模型很容易理解，通常不需要过多调节就可以得到不错的性能。在考虑使用更高级的技术之前，尝试此算法是一种很好的基准方法。构建最近邻模型的速度通常很快，但如果训练集很大（特征数很多或者样本数很大），预测速度可能会比较慢。使用 k-NN 算法时，对数据进行预处理是很重要的（见第 3 章）。这一算法对于有很多特征（几百或更多）的数据集往往效果不好，对于大多数特征的大多数取值都为 0 的数据集（所谓的稀疏数据集）来说，这一算法的效果尤其不好。</p>
+<p>虽然 k 近邻算法很容易理解，但由于预测速度慢且不能处理具有很多特征的数据集，所以在实践中往往不会用到</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>监督学习之k近邻</div>
+      <div>https://shanhainanhua.github.io/2019/10/05/监督学习之k近邻/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月5日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/05/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91%E9%9B%86%E6%88%90/" title="监督学习之决策树集成">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">监督学习之决策树集成</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/05/%E9%B8%A2%E5%B0%BE%E8%8A%B1%E7%9A%84%E4%BE%8B%E5%AD%90/" title="鸢尾花的例子">
+                        <span class="hidden-mobile">鸢尾花的例子</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

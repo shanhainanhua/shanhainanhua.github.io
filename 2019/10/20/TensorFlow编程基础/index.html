@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="TensorFlow编程相关基础知识，会逐渐补充，以备复习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow编程基础">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="TensorFlow编程相关基础知识，会逐渐补充，以备复习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu3.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png">
+<meta property="article:published_time" content="2019-10-20T06:47:01.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:05:52.443Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png">
+  
+  
+  
+  <title>TensorFlow编程基础 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="TensorFlow编程基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          11k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          95 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">TensorFlow编程基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>TensorFlow编程相关基础知识，会逐渐补充，以备复习</p>
+<span id="more"></span>
+<h1 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h1><p>一个TensorFlow程序的执行过程一般分为3个阶段：</p>
+<ul>
+<li>创建计算图</li>
+<li>运行一个会话，以完成计算图中定义的操作</li>
+<li>输出数据集合和分析</li>
+</ul>
+<p>用placeholder函数定义一个数据或张量需要3个参数。第一个是数据类型。第二个是占位<br>符 的形状,本例中为一个一维张量,含有一个条目,第三个是变量名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> session:  <span class="hljs-comment">#创建一个对象包含计算图</span><br>    x = tf.placeholder(tf.float32, [<span class="hljs-number">1</span>], name=<span class="hljs-string">&quot;x&quot;</span>) <span class="hljs-comment">#利用占位符概念定义变量</span><br>    y = tf.placeholder(tf.float32, [<span class="hljs-number">1</span>], name=<span class="hljs-string">&quot;y&quot;</span>)<br>    z = tf.constant(<span class="hljs-number">2.0</span>)<br>    y = x * z<br>    x_in = [<span class="hljs-number">100</span>]<span class="hljs-comment">#该程序可以处理非常大、非常复杂的x值，所以可以创建x_in列表，并使其指向占位符x。</span><br>    y_output = session.run(y, &#123;x: x_in&#125;) <span class="hljs-comment">#只有执行session.run()时，程序才会开始处理已定义的图元素</span><br>    <span class="hljs-built_in">print</span>(y_output)<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">[200.]
+</code></pre>
+<h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><p>TensorFlow的数据模型由张量表示。忽略那些复杂的数学定义，可以说（ TensorFlow中的）<br>“张量”指的是一个多维数值阵列。<br>这种数据结构由3个参数描述——阶（ rank）、 形状（ shape） 和数据类型（ type）</p>
+<h2 id="阶"><a href="#阶" class="headerlink" title="阶"></a>阶</h2><p>每个张量的维度单位用阶来描述。它定义了张量的维数，因此，也被称为一个张量的量级或<br>张量的n个维。零阶张量是一个标量，一阶张量是一个向量，二阶张量是一个矩阵</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#定义TensorFlow中的标量，向量，矩阵，立方阵</span><br><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>scalar=tf.constant(<span class="hljs-number">100</span>)<br>vector=tf.constant([<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>])<br>matrix=tf.constant([[<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>],[<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>]])<br>cube_matrix=tf.constant([[[<span class="hljs-number">1</span>],[<span class="hljs-number">2</span>],[<span class="hljs-number">3</span>]],[[<span class="hljs-number">4</span>],[<span class="hljs-number">5</span>],[<span class="hljs-number">6</span>]],[[<span class="hljs-number">7</span>],[<span class="hljs-number">8</span>],[<span class="hljs-number">9</span>]]])<br><span class="hljs-built_in">print</span>(scalar.get_shape())<br><span class="hljs-built_in">print</span>(vector.get_shape())<br><span class="hljs-built_in">print</span>(matrix.get_shape())<br><span class="hljs-built_in">print</span>(cube_matrix.get_shape())<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">()
+(5,)
+(2, 3)
+(3, 3, 1)
+</code></pre>
+<h2 id="形状"><a href="#形状" class="headerlink" title="形状"></a>形状</h2><p>张量的形状指的是其行数和列数<br>使用get_shape()函数</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>TensorFlow中数据的传递需要通过其API与NumPy数组的交互来完成<br><br>tf.constant()  定义常量<br><br>tf.variable()  定义变量</p>
+<h2 id="取回"><a href="#取回" class="headerlink" title="取回"></a>取回</h2><p>同时取回多个操作的输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>constant_A=tf.constant([<span class="hljs-number">100.0</span>])<br>constant_B=tf.constant([<span class="hljs-number">300.0</span>])<br>constant_C=tf.constant([<span class="hljs-number">3.0</span>])<br>sum_=tf.add(constant_A,constant_B)<br>mul_=tf.multiply(constant_A,constant_C)<br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    result=sess.run([sum_,mul_])<br>    <span class="hljs-built_in">print</span>(result)<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">[array([400.], dtype=float32), array([300.], dtype=float32)]
+</code></pre>
+<h2 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h2><p>注入机制将张量插入图节点，它用一个张量值暂时替代操作的输出。注入机制只用于在调用<br>run函数时，通过feed_dict传递参数。最常见的用法是使用tf.placeholder()创建feed操作，<br>并继承其他特定操作作为注入操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>a=<span class="hljs-number">3</span><br>b=<span class="hljs-number">2</span><br>x=tf.placeholder(tf.float32,shape=(a,b))<br>y=tf.add(x,x)<br>data=np.random.rand(a,b)<br>sess=tf.Session()<br><span class="hljs-built_in">print</span>(sess.run(y,feed_dict=&#123;x:data&#125;))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">[[1.1956241  0.17609641]
+ [1.9851147  1.7567049 ]
+ [0.4986568  0.8624873 ]]
+</code></pre>
+<h1 id="TensorBoard"><a href="#TensorBoard" class="headerlink" title="TensorBoard"></a>TensorBoard</h1><p>训练神经网络时，有时会需要监控网络的参数，一般是节点的输入和输出。这样即可在每次<br>训练迭代后检查误差函数是否最小化，从而了解你的模型是否正确学习。<br><br>TensorFlow提供了TensorBoard框架，用于分析和调试神经网络模型。<br><br>TensorBoard采用所谓的汇总来查看模型的参数；一旦TensorFlow代码执行，我们就可以调用TensorBoard的图形用户界面来查看汇总数据。<br><br>此外， TensorBoard还可以显示并学习TensorFlow的计算图。一个深度神经网络模型的计算图<br>往往会非常复杂<br><br>工作流程如下：</p>
+<ul>
+<li>编译你的计算图&#x2F;代码；</li>
+<li>添加汇总op到你需要分析的节点上；</li>
+<li>照常运行你的计算图；</li>
+<li>同时附带运行汇总op；</li>
+<li>代码运行完成后， 启动TensorBoard；</li>
+<li>可视化汇总输出。</li>
+</ul>
+<p>实例：实现一个单输入神经元<br><br>损失函数采用结果与期望值的差的平方，越小越好<br><br>优化函数采用梯度下降法<br></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br>input_value=tf.constant(<span class="hljs-number">0.5</span>,name=<span class="hljs-string">&quot;input_value&quot;</span>)  <span class="hljs-comment">#输入值，不变</span><br>weight=tf.Variable(<span class="hljs-number">1.0</span>,name=<span class="hljs-string">&quot;weight&quot;</span>)  <span class="hljs-comment">#权值，会更新</span><br>expected_output=tf.constant(<span class="hljs-number">0.0</span>,name=<span class="hljs-string">&quot;expected_output&quot;</span>) <span class="hljs-comment">#期望输出</span><br>model=tf.multiply(input_value,weight,<span class="hljs-string">&quot;model&quot;</span>) <span class="hljs-comment">#操作，模型</span><br>loss_function=tf.<span class="hljs-built_in">pow</span>(expected_output-model,<span class="hljs-number">2</span>) <span class="hljs-comment">#损失函数</span><br>optimizer=tf.train.GradientDescentOptimizer(<span class="hljs-number">0.025</span>).minimize(loss_function) <span class="hljs-comment">#优化函数</span><br><br><span class="hljs-comment">#接下来 tensorboard</span><br><span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> [input_value,weight,expected_output,model,loss_function]:<br>    tf.summary.scalar(value.op.name,value)<br>summaries=tf.summary.merge_all()  <span class="hljs-comment">#为每个运行的结点添加分析，然后总结</span><br>sess=tf.Session()<br>log_path=<span class="hljs-string">&quot;../Tensorboardlog\og_simple_stats&quot;</span><br>summary_writer=tf.summary.FileWriter(log_path,sess.graph) <span class="hljs-comment">#声明路径</span><br>sess.run(tf.global_variables_initializer())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">100</span>):<br>    summary_writer.add_summary(sess.run(summaries),i) <span class="hljs-comment">#写入信息</span><br>    sess.run(optimizer)<br><br></code></pre></td></tr></table></figure>
+
+
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>实例1：从一组看似混乱的数据中找出y&#x3D;2x的规律</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br>%matplotlib inline<br>train_X=np.linspace(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">100</span>)<br>train_Y=<span class="hljs-number">2</span>*train_X+np.random.randn(<span class="hljs-number">100</span>)*<span class="hljs-number">0.3</span><br><span class="hljs-comment">#显示模拟数据点</span><br>plt.plot(train_X,train_Y,<span class="hljs-string">&#x27;ro&#x27;</span>,label=<span class="hljs-string">&#x27;Original data&#x27;</span>)<br>plt.legend()<br>plt.show()<br><br></code></pre></td></tr></table></figure>
+
+
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_2_0.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p>接下来进行模型搭建，正向和反向<br><br>创建模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python">X=tf.placeholder(<span class="hljs-string">&quot;float&quot;</span>)<br>Y=tf.placeholder(<span class="hljs-string">&quot;float&quot;</span>)<br><span class="hljs-comment">#模型参数</span><br>W=tf.Variable(tf.random_normal([<span class="hljs-number">1</span>]),name=<span class="hljs-string">&quot;weight&quot;</span>)<br><span class="hljs-comment">#tf.random_normal()函数用于从服从指定正态分布的数值中取出指定个数的值</span><br>b=tf.Variable(tf.zeros([<span class="hljs-number">1</span>]),name=<span class="hljs-string">&quot;bias&quot;</span>)<br><span class="hljs-comment">#前向结构</span><br>z=tf.multiply(X,W)+b  <span class="hljs-comment">#乘以权值加上偏差</span><br><span class="hljs-comment">#反向优化</span><br>cost=tf.reduce_mean(tf.square(Y-z))<br><span class="hljs-comment">#学习率一般小于1，小而精确且慢</span><br>learning_rate=<span class="hljs-number">0.01</span><br><span class="hljs-comment">#梯度下降</span><br>optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)<br></code></pre></td></tr></table></figure>
+
+<p>接下来迭代训练模型，先进行全局初始化，然后设置训练迭代的次数，启动session开始运行任务</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs python">init=tf.global_variables_initializer()<br><span class="hljs-comment">#定义参数</span><br>training_epochs=<span class="hljs-number">20</span> <span class="hljs-comment">#迭代次数</span><br>display_step=<span class="hljs-number">2</span><br>saver=tf.train.Saver()<br>savedir=<span class="hljs-string">&quot;log/&quot;</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">moving_average</span>(<span class="hljs-params">a,w=<span class="hljs-number">10</span></span>):<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(a)&lt;w:<br>        <span class="hljs-keyword">return</span> a[:]<br>    <span class="hljs-keyword">return</span> [val <span class="hljs-keyword">if</span> idx&lt;w <span class="hljs-keyword">else</span> <span class="hljs-built_in">sum</span>(a[(idx-w):idx])/w <span class="hljs-keyword">for</span> idx,val <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(a)]<br><span class="hljs-comment">#启动session</span><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    sess.run(init)<br>    plotdata=&#123;<span class="hljs-string">&quot;batchsize&quot;</span>:[],<span class="hljs-string">&quot;loss&quot;</span>:[]&#125;  <span class="hljs-comment">#存放批次值和损失值</span><br>    <span class="hljs-comment">#向模型输入数据</span><br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(training_epochs):<br>        <span class="hljs-keyword">for</span> (x,y) <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(train_X,train_Y):<br>            sess.run(optimizer,feed_dict=&#123;X:x,Y:y&#125;)<br>            <br>        <span class="hljs-comment">#显示训练中的详细信息</span><br>        <span class="hljs-keyword">if</span> epoch % display_step==<span class="hljs-number">0</span>:<br>            loss=sess.run(cost,feed_dict=&#123;X:train_X,Y:train_Y&#125;)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Epoch:&quot;</span>,epoch+<span class="hljs-number">1</span>,<span class="hljs-string">&quot;cost=&quot;</span>,loss,<span class="hljs-string">&quot;W=&quot;</span>,sess.run(W),<span class="hljs-string">&quot;b=&quot;</span>,sess.run(b))<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> (loss==<span class="hljs-string">&quot;NA&quot;</span>):<br>                plotdata[<span class="hljs-string">&quot;batchsize&quot;</span>].append(epoch)<br>                plotdata[<span class="hljs-string">&quot;loss&quot;</span>].append(loss)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Finished!&quot;</span>)<br>    saver.save(sess,savedir+<span class="hljs-string">&quot;linermodel.cpkt&quot;</span>) <span class="hljs-comment">#保存模型</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;cost=&quot;</span>,sess.run(cost,feed_dict=&#123;X:train_X,Y:train_Y&#125;),<span class="hljs-string">&quot;W=&quot;</span>,sess.run(W),<br>         <span class="hljs-string">&quot;b=&quot;</span>,sess.run(b))<br><br>    <span class="hljs-comment">#训练模型可视化，可视化生成的模型和训练中的状态值</span><br>    plt.plot(train_X,train_Y,<span class="hljs-string">&#x27;ro&#x27;</span>,label=<span class="hljs-string">&#x27;Original data&#x27;</span>)<br>    plt.plot(train_X,sess.run(W)*train_X+sess.run(b),label=<span class="hljs-string">&#x27;Fittedline&#x27;</span>)<br>    plt.legend()<br>    plt.show()<br><br>    plotdata[<span class="hljs-string">&#x27;avgloss&#x27;</span>]=moving_average(plotdata[<span class="hljs-string">&quot;loss&quot;</span>])<br>    plt.figure(<span class="hljs-number">1</span>)<br>    plt.subplot(<span class="hljs-number">211</span>)<br>    plt.plot(plotdata[<span class="hljs-string">&quot;batchsize&quot;</span>],plotdata[<span class="hljs-string">&quot;avgloss&quot;</span>],<span class="hljs-string">&#x27;b--&#x27;</span>)<br>    plt.xlabel(<span class="hljs-string">&#x27;Minibatch number&#x27;</span>)<br>    plt.ylabel(<span class="hljs-string">&#x27;Loss&#x27;</span>)<br>    plt.title(<span class="hljs-string">&#x27;Minibatch run vs. Training loss&#x27;</span>)<br>    plt.show()<br><br>    <span class="hljs-comment">#模型训练后，使用模型</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x=0.2,z=&quot;</span>,sess.run(z,feed_dict=&#123;X:<span class="hljs-number">0.2</span>&#125;))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Epoch: 1 cost= 0.70816207 W= [0.75885475] b= [0.35309508]
+Epoch: 3 cost= 0.12805094 W= [1.649097] b= [0.11414018]
+Epoch: 5 cost= 0.08086114 W= [1.8904546] b= [0.02324806]
+Epoch: 7 cost= 0.0777822 W= [1.9530506] b= [-0.00074375]
+Epoch: 9 cost= 0.07760694 W= [1.9692401] b= [-0.00695578]
+Epoch: 11 cost= 0.0776032 W= [1.9734255] b= [-0.00856198]
+Epoch: 13 cost= 0.077605 W= [1.9745078] b= [-0.00897733]
+Epoch: 15 cost= 0.07760566 W= [1.9747877] b= [-0.0090847]
+Epoch: 17 cost= 0.077605836 W= [1.9748603] b= [-0.00911253]
+Epoch: 19 cost= 0.07760589 W= [1.9748794] b= [-0.00911988]
+Finished!
+cost= 0.077605896 W= [1.9748821] b= [-0.00912086]
+</code></pre>
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_6_2.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<pre><code class="hljs">x=0.2,z= [0.3858556]
+</code></pre>
+<p>Tensorflow将中间结点及结点间的运算关系定义在图上，图是静态的，会话是动态的，只有启动会话后才会将数据流向图中<br><br>定义数据时可以通过占位符，也可以通过字典方式，也可以直接定义</p>
+<p>记得在session创建后初始化所有变量，而变量定义在此之前</p>
+<br>
+
+<p>TensorFlow模型构建的概念<br><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%A6%82%E5%BF%B5.png" srcset="/img/loading.gif" lazyload></p>
+<p>两个重要的机制：注入机制，取回机制</p>
+<p>注入机制：占位符<br>placeholder，feed-dict<br><br>示例如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">a=tf.placeholder(tf.int32)<br>b=tf.placeholder(tf.int32)<br>add=tf.add(a,b)<br>multiply=tf.multiply(a,b)<br>mysess=tf.Session()<br><span class="hljs-built_in">print</span>(mysess.run(add,feed_dict=&#123;a:<span class="hljs-number">1</span>,b:<span class="hljs-number">2</span>&#125;))<br><span class="hljs-built_in">print</span>(mysess.run(multiply,feed_dict=&#123;a:<span class="hljs-number">1</span>,b:<span class="hljs-number">2</span>&#125;))<br><span class="hljs-comment">#一次取出多个结点</span><br><span class="hljs-built_in">print</span>(mysess.run([add,multiply],feed_dict=&#123;a:<span class="hljs-number">1</span>,b:<span class="hljs-number">2</span>&#125;))<br>mysess.close()<br><br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">3
+2
+[3, 2]
+</code></pre>
+<p>建立session可以直接<br><br>也可以with tf.Session() as sess<br><br>然后还有方法是交换式session方式：<br><br>sess&#x3D;tf.InteractiveSession()<br><br>另一种是Supervisor方式：该方式会更高级一些， 使用起来也更加复<br>杂， 可以自动来管理session中的具体任务， 例如， 载入&#x2F;载出检查点文件、 写入TensorBoard等， 另外该方法还支持分布式训练的部署</p>
+<br>
+
+<p>保存和载入模型</p>
+<p>保存模型<br><br>训练完模型后: tf.train.Saver().save(sess,”save_path&#x2F;file_name”)</p>
+<p>载入模型<br><br>调用saver的restore函数</p>
+<p>保存载入模型实例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#保存模型见上文代码 中saver</span><br><span class="hljs-comment">#载入模型</span><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess2:<br>    sess2.run(tf.global_variables_initializer())<br>    saver.restore(sess2,savedir+<span class="hljs-string">&quot;linermodel.cpkt&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x=0.2,z=&quot;</span>,sess2.run(z,feed_dict=&#123;X:<span class="hljs-number">0.2</span>&#125;))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">WARNING:tensorflow:From E:\Python\Anaconda\lib\site-packages\tensorflow\python\training\saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+INFO:tensorflow:Restoring parameters from log/linermodel.cpkt
+x=0.2,z= [0.3858556]
+</code></pre>
+<p>打印模型内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tensorflow.python.tools.inspect_checkpoint <span class="hljs-keyword">import</span> print_tensors_in_checkpoint_file<br>savedir=<span class="hljs-string">&quot;log/&quot;</span><br>print_tensors_in_checkpoint_file(savedir+<span class="hljs-string">&quot;linermodel.cpkt&quot;</span>,<span class="hljs-literal">None</span>,<span class="hljs-literal">True</span>)<br><br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">tensor_name:  bias
+[-0.00912086]
+tensor_name:  weight
+[1.9748821]
+# Total number of params: 2
+</code></pre>
+<br>
+<br>
+
+<p>为模型添加保存检查点，继续修改原代码</p>
+<p>完整代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt<br><span class="hljs-comment">#定义生成loss可视化的函数</span><br>plotdata=&#123;<span class="hljs-string">&quot;batchsize&quot;</span>:[],<span class="hljs-string">&quot;loss&quot;</span>:[]&#125;<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">moving_average</span>(<span class="hljs-params">a,w=<span class="hljs-number">10</span></span>):<br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(a)&lt;w:<br>        <span class="hljs-keyword">return</span> a[:]<br>    <span class="hljs-keyword">return</span> [val <span class="hljs-keyword">if</span> idx&lt;w <span class="hljs-keyword">else</span> <span class="hljs-built_in">sum</span>(a[(idx-w):idx])/w <span class="hljs-keyword">for</span> idx,val <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(a)]<br><span class="hljs-comment">#生成模拟数据</span><br>train_X=np.linspace(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">100</span>)<br>train_Y=<span class="hljs-number">2</span>*train_X+np.random.randn(<span class="hljs-number">100</span>)*<span class="hljs-number">0.3</span> <br><br>tf.reset_default_graph()<br><span class="hljs-comment">#创建模型</span><br><span class="hljs-comment">#占位符</span><br>X=tf.placeholder(<span class="hljs-string">&quot;float&quot;</span>)<br>Y=tf.placeholder(<span class="hljs-string">&quot;float&quot;</span>)<br><span class="hljs-comment">#模型参数</span><br>W=tf.Variable(tf.random_normal([<span class="hljs-number">1</span>]),name=<span class="hljs-string">&quot;weight&quot;</span>)<br>b=tf.Variable(tf.zeros([<span class="hljs-number">1</span>]),name=<span class="hljs-string">&quot;bias&quot;</span>)<br><span class="hljs-comment">#前向结构</span><br>z=tf.multiply(X,W)+b<br><br><span class="hljs-comment">#反向优化</span><br>cost=tf.reduce_mean(tf.square(Y-z))<br>learning_rate=<span class="hljs-number">0.01</span><br>optimizer=tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)<br><span class="hljs-comment">#初始化所有变量</span><br>init=tf.global_variables_initializer()<br><span class="hljs-comment">#定义学习参数</span><br>training_epochs=<span class="hljs-number">20</span><br>display_step=<span class="hljs-number">2</span><br><span class="hljs-comment">#生成saver</span><br>saver=tf.train.Saver(max_to_keep=<span class="hljs-number">1</span>)<br>savedir=<span class="hljs-string">&quot;log/&quot;</span><br><span class="hljs-comment">#启动图</span><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:<br>    sess.run(init)<br>    <span class="hljs-comment">#向模型中输入数据</span><br>    <span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(training_epochs):<br>        <span class="hljs-keyword">for</span> (x,y) <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(train_X,train_Y):<br>            sess.run(optimizer,feed_dict=&#123;X:x,Y:y&#125;)<br>        <span class="hljs-comment">#显示训练中的详细信息</span><br>        <span class="hljs-keyword">if</span> epoch % display_step==<span class="hljs-number">0</span>:<br>            loss=sess.run(cost,feed_dict=&#123;X:train_X,Y:train_Y&#125;)<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Epoch:&quot;</span>,epoch+<span class="hljs-number">1</span>,<span class="hljs-string">&quot;cost=&quot;</span>,loss,<span class="hljs-string">&quot;W=&quot;</span>,sess.run(W),<span class="hljs-string">&quot;b=&quot;</span>,sess.run(b))<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> (loss==<span class="hljs-string">&quot;NA&quot;</span>):<br>                plotdata[<span class="hljs-string">&quot;batchsize&quot;</span>].append(epoch)<br>                plotdata[<span class="hljs-string">&quot;loss&quot;</span>].append(loss)<br>            saver.save(sess,savedir+<span class="hljs-string">&quot;linermodel.cpkt&quot;</span>,global_step=epoch) <span class="hljs-comment">#保存模型</span><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Finished!&quot;</span>)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;cost=&quot;</span>,sess.run(cost,feed_dict=&#123;X:train_X,Y:train_Y&#125;),<span class="hljs-string">&quot;W=&quot;</span>,sess.run(W),<br>         <span class="hljs-string">&quot;b=&quot;</span>,sess.run(b))<br><br>    <span class="hljs-comment">#训练模型可视化，可视化生成的模型和训练中的状态值</span><br>    plt.plot(train_X,train_Y,<span class="hljs-string">&#x27;ro&#x27;</span>,label=<span class="hljs-string">&#x27;Original data&#x27;</span>)<br>    plt.plot(train_X,sess.run(W)*train_X+sess.run(b),label=<span class="hljs-string">&#x27;Fittedline&#x27;</span>)<br>    plt.legend()<br>    plt.show()<br><br>    plotdata[<span class="hljs-string">&#x27;avgloss&#x27;</span>]=moving_average(plotdata[<span class="hljs-string">&quot;loss&quot;</span>])<br>    plt.figure(<span class="hljs-number">1</span>)<br>    plt.subplot(<span class="hljs-number">211</span>)<br>    plt.plot(plotdata[<span class="hljs-string">&quot;batchsize&quot;</span>],plotdata[<span class="hljs-string">&quot;avgloss&quot;</span>],<span class="hljs-string">&#x27;b--&#x27;</span>)<br>    plt.xlabel(<span class="hljs-string">&#x27;Minibatch number&#x27;</span>)<br>    plt.ylabel(<span class="hljs-string">&#x27;Loss&#x27;</span>)<br>    plt.title(<span class="hljs-string">&#x27;Minibatch run vs. Training loss&#x27;</span>)<br>    plt.show()<br><span class="hljs-comment">#重启session，载入检查点</span><br>load_epoch=<span class="hljs-number">18</span><br><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess2:<br>    sess2.run(tf.global_variables_initializer())<br>    saver.restore(sess2,savedir+<span class="hljs-string">&quot;linermodel.cpkt-&quot;</span>+<span class="hljs-built_in">str</span>(load_epoch))<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;x=0.2,z=&quot;</span>,sess2.run(z,feed_dict=&#123;X:<span class="hljs-number">0.2</span>&#125;))<br></code></pre></td></tr></table></figure>
+
+<pre><code class="hljs">Epoch: 1 cost= 1.4514498 W= [0.24221869] b= [0.5121559]
+Epoch: 3 cost= 0.18433338 W= [1.5415516] b= [0.16298366]
+Epoch: 5 cost= 0.07567732 W= [1.8937755] b= [0.03033424]
+Epoch: 7 cost= 0.067009285 W= [1.9851238] b= [-0.00467777]
+Epoch: 9 cost= 0.066090204 W= [2.0087478] b= [-0.01374275]
+Epoch: 11 cost= 0.06594107 W= [2.014856] b= [-0.0160868]
+Epoch: 13 cost= 0.06590843 W= [2.0164354] b= [-0.0166929]
+Epoch: 15 cost= 0.06590037 W= [2.016844] b= [-0.0168497]
+Epoch: 17 cost= 0.065898314 W= [2.0169504] b= [-0.01689044]
+Epoch: 19 cost= 0.0658978 W= [2.0169766] b= [-0.0169006]
+Finished!
+cost= 0.06589771 W= [2.0169811] b= [-0.01690225]
+</code></pre>
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_1.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/output_26_2.png" srcset="/img/loading.gif" lazyload alt="png"></p>
+<br>
+<br>
+模型操作相关函数
+
+<h1 id="常用函数总结（见pdf书籍）"><a href="#常用函数总结（见pdf书籍）" class="headerlink" title="常用函数总结（见pdf书籍）"></a>常用函数总结（见pdf书籍）</h1><h2 id="保存模型"><a href="#保存模型" class="headerlink" title="保存模型"></a>保存模型</h2><p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu1.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="数值操作相关函数"><a href="#数值操作相关函数" class="headerlink" title="数值操作相关函数"></a>数值操作相关函数</h2><p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/hanshu3.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="类型转换函数"><a href="#类型转换函数" class="headerlink" title="类型转换函数"></a>类型转换函数</h2><p><img src="/2019/10/20/TensorFlow%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E5%8F%98%E6%8D%A2.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="形状变换函数"><a href="#形状变换函数" class="headerlink" title="形状变换函数"></a>形状变换函数</h2><ul>
+<li>tf.shape(input,name&#x3D;None)<br>返回一个张量，值为输入参数input的shape，input可以是个张量，也可以是一个数组或list</li>
+<li>tf.size(input,name&#x3D;None)<br>返回一个张量，内容为输入数据的元素数量</li>
+<li>tf.rank(input,name&#x3D;None)<br>返回一个张量，其内容为输入数据input的rank，此处的rank看的是中括号的层数</li>
+<li>tf.reshape(input,shape,name&#x3D;None)<br>将原有数据的shape按照指定形状进行变换，生成一个新的张量</li>
+<li>tf.expand_dims(input,dim,name&#x3D;None)<br>插入维度1进入一个tensor中</li>
+<li>tf.squeeze(input,dim,name&#x3D;None)<br>将dim指定的维度去掉(dim所指定的维度必须为1，如果不为1则会报错)</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>TensorFlow编程基础</div>
+      <div>https://shanhainanhua.github.io/2019/10/20/TensorFlow编程基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年10月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/20/%E5%9F%BA%E7%A1%80%E7%BB%83%E4%B9%A0-mnist%E6%89%8B%E5%86%99%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%86%E5%88%AB/" title="基础练习-mnist手写数据集识别">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基础练习-mnist手写数据集识别</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/19/%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0KNN%E5%92%8C%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB/" title="编程实现KNN和朴素贝叶斯算法分类">
+                        <span class="hidden-mobile">编程实现KNN和朴素贝叶斯算法分类</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

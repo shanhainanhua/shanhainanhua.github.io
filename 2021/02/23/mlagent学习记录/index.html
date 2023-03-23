@@ -1,0 +1,983 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="记录mlagent相关知识  工作流程ML-Agents Academy类按如下方式安排代理模拟循环： 1.调用学院的OnEnvironmentReset委托。2.为场景中的每个Agent调用OnEpisodeBegin()函数。3.为场景中的每个Agent调用 CollectObservations(VectorSensor sensor)函数。4.使用每个Agent的策略来决定Agent的下一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mlagent学习记录">
+<meta property="og:url" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="记录mlagent相关知识  工作流程ML-Agents Academy类按如下方式安排代理模拟循环： 1.调用学院的OnEnvironmentReset委托。2.为场景中的每个Agent调用OnEpisodeBegin()函数。3.为场景中的每个Agent调用 CollectObservations(VectorSensor sensor)函数。4.使用每个Agent的策略来决定Agent的下一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A41.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A42.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A43.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/gridworld.png">
+<meta property="article:published_time" content="2021-02-23T07:33:18.000Z">
+<meta property="article:modified_time" content="2023-03-23T06:05:35.766Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="总结">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A41.png">
+  
+  
+  
+  <title>mlagent学习记录 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="mlagent学习记录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          17k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          144 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">mlagent学习记录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>记录mlagent相关知识</p>
+<!---more-->
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>ML-Agents Academy类按如下方式安排代理模拟循环：</p>
+<p>1.调用学院的<code>OnEnvironmentReset</code>委托。<br>2.为场景中的每个Agent调用<code>OnEpisodeBegin()</code>函数。<br>3.为场景中的每个Agent调用 <code>CollectObservations(VectorSensor sensor)</code>函数。<br>4.使用每个Agent的策略来决定Agent的下一个动作。<br>5.为场景中的每个Agent调用<code>OnActionReceived()</code>函数，并传入代理商策略选择的操作。<br>6.如果代理已达到其 <code>MaxStep</code> ，则调用代理的<code>OnEpisodeBegin()</code>函数。</p>
+<h2 id="命令行相关"><a href="#命令行相关" class="headerlink" title="命令行相关"></a>命令行相关</h2><p>使用mlagents-learn进行训练<br><br>相应参数：<br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A41.png" srcset="/img/loading.gif" lazyload><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A42.png" srcset="/img/loading.gif" lazyload><br><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/%E5%91%BD%E4%BB%A43.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="设计Agent"><a href="#设计Agent" class="headerlink" title="设计Agent"></a>设计Agent</h2><h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><p>代理扮演这观察周围环境，并决定最好的使用这些观察的行动方针的角色。通过在unity中继承Agent类来创建Agent。创建Agent的关键是你根据Agent完成任务并给予的奖励。<br><br>一个Agent将它观察到的信息传给它的Policy。之后，Policy会做出决定并且反馈相应的动作给Agent。你的Agent代码必须执行这个动作并对每个动作评估奖励值，奖励值用来探索最优的决策。<br><br>Policy从代理本身抽象出决策逻辑，因此您可以在多个代理中使用相同的策略。政策如何制定决策取决于它是什么样的政策。您可以更改策略<br>通过更改其”行为参数(Behavior Parameters)”来代理。如果您将”行为类型(Behavior Type)”设置为”仅限启发式(Heuristic Only)”，代理将使用其”启发式”方法做出决策它可以允许您手动控制代理或编写自己的策略。如果代理有一个”模型(Model)”文件，它的政策将使用神经网络”模型”作出决定。</p>
+<h3 id="Decisons"><a href="#Decisons" class="headerlink" title="Decisons"></a>Decisons</h3><p>每次代理请求时，观察-决策-行动-奖励周期都会重复一个决定。当”Agent.RequestDecision()”被调用时，代理将请求决策。如果您需要代理定期请求自行决策，添加代理游戏对象的”Decision Requester”组件。定期决策<br>间隔通常最适合基于物理的模拟。例如，机器人模拟器中的代理，必须提供关节扭矩的精细控制应该在模拟的每一步都做出决定。另一方面，一个代理，只需要作出决定时，某些游戏或模拟事件发生，应手动调用”Agent.RequestDecision()”。</p>
+<h3 id="Observations"><a href="#Observations" class="headerlink" title="Observations"></a>Observations</h3><p>要做出决策，代理必须观察其环境才能推断世界的状态。状态观察可以采取以下形式：<br></p>
+<ul>
+<li>Vector Observation :  由浮点数组成的数组</li>
+<li>Visual Observation :  一个或多个摄像机图像或者渲染纹理</li>
+</ul>
+<p>当你使用vector Observation时，要继承<code>Agent.CollectObservations(VectorSensor sensor)</code>方法来创建功能矢量<br><br>当你使用visual Observation时，你只需要确定哪些Unity的相机对象或渲染将提供图像，基础代理类将处理剩下的东西。你不需要使用<code>CollectObservations(VectorSensor sensor)</code>方法，除非你也同时使用了vector observation。</p>
+<h4 id="Vector-Observation-Space-Feature-Vectors"><a href="#Vector-Observation-Space-Feature-Vectors" class="headerlink" title="Vector Observation Space: Feature Vectors"></a>Vector Observation Space: Feature Vectors</h4><p>使用<code>CollectObservations(VectorSensor sensor)</code>方法来收集信息在这个函数里面使用<code>VectorSensor.AddObservation</code> 来手动添加信息。<br>例如：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-keyword">public</span> GameObject ball;<br><br><span class="hljs-keyword">private</span> List&lt;<span class="hljs-built_in">float</span>&gt; state = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">float</span>&gt;();<br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CollectObservations</span>(<span class="hljs-params">VectorSensor sensor</span>)</span><br>&#123;<br>    sensor.AddObservation(gameObject.transform.rotation.z);<br>    sensor.AddObservation(gameObject.transform.rotation.x);<br>    sensor.AddObservation((ball.transform.position.x - gameObject.transform.position.x));<br>    sensor.AddObservation((ball.transform.position.y - gameObject.transform.position.y));<br>    sensor.AddObservation((ball.transform.position.z - gameObject.transform.position.z));<br>    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.x);<br>    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.y);<br>    sensor.AddObservation(ball.transform.GetComponent&lt;Rigidbody&gt;().velocity.z);<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当设置Agent的<code>Behavior Parameters</code>时，可以设置下面这些属性：</p>
+<ul>
+<li>Space Size： 状态大小必须匹配你之前添加信息构成的功能矢量的长度，<br>观测特征向量是浮点数列表，这意味着<br>您必须将任何其他数据类型转换为浮点数或浮点数列表。<br><br><code>VectorSensor.AddObservation</code>方法提供许多通用类型的数据载入，你可以添加整数和布尔类型的数据，也可以添加unity中的数据类型<code>Vector2</code>,<br><code>Vector3</code>, and <code>Quaternion</code>.<br></li>
+</ul>
+<p>类型列举应以_one hot_样式进行编码。即，添加一个每个列举元素的功能载体的元素，设置将观察到的成员代表为一个的元素，并将其余部分设置为零。</p>
+<h5 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h5><p>为了在培训时取得最佳效果，您应该使培训的组件规范化。<br>功能矢量的范围[-1，+1]或[0，1]。当您使值规范化时，PPO神经网络通常可以更快地融合到解决方案。请注意，并不一定总是要的归一画到这些推荐的范围，但它是在使用神经网络时被认为是最佳实践。在您的观察组件之间的范围内变化越大，培训将更有可能受到影响。<br>为了归一化数值到值[o,1]，可以使用下面的公式</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp">normalizedValue = (currentValue - minValue)/(maxValue - minValue)<br></code></pre></td></tr></table></figure>
+
+<p>旋转和角度也同样要归一化，当角度位于0到360度之间时，可以使用下面的公式</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csharp">Quaternion rotation = transform.rotation;<br>Vector3 normalized = rotation.eulerAngles / <span class="hljs-number">180.0f</span> - Vector3.one;  <span class="hljs-comment">// [-1,1]</span><br>Vector3 normalized = rotation.eulerAngles / <span class="hljs-number">360.0f</span>;  <span class="hljs-comment">// [0,1]</span><br></code></pre></td></tr></table></figure>
+<p>对于可能超出[0,360]范围的角度，您可以减小角度，或者，如果转数很大，则增加最大值(maximum value).</p>
+<h4 id="Multiple-Visual-Observations"><a href="#Multiple-Visual-Observations" class="headerlink" title="Multiple Visual Observations"></a>Multiple Visual Observations</h4><p>视觉观察直接或从一个或多个中使用渲染的纹理场景中的摄影机。 该策略将纹理矢量化为3D张量可以馈入卷积神经网络（CNN）。可以将视觉观察与辅助向量观察一起使用。使用视觉观察的代理可以捕获任意复杂度的状态，并且当状态难以用数字描述时，此功能很有用。 但是，他们通常也效率较低，训练较慢，有时甚至不<br>完全成功。<br><br>视觉观察结果可以从场景中的Cameras或RenderTextures中获取。要将视觉观察添加到代理，请添加“摄像机传感器”组件或将RenderTextures传感器组件添加到代理。<br>然后拖动相机或渲染要添加到<code>Camera</code>或<code>RenderTexture</code>字段的纹理。您可以拥有多个摄像头或渲染纹理，甚至可以结合使用都附加到代理。 对于每个视觉观察，设置宽度和高度<br>图像的像素数（以像素为单位）以及观察结果是彩色还是灰度。<br><br>使用相同策略的每个代理程序必须具有相同数量的视觉观察结果，并且它们都必须具有相同的分辨率（包括它们是否为灰度）。此外，代理上的每个传感器组件都必须具有唯一的名称，以便它们可以确定性地排序（该名称对于该Agent必须是唯一的，但是多个Agent可以<br>具有相同名称的传感器组件）。<br><br>当使用<code>RenderTexture</code>视觉观察时，方便的调试功能是<br>添加一个“画布”，然后添加一个“原始图像”，并将其纹理设置为代理的<br><code>RenderTexture</code>。 这将在游戏屏幕上呈现Agent观察图像。<br><br>可以参考 <strong>GridWord</strong> 项目使用情况(官方案例)，目的是到达指定地点同时避免碰撞。</p>
+<h4 id="Raycast-Observations"><a href="#Raycast-Observations" class="headerlink" title="Raycast Observations"></a>Raycast Observations</h4><p>只需添加一个RayPerceptionSensorComponent3D（RayPerceptionSensorComponent2D）在观察过程中，几条光线（或球体，取决于设置）被投射到物理世界，被击中的物体决定了生成的观察向量。<br><br>Both sensor components have several settings:</p>
+<ul>
+<li><em>Detectable Tags</em>  对应于代理应该能够区分的对象类型的字符串列表。 例如，在WallJump示例中，我们使用“墙”，“目标”和“块”作为要检测的对象列表。</li>
+<li><em>Rays Per Direction</em> 确定投射的光线数。一缕是总是向前投射，多的光线向左右投射。</li>
+<li><em>Max Ray Degrees</em> 最外面的光线的角度（以度为单位）。 90度对应代理的左侧和右侧。.</li>
+<li><em>Sphere Cast Radius</em> 用于球体铸造的球体的大小。 如果设置到0，将使用射线代替球体。 光线可能更有效，特别是在复杂的场景中。</li>
+<li><em>Ray Length</em> 射线长度</li>
+<li><em>Observation Stacks</em>  要与转换结果“堆叠”的先前结果数。 请注意，这可以独立于“行为参数”中的“堆叠矢量”设置。</li>
+<li><em>Start Vertical Offset</em> (3D only) 射线起点的垂直偏移。</li>
+<li><em>End Vertical Offset</em> (3D only) 射线终点的垂直偏移.<br> 创建的观测值的总大小为</li>
+</ul>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gcode">（观测堆栈）*（<span class="hljs-number">1</span> + <span class="hljs-number">2</span> *每个方向的光线）*（可检测的标签数量+ <span class="hljs-number">2</span>）<br><span class="hljs-comment">(Observation Stacks)</span> * <span class="hljs-comment">(1 + 2 * Rays Per Direction)</span> * <span class="hljs-comment">(Num Detectable Tags + 2)</span><br><br></code></pre></td></tr></table></figure>
+<p>因此，应尽量减少射线和标签的数量，以减少使用的数据量。 请注意，这与在<br><code>Behavior Parameters</code>中状态大小无关。</p>
+<h3 id="Vector-Actions"><a href="#Vector-Actions" class="headerlink" title="Vector Actions"></a>Vector Actions</h3><p>动作是代理执行的来自策略的指令。 当学院调用时，会将操作作为参数传递给代理。使用OnActionReceived()。当您指定矢量动作空间时<br>是 <strong>Continuous</strong>，则传递给Agent的action参数是一个数组<br>长度等于<code>Vector Action Space Size</code>属性的控制信号。当您指定<strong>Discrete</strong>向量动作空间类型时，该动作参数是包含整数的数组。 每个整数都是列表或表的索引<br>命令。<br>在<strong>Discrete</strong>向量动作空间类型中，动作参数是一个索引数组。 数组中的索引数由<br>在<code>Branches Size</code>属性中定义的数决定。每个分支对应于一个动作表，您可以通过指定每个表的大小修改<code>Branches</code>属性。<br>Policy和培训算法都不知道有关该采取的行动本身的意思。训练算法只是尝试<br>动作列表中不同的值并观察随着时间的推移这些值对累积奖励的影响。因此，为Agent定义的唯一位置动作是在OnActionReceived()函数中。<br><br>例如，如果您设计了一个可以在两个维度上移动的代理，则可以使用连续或离散矢量动作。 在连续的情况下，您会将向量动作大小设置为2（每个维度一个），并且代理的策略将创建一个具有两个浮点值的操作。在离散情况下，您将使用一个大小为4的分支（每个分支一个）<br>方向），该策略将创建一个包含单个值范围从零到三的元素。 或者，您可以创建大小为2的两个分支（一个用于水平移动，一个用于垂直移动），并且该策略将创建一个包含两个元素的操作数组,值范围从零到一。<br><br>请注意，在为代理编程操作时，通常有助于使用代理的<code>Heuristic()</code>方法测试您的操作逻辑，让您映射键盘行动命令。<br>The 3DBall and Area  example environments are set up to use either the continuous or the discrete vector action spaces.</p>
+<h4 id="Continuous-Action-Space"><a href="#Continuous-Action-Space" class="headerlink" title="Continuous Action Space"></a>Continuous Action Space</h4><p>当代理使用设置为“连续”向量操作空间的策略时，传递给代理的OnActionReceived（）函数的操作参数是一个数组长度等于“矢量操作空间大小”属性值。数组中的各个值具有您赋予的任何含义.<br><br>默认情况下，我们提供的PPO算法的输出会预先钳制<code>vectorAction</code>进入[-1，1]范围。 最佳做法是手动剪辑如果您打算在您的环境中使用第三方算法，则也需要这些。</p>
+<h4 id="Discrete-Action-Space"><a href="#Discrete-Action-Space" class="headerlink" title="Discrete Action Space"></a>Discrete Action Space</h4><p>如果Agent使用 <strong>Discrete</strong>向量操作空间，则传递给代理的OnActionReceived()函数的操作参数是一个包含索引的数组。在离散向量作用空间中，<code>Branches</code>是一个<br>整数数组，每个值对应于每个分支。<br>例如，如果我们想要一个可以在平台上移动并跳跃的Agent，我们可以<br>定义两个分支（一个代表运动，一个代表跳跃），因为我们想要<br>代理能够同时移动 <strong>和</strong> 跳。 我们定义第一个分支有5种可能的动作（不要移动，左移，右移，后退，前进），第二个动作有2种可能的动作（不要跳，跳）。 这<br>OnActionReceived（）方法类似于：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">// Get the action index for movement</span><br><span class="hljs-built_in">int</span> movement = Mathf.FloorToInt(act[<span class="hljs-number">0</span>]);<br><span class="hljs-comment">// Get the action index for jumping</span><br><span class="hljs-built_in">int</span> jump = Mathf.FloorToInt(act[<span class="hljs-number">1</span>]);<br><br><span class="hljs-comment">// Look up the index in the movement action list:</span><br><span class="hljs-keyword">if</span> (movement == <span class="hljs-number">1</span>) &#123; directionX = <span class="hljs-number">-1</span>; &#125;<br><span class="hljs-keyword">if</span> (movement == <span class="hljs-number">2</span>) &#123; directionX = <span class="hljs-number">1</span>; &#125;<br><span class="hljs-keyword">if</span> (movement == <span class="hljs-number">3</span>) &#123; directionZ = <span class="hljs-number">-1</span>; &#125;<br><span class="hljs-keyword">if</span> (movement == <span class="hljs-number">4</span>) &#123; directionZ = <span class="hljs-number">1</span>; &#125;<br><span class="hljs-comment">// Look up the index in the jump action list:</span><br><span class="hljs-keyword">if</span> (jump == <span class="hljs-number">1</span> &amp;&amp; IsGrounded()) &#123; directionY = <span class="hljs-number">1</span>; &#125;<br><br><span class="hljs-comment">// Apply the action results to move the Agent</span><br>gameObject.GetComponent&lt;Rigidbody&gt;().AddForce(<br>    <span class="hljs-keyword">new</span> Vector3(<br>        directionX * <span class="hljs-number">40f</span>, directionY * <span class="hljs-number">300f</span>, directionZ * <span class="hljs-number">40f</span>));<br></code></pre></td></tr></table></figure>
+<p>以上代码示例是AreaAgent的简化摘录类，离散量和连续动作空间都有。</p>
+<h5 id="Masking-Discrete-Actions"><a href="#Masking-Discrete-Actions" class="headerlink" title="Masking Discrete Actions"></a>Masking Discrete Actions</h5><p>使用离散动作时，可以指定某些动作为下一个决定是不可能采用的。 当代理受<br>神经网络控制时，代理将无法执行指定的操作。 注意当代理受Heuristic启发式控制时，代理将仍然能够决定执行屏蔽操作。 为了掩盖动作，请覆盖<code>Agent.CollectDiscreteActionMasks（）</code>虚拟方法，并在其中调用<code>DiscreteActionMasker.SetMask（）</code>：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CollectDiscreteActionMasks</span>(<span class="hljs-params">DiscreteActionMasker actionMasker</span>)</span>&#123;<br>    actionMasker.SetMask(branch, actionIndices)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Where:</p>
+<ul>
+<li><code>branch</code> is the index (starting at 0) of the branch on which you want to mask the action</li>
+<li><code>actionIndices</code> is a list of <code>int</code> corresponding to the<br>indices of the actions that the Agent cannot perform.</li>
+</ul>
+<p>例如，如果您有一个具有2个分支的代理，并且在第一个分支<br>（分支0）有4种可能的操作：_“什么都不做” _，_“跳转” _，_“拍摄” _<br>和_“更换武器” _。 然后使用下面的代码，代理将_“ do<br>对于他的下一个决定，无“ _”或“更换武器” _（因为动作索引1和2<br>被遮罩）</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs csharp">SetMask(<span class="hljs-number">0</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">2</span>]&#123;<span class="hljs-number">1</span>,<span class="hljs-number">2</span>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>注意:</p>
+<ul>
+<li>You can call <code>SetMask</code> multiple times if you want to put masks on<br>multiple branches.</li>
+<li>You cannot mask all the actions of a branch.</li>
+<li>You cannot mask actions in continuous control.</li>
+</ul>
+<h3 id="Rewards"><a href="#Rewards" class="headerlink" title="Rewards"></a>Rewards</h3><p>在强化学习中，奖励是Agent做正确事情的信号。 PPO强化学习算法通过优化代理做出的选择来工作，以使代理随时间获得最高的累积奖励。 您的奖励机制越好，您的代理商将学得越好。<br><br><strong>注意:</strong><br>奖励在Agent使用经过训练的模型进行推理时不会使用，在模仿学习中也不会使用。<br>也许最好的建议是从简单开始，仅在需要时增加复杂性。 通常，您应该奖励结果，而不是您认为会导致期望结果的行动。 为了帮助您获得奖励，您可以使用Monitor类显示代理收到的累积奖励。 您甚至可以在观察代理如何累积奖励的同时，使用代理的启发式方法来控制代理。<br><br>通过调用OnActionReceived（）函数中的AddReward（）方法向代理分配奖励。 每个决策之间分配的奖励应在[-1,1]范围内。 超出此范围的值可能导致训练不稳定。 当Agent收到新决定时，<code>reward</code>值将重置为零。 如果对一个代理决策有多个对<code>AddReward（）</code>的调用，则将这些奖励加起来以评估前一个决策的质量。 有一种名为<code>SetReward()</code> ”的方法，该方法将覆盖自上一个决定以来给予代理的所有先前奖励。</p>
+<h3 id="Agent-Properties"><a href="#Agent-Properties" class="headerlink" title="Agent Properties"></a>Agent Properties</h3><ul>
+<li><code>Behavior Parameters</code> - The parameters dictating what Policy the Agent will<br>receive.<ul>
+<li><code>Behavior Name</code> - 行为的标识符。 具有相同行为名称的代理将学习相同的政策. </li>
+<li><code>Vector Observation</code><ul>
+<li><code>Space Size</code> - Agent的向量观测值的长度。</li>
+<li><code>Stacked Vectors</code> - 将被堆叠并一起用于决策的先前矢量观测的数量。 这导致矢量观察的有效大小被传递给策略为：<em>Space Size</em> x _Stacked Vectors_。</li>
+</ul>
+</li>
+<li><code>Vector Action</code><ul>
+<li><code>Space Type</code> - 对应于动作矢量是否包含单个整数（离散）或一系列实值浮点（连续）.</li>
+<li><code>Space Size</code> (Continuous) - 动作向量的长度.</li>
+<li><code>Branches</code> (Discrete) - 整数数组，定义多个并发的离散操作。 “分支”数组中的值对应于每个操作分支的可能离散值的数量。</li>
+</ul>
+</li>
+<li><code>Model</code> - 用于推理的神经网络模型（训练后获得）</li>
+<li><code>Inference Device</code> - 在推理期间使用CPU还是GPU运行模型</li>
+<li><code>Behavior Type</code> - Determines whether the Agent will do training, inference, or use its<br>Heuristic() method:<ul>
+<li><code>Default</code> - the Agent will train if they connect to a python trainer, otherwise they will perform inference.</li>
+<li><code>Heuristic Only</code> - the Agent will always use the <code>Heuristic()</code> method.</li>
+<li><code>Inference Only</code> - the Agent will always perform inference.</li>
+</ul>
+</li>
+<li><code>Team ID</code> - Used to define the team for <a href="Training-Self-Play.md">self-play</a></li>
+<li><code>Use Child Sensors</code> - Whether to use all Sensor components attached to child GameObjects of this Agent.</li>
+</ul>
+</li>
+<li><code>Max Step</code> - 每个代理的最大步骤数。 一旦这个数字到达后，代理将被重置.</li>
+</ul>
+<h2 id="训练-Agent"><a href="#训练-Agent" class="headerlink" title="训练 Agent"></a>训练 Agent</h2><p>训练过程的输出是一个包含优化后的模型文件政策。 该模型文件是TensorFlow数据图，其中包含数学训练过程中选择的最佳操作和最佳权重。 使用命令<code>mlagents-learn</code> 来训练您的代理。 此命令已安装在<code>mlagents</code>软件包。可在以下位置找到ml-agents &#x2F; mlagents &#x2F; trainers &#x2F; learn.py。<br>可以像<code>config / trainer_config.yaml</code>这样编辑配置文件指定训练期间使用的超参数。您可以使用文本编辑器编辑此文件，以添加特定的配置<br>每个行为。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">mlagents-learn &lt;trainer-config-file&gt; --<span class="hljs-built_in">env</span>=&lt;env_name&gt; --run-id=&lt;run-identifier&gt; --train<br></code></pre></td></tr></table></figure>
+<p>在训练过程中，训练程序会定期间隔（由<code>summary_freq</code>选项指定）打印和保存更新。 保存的信息按<code>run-id</code>值分组，因此您应该为每个ID分配一个唯一的ID。<br><br>您可以在训练期间或之后通过运行以下命令使用TensorBoard查看这些统计信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">tensorboard --logdir=summaries --port 6006<br></code></pre></td></tr></table></figure>
+<p>之后本地浏览器打开 <code>http://localhost:6006</code>.<br><strong>注意：</strong><br>TensorBoard使用的默认端口是6006。如果存在现有会话在端口6006上运行，可以使用–port在开放的端口上启动新会话选项。<br><br>训练结束后，您可以在<code>models</code> 文件夹中在指定的运行ID下找到保存的模型</p>
+<h3 id="Training-Config-File"><a href="#Training-Config-File" class="headerlink" title="Training Config File"></a>Training Config File</h3><table>
+<thead>
+<tr>
+<th align="left"><strong>Setting</strong></th>
+<th align="left"><strong>Description</strong></th>
+<th align="left"><strong>Applies To Trainer*</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">batch_size</td>
+<td align="left">The number of experiences in each iteration of gradient descent.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">batches_per_epoch</td>
+<td align="left">In imitation learning, the number of batches of training examples to collect before training the model.</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">beta</td>
+<td align="left">The strength of entropy regularization.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">buffer_size</td>
+<td align="left">The number of experiences to collect before updating the policy model. In SAC, the max size of the experience buffer.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">buffer_init_steps</td>
+<td align="left">The number of experiences to collect into the buffer before updating the policy model.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">epsilon</td>
+<td align="left">Influences how rapidly the policy can evolve during training.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">hidden_units</td>
+<td align="left">The number of units in the hidden layers of the neural network.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">init_entcoef</td>
+<td align="left">How much the agent should explore in the beginning of training.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">lambd</td>
+<td align="left">The regularization parameter.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">learning_rate</td>
+<td align="left">The initial learning rate for gradient descent.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">learning_rate_schedule</td>
+<td align="left">Determines how learning rate changes over time.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">max_steps</td>
+<td align="left">The maximum number of simulation steps to run during a training session.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">memory_size</td>
+<td align="left">The size of the memory an agent must keep. Used for training with a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">normalize</td>
+<td align="left">Whether to automatically normalize observations.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">num_epoch</td>
+<td align="left">The number of passes to make through the experience buffer when performing gradient descent optimization.</td>
+<td align="left">PPO</td>
+</tr>
+<tr>
+<td align="left">num_layers</td>
+<td align="left">The number of hidden layers in the neural network.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">behavioral_cloning</td>
+<td align="left">Use demonstrations to bootstrap the policy neural network. See <a href="Training-PPO.md#optional-behavioral-cloning-using-demonstrations">Pretraining Using Demonstrations</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">reward_signals</td>
+<td align="left">The reward signals used to train the policy. Enable Curiosity and GAIL here. See <a href="Reward-Signals.md">Reward Signals</a> for configuration options.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">save_replay_buffer</td>
+<td align="left">Saves the replay buffer when exiting training, and loads it on resume.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">sequence_length</td>
+<td align="left">Defines how long the sequences of experiences must be while training. Only used for training with a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">summary_freq</td>
+<td align="left">How often, in steps, to save training statistics. This determines the number of data points shown by TensorBoard.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">tau</td>
+<td align="left">How aggressively to update the target network used for bootstrapping value estimation in SAC.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">time_horizon</td>
+<td align="left">How many steps of experience to collect per-agent before adding it to the experience buffer.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">trainer</td>
+<td align="left">The type of training to perform: “ppo”, “sac”, “offline_bc” or “online_bc”.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+<tr>
+<td align="left">train_interval</td>
+<td align="left">How often to update the agent.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">num_update</td>
+<td align="left">Number of mini-batches to update the agent with during each update.</td>
+<td align="left">SAC</td>
+</tr>
+<tr>
+<td align="left">use_recurrent</td>
+<td align="left">Train using a recurrent neural network. See <a href="Feature-Memory.md">Using Recurrent Neural Networks</a>.</td>
+<td align="left">PPO, SAC</td>
+</tr>
+</tbody></table>
+<h2 id="Training-with-Proximal-Policy-Optimization"><a href="#Training-with-Proximal-Policy-Optimization" class="headerlink" title="Training with Proximal Policy Optimization"></a>Training with Proximal Policy Optimization</h2><p>ML-Agents提供一种称为近端策略优化（PPO）的强化学习算法的实现。 PPO使用神经网络来逼近理想功能，该理想功能将代理的观察结果映射到代理在给定状态下可以采取的最佳操作。 ML-Agents PPO算法在TensorFlow中实现，并在单独的Python进程中运行（通过套接字与正在运行的Unity应用程序进行通信）。成功训练强化学习模型通常涉及调整训练超参数。 本指南包含一些最佳实践，用于在默认参数似乎无法达到您想要的性能水平时调整培训过程。</p>
+<h3 id="Hyperparameters"><a href="#Hyperparameters" class="headerlink" title="Hyperparameters"></a>Hyperparameters</h3><h4 id="Reward-Signals"><a href="#Reward-Signals" class="headerlink" title="Reward Signals"></a>Reward Signals</h4><p>在强化学习中，目标是学习使奖励最大化的策略。在基础级别上，奖励是由环境给予的。 但是，我们可以想象奖励代理商各种不同的行为。 例如，我们可以奖励代理商探索新状态，而不仅仅是给出明确的奖励。 此外，我们可以混合奖励信号来帮助学习过程。<br>ML-Agents工具箱默认提供三个奖励信号：外部（环境）奖励信号，好奇心奖励信号（可用于鼓励在稀疏外部奖励环境中进行探索）和GAIL奖励信号。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">reward_signals:</span><br>    <span class="hljs-attr">extrinsic:</span><br>        <span class="hljs-attr">strength:</span> <span class="hljs-number">1.0</span><br>        <span class="hljs-attr">gamma:</span> <span class="hljs-number">0.99</span><br>    <span class="hljs-attr">curiosity:</span><br>        <span class="hljs-attr">strength:</span> <span class="hljs-number">0.02</span><br>        <span class="hljs-attr">gamma:</span> <span class="hljs-number">0.99</span><br>        <span class="hljs-attr">encoding_size:</span> <span class="hljs-number">256</span><br>    <span class="hljs-attr">gail:</span><br>        <span class="hljs-attr">strength:</span> <span class="hljs-number">0.01</span><br>        <span class="hljs-attr">gamma:</span> <span class="hljs-number">0.99</span><br>        <span class="hljs-attr">encoding_size:</span> <span class="hljs-number">128</span><br>        <span class="hljs-attr">demo_path:</span> <span class="hljs-string">Project/Assets/ML-Agents/Examples/Pyramids/Demos/ExpertPyramid.demo</span><br></code></pre></td></tr></table></figure>
+
+<p>除了任何特定于类的超参数之外，每个奖励信号还应至少定义两个参数“ strength”和“ gamma”。 请注意，要删除奖励信号，您应该从“ reward_signals”中完全删除其条目。 任何时候都应至少定义一个奖励信号。</p>
+<ul>
+<li><p>Reward Signal Types: <br><br>  Strength：Typical Range: <code>1.0</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.995</code></p>
+</li>
+<li><p>Curiosity Reward Signal: <br><br>  Strength：Typical Range: <code>0.001</code> - <code>0.1</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.995</code><br>  encoding_size:  <code>encoding_size</code>对应于固有好奇心模型使用的编码大小。此值应足够小以鼓励ICM压缩原始观察结果，但也不能太小以防止其学习区分已演示和实际行为。Default Value: <code>64</code>   。Typical Range: <code>64</code> - <code>256</code></p>
+</li>
+<li><p>GAIL Reward Signal: <br><br>  Strength：Typical Range: <code>0.01</code> - <code>1.0</code><br><br>  Gamma：   Typical Range: <code>0.8</code> - <code>0.9</code><br>  demo_path:   <code>demo_path</code>是您的.demo文件或.demo文件目录的路径。<br>  encoding_size:encoding_size对应于鉴别器使用的隐藏层的大小，该值应足够小以鼓励鉴别器压缩原始观测值，但也不能太小以防止其学习区分已证明的行为和实际行为。 大幅增加此大小也会对训练时间产生负面影响。 Default Value: <code>64</code>     Typical Range: <code>64</code> - <code>256</code></p>
+</li>
+</ul>
+<h4 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h4><p><code>lambd</code>对应于计算通用优势估算值（[GAE]（<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.02438%EF%BC%89%EF%BC%89%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84%E2%80%9C">https://arxiv.org/abs/1506.02438））时使用的“</a> lambda”参数。 这可以认为代理在计算更新的价值估算时多少依赖于其当前价值估算。 低值对应于更多地依赖于当前值估计（可能是高偏差），而高值对应于更多地依赖于在环境中接收到的实际奖励（可能是高方差）。 参数提供了两者之间的折衷，正确的值可以导致更稳定的训练过程。</p>
+<p>Typical Range: <code>0.9</code> - <code>0.95</code></p>
+<h4 id="Buffer-Size"><a href="#Buffer-Size" class="headerlink" title="Buffer Size"></a>Buffer Size</h4><p><code>buffer_size</code>对应于我们进行任何模型学习或更新之前应收集的经验（代理商的观察，行动和获得的奖励）的数量。 **这应该是<code>batch_size</code>**的倍数。 通常，较大的<code>buffer_size</code>对应于更稳定的训练更新。</p>
+<p>Typical Range: <code>2048</code> - <code>409600</code></p>
+<h4 id="Batch-Size"><a href="#Batch-Size" class="headerlink" title="Batch Size"></a>Batch Size</h4><p><code>batch_size</code>是用于梯度下降更新的一次迭代的经验数量。 **这应该始终是<code>buffer_size</code>**的一小部分。 如果您使用的是连续动作空间，则该值应较大（大约1000s）。 如果您使用的是离散操作空间，则该值应较小（约10s）。</p>
+<p>Typical Range (Continuous): <code>512</code> - <code>5120</code></p>
+<p>Typical Range (Discrete): <code>32</code> - <code>512</code></p>
+<h4 id="Number-of-Epochs"><a href="#Number-of-Epochs" class="headerlink" title="Number of Epochs"></a>Number of Epochs</h4><p>num_epoch是梯度下降过程中通过experience buffer的次数。 <code>batch_size</code>越大，可以接受的越大。 减少此设置将确保更新更稳定，但会降低学习速度。</p>
+<p>Typical Range: <code>3</code> - <code>10</code></p>
+<h4 id="Learning-Rate"><a href="#Learning-Rate" class="headerlink" title="Learning Rate"></a>Learning Rate</h4><p><code>learning_rate</code>对应于每个梯度下降更新步骤的强度。 如果训练不稳定，则通常应减少该奖励，并且奖励不能持续增加。</p>
+<p>Typical Range: <code>1e-5</code> - <code>1e-3</code></p>
+<h4 id="Optional-Learning-Rate-Schedule"><a href="#Optional-Learning-Rate-Schedule" class="headerlink" title="(Optional) Learning Rate Schedule"></a>(Optional) Learning Rate Schedule</h4><p>learning_rate_schedule对应于学习率随时间的变化。对于PPO，我们建议递减学习率直到max_steps以便学习更稳定地收敛。 但是，在某些情况下（例如，训练时间未知），可以禁用此功能。</p>
+<p>Options:</p>
+<ul>
+<li><code>linear</code> (default): 线性衰减<code>learning_rate</code>，在<code>max_steps</code>处达到0。</li>
+<li><code>constant</code>: 在整个训练过程中保持学习率恒定.</li>
+</ul>
+<p>Options: <code>linear</code>, <code>constant</code></p>
+<h4 id="Time-Horizon"><a href="#Time-Horizon" class="headerlink" title="Time Horizon"></a>Time Horizon</h4><p><code>time_horizon</code>对应于将每个代理添加到体验缓冲区之前收集多少个体验步骤。 在episode结束之前达到此限制时，将使用价值估算值来预测业务代表当前状态的总体预期回报。 因此，此参数在偏见程度较小但方差估计较高（较长时间范围）与偏倚较大但变化较少的估计值（较短时间范围）之间进行权衡。 如果情节中频繁获得奖励，或者情节过长，<br>数字越小越理想。 此数字应足够大，以捕获代理程序动作序列中的所有重要行为。</p>
+<p>Typical Range: <code>32</code> - <code>2048</code></p>
+<h4 id="Max-Steps"><a href="#Max-Steps" class="headerlink" title="Max Steps"></a>Max Steps</h4><p><code>max_steps</code>对应于训练过程中运行了多少步仿真（乘以跳帧）。 对于更复杂的问题，应该增加该值。</p>
+<p>Typical Range: <code>5e5</code> - <code>1e7</code></p>
+<h4 id="Beta"><a href="#Beta" class="headerlink" title="Beta"></a>Beta</h4><p><code>beta</code>对应于熵正则化的强度，这使策略“更加随机”。 这样可以确保座席在训练过程中正确探索动作空间。 增加此数量将确保采取更多随机动作。 应当对此进行调整，以使熵（可从TensorBoard测量）随着奖励的增加而缓慢减小。 如果熵下降太快，则增加<code>beta</code>。 如果熵下降太慢，则降低<code>beta</code>。.</p>
+<p>Typical Range: <code>1e-4</code> - <code>1e-2</code></p>
+<h4 id="Epsilon"><a href="#Epsilon" class="headerlink" title="Epsilon"></a>Epsilon</h4><p><code>epsilon</code> 对应于梯度下降更新期间新旧策略之间可接受的差异阈值。 将此值设置得较小将导致更稳定的更新，但也会减慢训练过程。</p>
+<p>Typical Range: <code>0.1</code> - <code>0.3</code></p>
+<h4 id="Normalize"><a href="#Normalize" class="headerlink" title="Normalize"></a>Normalize</h4><p><code>normalize</code> 对应于是否对矢量观测输入应用了归一化。 该归一化基于矢量观测值的移动平均值和方差。 规范化对于复杂的连续控制问题很有用，但对于较简单的离散控制问题则可能有害。</p>
+<h4 id="Number-of-Layers"><a href="#Number-of-Layers" class="headerlink" title="Number of Layers"></a>Number of Layers</h4><p><code>num_layers</code>对应于观察输入之后或视觉观察的CNN编码之后存在多少个隐藏层。 对于简单的问题，较少的层可能会更快更有效地进行训练。 对于更复杂的控制问题，可能需要更多的层。</p>
+<h4 id="Hidden-Units"><a href="#Hidden-Units" class="headerlink" title="Hidden Units"></a>Hidden Units</h4><p><code>hidden_units</code> 对应于神经网络的每个完全连接层中有多少个单元。 对于简单的问题，其中正确的操作是观察输入的直接组合，这应该很小。 对于动作是观察变量之间非常复杂的相互作用的问题，此值应该更大。</p>
+<p>Typical Range: <code>32</code> - <code>512</code></p>
+<h4 id="Optional-Visual-Encoder-Type"><a href="#Optional-Visual-Encoder-Type" class="headerlink" title="(Optional) Visual Encoder Type"></a>(Optional) Visual Encoder Type</h4><p><code>vis_encode_type</code>对应于用于对视觉观察进行编码的编码器类型。<br>有效选项包括：</p>
+<ul>
+<li><code>simple</code>（默认）：一个简单的编码器，由两个卷积层组成</li>
+<li><code>nature_cnn</code>：[Mnih等人提出的CNN实现]（<a target="_blank" rel="noopener" href="https://www.nature.com/articles/nature14236%EF%BC%89%EF%BC%8C">https://www.nature.com/articles/nature14236），</a><br>由三个卷积层组成</li>
+<li><code>resnet</code>：[IMPALA Resnet实施]（<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1802.01561%EF%BC%89%EF%BC%8C">https://arxiv.org/abs/1802.01561），</a><br>由三层堆叠的层组成，每层有两个残余块，<br>比其他两个更大的网络。</li>
+</ul>
+<p>选项：<code>simple</code>，<code>nature_cnn</code>，<code>resnet</code></p>
+<h3 id="Optional-Recurrent-Neural-Network-Hyperparameters"><a href="#Optional-Recurrent-Neural-Network-Hyperparameters" class="headerlink" title="(Optional) Recurrent Neural Network Hyperparameters"></a>(Optional) Recurrent Neural Network Hyperparameters</h3><p>以下超参数仅在<code>use_recurrent</code>设置为true时使用</p>
+<h4 id="Sequence-Length"><a href="#Sequence-Length" class="headerlink" title="Sequence Length"></a>Sequence Length</h4><p><code>sequence_length</code> 对应于训练期间通过网络传递的经验序列的长度。 该时间应足够长，以捕获代理随时间推移可能需要记住的任何信息。 例如，如果您的Agent需要记住物体的速度，则此值可能很小。 如果您的经纪人只需要记住一集开始时只给出一次的信息，则该值应该更大。</p>
+<p>Typical Range: <code>4</code> - <code>128</code></p>
+<h4 id="Memory-Size"><a href="#Memory-Size" class="headerlink" title="Memory Size"></a>Memory Size</h4><p><code>memory_size</code>对应于用于存储策略循环神经网络隐藏状态的浮点数数组的大小。 该值必须是2的倍数，并且应该与您期望代理成功完成任务所需记住的信息量成比例。</p>
+<p>Typical Range: <code>32</code> - <code>256</code></p>
+<h3 id="Optional-Behavioral-Cloning-Using-Demonstrations"><a href="#Optional-Behavioral-Cloning-Using-Demonstrations" class="headerlink" title="(Optional) Behavioral Cloning Using Demonstrations"></a>(Optional) Behavioral Cloning Using Demonstrations</h3><p>在某些情况下，您可能想使用播放器记录的行为来引导代理策略。 这可以帮助指导代理商获得奖励。 行为克隆（BC）增加了模仿示范的训练操作，而不是试图使报酬最大化。<br>要使用BC，请在trainer_config中添加一个“ behavioral_cloning”部分。 例如：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">behavioral_cloning:<br>    demo_path: .<span class="hljs-regexp">/Project/</span>Assets<span class="hljs-regexp">/ML-Agents/</span>Examples<span class="hljs-regexp">/Pyramids/</span>Demos/ExpertPyramid.demo<br>    strength: <span class="hljs-number">0.5</span><br>    steps: <span class="hljs-number">10000</span><br></code></pre></td></tr></table></figure>
+
+<p>以下是BC可用的超参数。</p>
+<h4 id="Strength"><a href="#Strength" class="headerlink" title="Strength"></a>Strength</h4><p><code>strength</code>对应于模仿的学习率相对于PPO的学习率，大致对应于我们允许BC影响政策的强度。</p>
+<p>Typical Range: <code>0.1</code> - <code>0.5</code></p>
+<h4 id="Demo-Path"><a href="#Demo-Path" class="headerlink" title="Demo Path"></a>Demo Path</h4><p><code>demo_path</code>是您的.demo文件或.demo文件目录的路径。 有关<code>.demo</code>文件的更多信息，请参见Training-Imitation-Learning.md（官方文档）。</p>
+<h4 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h4><p>在BC期间，通常希望代理在“看到”奖励后停止使用演示，并允许其优化过去的可用演示和&#x2F;或泛化所提供的演示之外的内容。<br> <code>steps</code>对应于BC有效的训练步骤。 BC的学习率将逐步逐步提高。 将步骤设置为0，以在整个训练过程中持续模仿。</p>
+<h4 id="Optional-Batch-Size"><a href="#Optional-Batch-Size" class="headerlink" title="(Optional) Batch Size"></a>(Optional) Batch Size</h4><p><code>batch_size</code>是用于梯度下降更新的一次迭代的演示经验的数量。 如果未指定，则默认为为PPO定义的<code>batch_size</code>。</p>
+<p>Typical Range (Continuous): <code>512</code> - <code>5120</code></p>
+<p>Typical Range (Discrete): <code>32</code> - <code>512</code></p>
+<h4 id="Optional-Number-of-Epochs"><a href="#Optional-Number-of-Epochs" class="headerlink" title="(Optional) Number of Epochs"></a>(Optional) Number of Epochs</h4><p><code>num_epoch</code>是梯度下降过程中通过体验缓冲区的次数。 如果未指定，则默认为PPO设置的时期数。</p>
+<p>Typical Range: <code>3</code> - <code>10</code></p>
+<h4 id="Optional-Samples-Per-Update"><a href="#Optional-Samples-Per-Update" class="headerlink" title="(Optional) Samples Per Update"></a>(Optional) Samples Per Update</h4><p><code>samples_per_update</code> 是最大样本数<br>在每次模仿更新期间使用。 如果您的演示数据集非常大，则可能需要降低此值，以避免过分适合演示策略。 设置为0可在每个更新步骤训练所有演示。</p>
+<p>Default Value: <code>0</code> (all)</p>
+<p>Typical Range: Approximately equal to PPO’s <code>buffer_size</code></p>
+<h3 id="Training-Statistics"><a href="#Training-Statistics" class="headerlink" title="Training Statistics"></a>Training Statistics</h3><p>要查看训练统计信息，请使用TensorBoard。 </p>
+<h4 id="Cumulative-Reward"><a href="#Cumulative-Reward" class="headerlink" title="Cumulative Reward"></a>Cumulative Reward</h4><p>随着时间的流逝，奖励的总体趋势应持续增加。 预计会有小起起落。 根据任务的复杂性，奖励可能不会显着增加，直到进入培训过程的数百万步为止。</p>
+<h4 id="Entropy"><a href="#Entropy" class="headerlink" title="Entropy"></a>Entropy</h4><p>这对应于决策的随机性。 在训练期间，这应该持续减少。 如果它减小得太快或根本没有减小，则应调整<code>beta</code>（使用离散动作空间时）。</p>
+<h4 id="Learning-Rate-1"><a href="#Learning-Rate-1" class="headerlink" title="Learning Rate"></a>Learning Rate</h4><p>默认情况下，这会随着时间的流逝而减少，除非将<code>learning_rate_schedule</code>设置为<code>constant</code>。</p>
+<h4 id="Policy-Loss"><a href="#Policy-Loss" class="headerlink" title="Policy Loss"></a>Policy Loss</h4><p>这些值会在训练过程中振荡。 通常，它们应小于1.0。</p>
+<h4 id="Value-Estimate"><a href="#Value-Estimate" class="headerlink" title="Value Estimate"></a>Value Estimate</h4><p>这些值应随着累积奖励的增加而增加。 它们对应于Agent预测自己在任何给定时间点会收到多少奖励。</p>
+<h4 id="Value-Loss"><a href="#Value-Loss" class="headerlink" title="Value Loss"></a>Value Loss</h4><p>这些价值将随着奖励的增加而增加，一旦奖励稳定就应减少。</p>
+<h2 id="实例-Gridworld"><a href="#实例-Gridworld" class="headerlink" title="实例 Gridworld"></a>实例 Gridworld</h2><p><a target="_blank" rel="noopener" href="https://youtu.be/gu8HE9WKEVI">GridWorld</a></p>
+<p><img src="/2021/02/23/mlagent%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/gridworld.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>设置：经典网格世界任务的版本。场景包含代理商，目标，<br>和障碍。</li>
+<li>目标：代理商必须在网格上导航至目标，同时避免<br>障碍。</li>
+<li>代理：环境包含九个具有相同行为参数的代理。</li>
+<li>Agent奖励功能：<ul>
+<li>-0.01每一步。</li>
+<li>+1.0，如果座席导航到网格的目标位置（情节结束）。</li>
+<li>-1.0，如果特工导航到障碍物（情节结束）。</li>
+</ul>
+</li>
+<li>行为参数：<ul>
+<li>向量观察空间：无</li>
+<li>向量动作空间：（离散）大小为4，对应于运动<br>基本方向。请注意，对于这种环境，<br>[动作遮罩]（Learning-Environment-Design-Agents.md＃masking-discrete-actions）<br>默认情况下处于打开状态（此选项可以切换<br>使用“ trueAgent” GameObject中的“屏蔽动作”复选框。<br>提供的经过训练的模型文件是在启用操作屏蔽的情况下生成的。</li>
+<li>视觉观察：对应于GridWorld的自顶向下视图。</li>
+</ul>
+</li>
+<li>浮动属性：三个，分别对应于网格大小，障碍物数量和<br>目标数。</li>
+<li>基准平均奖励：0.8</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/mlagent/" class="category-chain-item">mlagent</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%80%BB%E7%BB%93/">#总结</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>mlagent学习记录</div>
+      <div>https://shanhainanhua.github.io/2021/02/23/mlagent学习记录/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2021年2月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/" title="数据结构相关算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据结构相关算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/02/08/cpp%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" title="cpp常用函数">
+                        <span class="hidden-mobile">cpp常用函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

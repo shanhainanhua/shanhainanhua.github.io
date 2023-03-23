@@ -1,0 +1,891 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="java中有关网络方面的功能定义都在java.net包中 InetAddress类封装IP或域名包含的方法： * 获取本机对应的InetAdress对象：getLocalHost * 根据主机获得对应的InetAdress对象，参数为String类型，可以是ip地址或域名：getByName（String ） * 根据主机获得具有相同名字的一组InetAddress对象：getAllByName（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java网络编程">
+<meta property="og:url" content="https://shanhainanhua.github.io/2019/09/03/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="java中有关网络方面的功能定义都在java.net包中 InetAddress类封装IP或域名包含的方法： * 获取本机对应的InetAdress对象：getLocalHost * 根据主机获得对应的InetAdress对象，参数为String类型，可以是ip地址或域名：getByName（String ） * 根据主机获得具有相同名字的一组InetAddress对象：getAllByName（">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-03T09:45:09.000Z">
+<meta property="article:modified_time" content="2019-09-04T02:41:15.027Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>java网络编程 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="java网络编程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          7.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          67 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">java网络编程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><strong>java中有关网络方面的功能定义都在java.net包中</strong></p>
+<h2 id="InetAddress类封装IP或域名"><a href="#InetAddress类封装IP或域名" class="headerlink" title="InetAddress类封装IP或域名"></a>InetAddress类封装IP或域名</h2><p>包含的方法：</p>
+<pre><code class="hljs">* 获取本机对应的InetAdress对象：getLocalHost
+* 根据主机获得对应的InetAdress对象，参数为String类型，可以是ip地址或域名：getByName（String ）
+* 根据主机获得具有相同名字的一组InetAddress对象：getAllByName（String）
+* 获取addr所封装的IP地址对应的InetAddress对象：getByAddress（byte[] addr）
+* 获取ip地址：getHostAddress
+* 获取域名：getHostName
+* 判断是否可以到达该地址：isReachable
+</code></pre>
+<h2 id="URL类（Uniform-Resource-Locator，统一资源定位器"><a href="#URL类（Uniform-Resource-Locator，统一资源定位器" class="headerlink" title="URL类（Uniform Resource Locator，统一资源定位器)"></a>URL类（Uniform Resource Locator，统一资源定位器)</h2><p>通常语法格式：  协议名：&#x2F;&#x2F;主机名：端口号&#x2F;资源名 <br><br>getXXX（）返回相应信息<br></p>
+<h2 id="URI类-统一资源标识符"><a href="#URI类-统一资源标识符" class="headerlink" title="URI类  统一资源标识符"></a>URI类  统一资源标识符</h2><p>唯一作用就是解析  可以将URL理解成URI的特例<br><br>创建URL对象需要抛出异常<br><br>openConnection方法用于返回一个URLConnection对象，URLConnection类提供一些更强的方法</p>
+<pre><code class="hljs">• 获得文件的长度，类型，创建时间，修改时间  getXXX（）
+• 获得输入流，以便读取文件的数据  getInputStream（）
+• 获得输出流，以便输出数据 getOutputStream（）
+• 设置请求属性值：setRequestProperty（String key，String value）
+</code></pre>
+<h2 id="基于TCP的网络编程-关于套接字-socket"><a href="#基于TCP的网络编程-关于套接字-socket" class="headerlink" title="基于TCP的网络编程  关于套接字 socket"></a>基于TCP的网络编程  关于套接字 socket</h2><p>使用TCP&#x2F;IP协议进行通信时，会在通信的两端各建立一个Socket（套接字），从而形成虚拟链路<br><br>使用Socket对象封装了两端的通信端口，屏蔽了底层细节，其允许用户将网络连接当成一个IO流，<br><br>读写数据<br><br>主要使用java.net包下的两个类：</p>
+<p>   <strong>ServeSocket</strong>类：服务器套接字<br><br>   <strong>Socket</strong>类：客户端套接字<br><br><strong>都必须抛出异常</strong></p>
+<hr>
+<p>基础用法：<br><br><strong>客户端</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> 网络编程;<br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.PrintStream;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Client</span> &#123;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">//创建连接到本机对象</span><br>			Socket socket=<span class="hljs-keyword">new</span> <span class="hljs-title class_">Socket</span>(<span class="hljs-string">&quot;10.0.218.101&quot;</span>,<span class="hljs-number">28888</span>);<br>			<span class="hljs-comment">//将socket对应的输出对象包装成printstream</span><br>			PrintStream printStream=<span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintStream</span>(socket.getOutputStream());<br>			<span class="hljs-comment">//往服务器发送信息</span><br>			printStream.println(<span class="hljs-string">&quot;我是客户&quot;</span>);<br>			printStream.flush();<br>			<span class="hljs-comment">//获取服务器的信息,将socket对应的输入流包装成bufferreader</span><br>			<span class="hljs-comment">//BufferedInputStream bufferedInputStream=new BufferedInputStream(socket.getInputStream());</span><br>		    BufferedReader bufferedReader=<span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(socket.getInputStream()));<br>		    String line=bufferedReader.readLine();<br>		    System.out.println(<span class="hljs-string">&quot;来自服务器的数据：&quot;</span>+line);<br>		    <span class="hljs-comment">//关闭</span><br>		    bufferedReader.close();<br>		    printStream.close();<br>		    socket.close();<br>		&#125;<span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			<span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> handle exception</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125; <br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>服务端</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> 网络编程;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.PrintStream;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Server</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Thread</span> &#123;<br>	ServerSocket server;<br>	<span class="hljs-comment">// 计数</span><br>	<span class="hljs-type">int</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-title function_">Server</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">// 创建serversocket，用于监听客户端对应的端口号是否有socket</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ServerSocket</span>(<span class="hljs-number">28888</span>);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>		<span class="hljs-comment">// 启动当前线程，执行run方法</span><br>		<span class="hljs-built_in">this</span>.start();<br>		System.out.println(<span class="hljs-string">&quot;服务器启动&quot;</span>);<br><br>	&#125;<br><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">run</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-keyword">while</span> (<span class="hljs-built_in">this</span>.isAlive()) &#123;<br>			<span class="hljs-keyword">try</span> &#123;<br>				<span class="hljs-comment">// 首先接受客户端的Socket</span><br>				<span class="hljs-type">Socket</span> <span class="hljs-variable">socket</span> <span class="hljs-operator">=</span> server.accept();<br>				<span class="hljs-type">BufferedReader</span> <span class="hljs-variable">bufferedReader</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(socket.getInputStream()));<br>				<span class="hljs-comment">// 读客户端发送的消息并显示</span><br>				<span class="hljs-type">String</span> <span class="hljs-variable">line</span> <span class="hljs-operator">=</span> bufferedReader.readLine();<br>				System.out.println(<span class="hljs-string">&quot;客户端发送的消息为：&quot;</span> + line);<br>				<span class="hljs-comment">// 将socket对应的输出流包装成为printstream</span><br>				<span class="hljs-type">PrintStream</span> <span class="hljs-variable">printStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PrintStream</span>(socket.getOutputStream());<br>				<span class="hljs-comment">// 往客户端发送消息</span><br>				printStream.println(<span class="hljs-string">&quot;您是第&quot;</span> + (++num) + <span class="hljs-string">&quot;个访问服务器的用户！&quot;</span>);<br>				printStream.close();<br>				bufferedReader.close();<br>				socket.close();<br>			&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>				e.printStackTrace();<span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> handle exception</span><br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>		<span class="hljs-keyword">new</span> <span class="hljs-title class_">Server</span>();<br>	&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>应用：实现一个简易的聊天室</strong></p>
+<pre><code class="java">客户端：
+package 网络编程;
+
+import java.awt.BorderLayout;
+import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+
+public class chatClient extends JFrame &#123;
+    Socket socket = null;
+    PrintStream pStream = null;
+    BufferedReader bReader = null;
+    JPanel jPanelbottom = null;
+    JScrollPane jScrollPane = null;
+    JLabel label_name = null;
+    JLabel label_txt = null;
+    JButton send = null;
+    JTextArea maintxt = null;
+    JTextField txt_name = null;
+    JTextField txt_input = null;
+
+    public chatClient() &#123;
+        // TODO Auto-generated constructor stub
+        // 组装底部一栏
+        super(&quot;聊天室&quot;);
+        label_name = new JLabel(&quot;昵称&quot;);
+        txt_name = new JTextField(5);
+        label_txt = new JLabel(&quot;输入消息&quot;);
+        txt_input = new JTextField(20);
+        send = new JButton(&quot;发送&quot;);
+        jPanelbottom = new JPanel();
+        jPanelbottom.add(label_name);
+        jPanelbottom.add(txt_name);
+        jPanelbottom.add(label_txt);
+        jPanelbottom.add(txt_input);
+        jPanelbottom.add(send);
+        this.add(jPanelbottom, BorderLayout.SOUTH);
+        // 组装显示主界面
+        maintxt = new JTextArea();
+        maintxt.setEditable(false);
+        jScrollPane = new JScrollPane(maintxt);
+        this.add(jScrollPane);
+        this.setSize(500, 300);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try &#123;
+            // 创建socket对象
+            socket = new Socket(&quot;10.0.218.101&quot;, 28888);
+            // 创建一个往socket里写数据的管道
+            pStream = new PrintStream(socket.getOutputStream());
+            // 创建一个从socket里读数据的管道
+            bReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        &#125; catch (Exception e) &#123;
+            e.printStackTrace();// TODO: handle exception
+        &#125;
+        // 为发送按钮注册监听
+        send.addActionListener(new ActionListener() &#123;
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) &#123;
+                // TODO Auto-generated method stub
+                String name = txt_name.getText();
+                String msg = txt_input.getText();
+                if (!msg.equals(&quot;&quot;)) &#123;
+                    pStream.println(name + &quot;说：&quot; + msg);
+                    pStream.flush();
+                    // 发送完毕清空输入框
+                    txt_input.setText(&quot;&quot;);
+                &#125;
+            &#125;
+        &#125;);
+        // 启动线程
+        new GetMsg().start();
+    &#125;
+
+    // 接收服务器返回信息的线程
+    class GetMsg extends Thread &#123;
+        public void run() &#123;
+            while (this.isAlive()) &#123;
+                try &#123;
+                    String getMsg = bReader.readLine();
+                    if (getMsg != null) &#123;
+                        // 主窗口显示信息并换行
+                        maintxt.append(getMsg + &quot;\n&quot;);
+                    &#125;
+                    Thread.sleep(50);
+                &#125; catch (Exception e) &#123;
+                    e.printStackTrace();// TODO: handle exception
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        new chatClient().setVisible(true);
+    &#125;
+&#125;
+
+
+服务端：
+package 网络编程;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+
+import javax.swing.JFrame;
+
+public class chatServer extends JFrame &#123;
+    // 声明服务器端套接字
+    ServerSocket serverSocket;
+    // 输入流列表集合
+    ArrayList&lt;BufferedReader&gt; bReaders = new ArrayList&lt;BufferedReader&gt;();
+    // 输出流列表集合
+    ArrayList&lt;PrintWriter&gt; pStreams = new ArrayList&lt;PrintWriter&gt;();
+    // 聊天信息链表集合
+    LinkedList&lt;String&gt; msgList = new LinkedList&lt;String&gt;();
+
+    public chatServer() &#123;
+        try &#123;
+            serverSocket = new ServerSocket(28888);
+        &#125; catch (Exception e) &#123;
+            e.printStackTrace();// TODO: handle exception
+        &#125;
+        // 创建接收客户端Socket的线程实例，并启动
+        new getMsg().start();
+        // 创建给客户端发送消息的线程实例，并启动
+        new SendMag().start();
+        System.out.println(&quot;服务器已经启动&quot;);
+
+    &#125;
+    // 接收客户端消息线程
+    class getMsg extends Thread &#123;
+        @Override
+        public void run() &#123;
+            // TODO Auto-generated method stub
+            while (this.isAlive()) &#123;
+                try &#123;
+                    // 接收一个客户端socket对象
+                    Socket socket = serverSocket.accept();
+                    if (socket != null) &#123;
+                        // 获取socket对象的输入流
+                        BufferedReader bReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        // 将输入流添加入输入流列表集合中
+                        bReaders.add(bReader);
+                        // 开启一个线程接收该客户的聊天信息
+                        new getMsg1(bReader).start();
+                        // 获取socket对象的输出流，并将其加入输出流列表中
+                        pStreams.add(new PrintWriter(socket.getOutputStream()));
+
+                    &#125;
+                &#125; catch (Exception e) &#123;
+                    e.printStackTrace();// TODO: handle exception
+                &#125;
+
+            &#125;
+        &#125;
+    &#125;
+
+    // 接收客户聊天信息的线程
+    class getMsg1 extends Thread &#123;
+        BufferedReader bReader;
+        public getMsg1(BufferedReader bReader) &#123;
+            this.bReader = bReader;
+        &#125;
+        @Override
+        public void run() &#123;
+            while (this.isAlive()) &#123;
+                try &#123;
+                    // 从输入流中读取一行消息
+                    String strMsg = bReader.readLine();
+                    if (strMsg != null) &#123;
+                        SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);
+                        String strTime = dateFormat.format(new Date());
+                        msgList.addFirst(&quot;&lt;== &quot; + strTime + &quot; ==&gt;\n&quot; + strMsg);
+                    &#125;
+                &#125; catch (Exception e) &#123;
+                    e.printStackTrace();// TODO: handle exception
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    // 给所有客户发送聊天信息的线程
+    class SendMag extends Thread &#123;
+        @Override
+        public void run() &#123;
+            while (this.isAlive()) &#123;
+                try &#123;
+                    // 如果信息链表不为空 发送
+                    if (!msgList.isEmpty()) &#123;
+                        String msg = msgList.removeLast();
+                        for (int i = 0; i &lt; pStreams.size(); i++) &#123;
+                            pStreams.get(i).println(msg);
+                            pStreams.get(i).flush();
+                        &#125;
+                    &#125;
+                &#125; catch (Exception e) &#123;
+                    // TODO: handle exception
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+    public static void main(String[] args) &#123;
+        new chatServer();
+    &#125;
+&#125;
+
+ 
+</code></pre>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/java/" class="category-chain-item">java</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/java/">#java</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>java网络编程</div>
+      <div>https://shanhainanhua.github.io/2019/09/03/java网络编程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2019年9月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/09/03/%E7%AC%AC%E4%B8%80%E7%AB%A0/" title="第一章">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">第一章</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/05/21/Eclipse%E8%BF%9E%E6%8E%A5MySQL%E6%95%B0%E6%8D%AE%E5%BA%93/" title="Eclipse连接MySQL数据库">
+                        <span class="hidden-mobile">Eclipse连接MySQL数据库</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
