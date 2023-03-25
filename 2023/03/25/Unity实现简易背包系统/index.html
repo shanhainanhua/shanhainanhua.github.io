@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Unity中使用ScriptableObject和UI实现背包系统">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity实现简易背包系统">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/03/25/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="Unity中使用ScriptableObject和UI实现背包系统">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/slot.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/ingorelayout.png">
+<meta property="article:published_time" content="2023-03-25T02:50:36.000Z">
+<meta property="article:modified_time" content="2023-03-25T05:48:29.079Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="背包系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/slot.png">
+  
+  
+  
+  <title>Unity实现简易背包系统 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Unity实现简易背包系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          73 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Unity实现简易背包系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>Unity中使用ScriptableObject和UI实现背包系统</p>
+<span id="more"></span>
+<p>ScriptableObject：<br></p>
+<ul>
+<li>ScriptableObject 是 Unity 提供的一个数据配置存储基类，它是一个可以用来保存大量数据的数据容器，我们可以将它保存为自定义的数据资源文件。</li>
+<li>ScriptableObject 是一个类似 MonoBehaviour 的基类，继承自 UnityEngine.Object 。要想使用它，需要我们写个脚本去继承 ScriptableObject 。需要注意的是，继承自 SctiptableObject 的脚本无法挂载到游戏物体上，毕竟它不是继承自 MonoBehaviour。</li>
+<li>ScriptableObject 类的实例会被保存成资源文件（.asset文件），和预制体，材质球，音频文件等类似，都是一种资源文件，存放在 Assets 文件夹下，创建出来的实例也是唯一存在的</li>
+<li>详细链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_46044366/article/details/124310241?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-124310241-blog-99649941.235%5Ev27%5Epc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-1-124310241-blog-99649941.235%5Ev27%5Epc_relevant_3mothn_strategy_recovery&utm_relevant_index=2">Unity进阶：ScriptableObject使用指南</a></li>
+</ul>
+<p>背包系统详细实现链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42896549/article/details/105033887">背包系统制作</a></p>
+<h1 id="背包功能实现"><a href="#背包功能实现" class="headerlink" title="背包功能实现"></a>背包功能实现</h1><p>核心代码和想法：<br><br>两个ScriptableObject: 分别代表物品和背包<br><br>Item.cs 物品</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br>[<span class="hljs-meta">CreateAssetMenu(fileName =<span class="hljs-string">&quot;New Item&quot;</span>,menuName =<span class="hljs-string">&quot;Inventory/New Item&quot;</span>)</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Item</span> : <span class="hljs-title">ScriptableObject</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> itemName;  <span class="hljs-comment">//物品名称</span><br>    <span class="hljs-keyword">public</span> Sprite itemImage;    <span class="hljs-comment">//物品图片</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> itemHeld;    <span class="hljs-comment">//物品数量</span><br>    [<span class="hljs-meta">TextArea</span>]<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> itemInfo; <span class="hljs-comment">//物品信息</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> equip;  <span class="hljs-comment">//物品是否可装备</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>Inventory.cs 背包</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br>[<span class="hljs-meta">CreateAssetMenu(fileName =<span class="hljs-string">&quot;New Inventory&quot;</span>,menuName =<span class="hljs-string">&quot;Inventory/New Inventory&quot;</span>)</span>]<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Inventory</span> : <span class="hljs-title">ScriptableObject</span><br>&#123;<br>    <span class="hljs-keyword">public</span> List&lt;Item&gt; itemList=<span class="hljs-keyword">new</span> List&lt;Item&gt;(); <span class="hljs-comment">//存放物品</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>让我们按照事件触发的逻辑走起。<br><br>首先我们是要碰撞到世界中的一个物体，然后会调用背包管理脚本添加物品。<br></p>
+<p>那么世界中的物体需要脚本来控制，在触发碰撞且碰撞对象为玩家（Player）时就要调用背包管理脚本添加物品，同时销毁自己。<br><br>当前物体在挂载脚本之后需要绑定两个object：Item和Inventory，表示是哪种类型的物体，该放在哪一个背包中。<br><br>让我们来看代码实现吧：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ItemOnWorld</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">public</span> Item thisItem;<br>    <span class="hljs-keyword">public</span> Inventory playerInventory;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnTriggerEnter2D</span>(<span class="hljs-params">Collider2D other</span>)</span> &#123;<br>        <span class="hljs-keyword">if</span>(other.gameObject.CompareTag(<span class="hljs-string">&quot;Player&quot;</span>))<br>        &#123;<br>            AddNewItem();<br>            Destroy(gameObject);<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AddNewItem</span>()</span>&#123;<br>        <span class="hljs-comment">//判断是否在列表中，在 先加1</span><br>        <span class="hljs-keyword">if</span>(!playerInventory.itemList.Contains(thisItem))&#123;<br>            <span class="hljs-comment">// playerInventory.itemList.Add(thisItem);</span><br>            <span class="hljs-keyword">for</span>(<span class="hljs-built_in">int</span> i=<span class="hljs-number">0</span>;i&lt;playerInventory.itemList.Count;i++)&#123;<br>                <span class="hljs-keyword">if</span>(playerInventory.itemList[i]==<span class="hljs-literal">null</span>)&#123;<br>                    playerInventory.itemList[i]=thisItem;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            thisItem.itemHeld+=<span class="hljs-number">1</span>;<br>        &#125;<br>        InventoryManger.RefreshItem();<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>先修改背包的数据，然后调用RefreshItem重新生成每一个背包槽</p>
+<p>在一开始游戏初始化的时候，我们需要预先生成一些空槽位来填充grid panel，方便之后实现拖拽功能。空槽位的大小需要我们预先在Inventory对象中定义。修改myBag的itemList大小即可。<br><br>InventoryManger.cs</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> TMPro;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">InventoryManger</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">static</span> InventoryManger instance;<br>    <span class="hljs-keyword">public</span> Inventory myBag;<br>    <span class="hljs-keyword">public</span> GameObject slotGrid;<br>    <span class="hljs-comment">// public Slot slotPrefab;</span><br>    <span class="hljs-keyword">public</span> GameObject emptySlot;<br>    <span class="hljs-keyword">public</span> TMP_Text itemInformation;<br>    <span class="hljs-keyword">public</span> List&lt;GameObject&gt; slots=<span class="hljs-keyword">new</span> List&lt;GameObject&gt;();<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">if</span> (instance != <span class="hljs-literal">null</span>)<br>            Destroy(<span class="hljs-keyword">this</span>);<br>        instance = <span class="hljs-keyword">this</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnEnable</span>()</span><br>    &#123;<br>        RefreshItem();<br>        itemInformation.text = <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UpdateItemInformation</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> itemDescription</span>)</span><br>    &#123;<br>        instance.itemInformation.text = itemDescription;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">RefreshItem</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; instance.slotGrid.transform.childCount; i++)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (instance.slotGrid.transform.childCount == <span class="hljs-number">0</span>)<br>                <span class="hljs-keyword">break</span>;<br>            Destroy(instance.slotGrid.transform.GetChild(i).gameObject);<br>            instance.slots.Clear();<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; instance.myBag.itemList.Count; i++)<br>        &#123;<br>            instance.slots.Add(Instantiate(instance.emptySlot));<br>            instance.slots[i].transform.SetParent(instance.slotGrid.transform);<br>            instance.slots[i].GetComponent&lt;Slot&gt;().slotID=i;<br>            instance.slots[i].GetComponent&lt;Slot&gt;().SetupSlot(instance.myBag.itemList[i]);<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>可以看到这个背包管理脚本的核心就是控制销毁或实例化slot物体。<br>slot是什么呢？<br><br>Slot本身不再承载装备的素材图片，仅呈现出背包栏背景图片样式，实际的图片以及数字由Slot下的相关子物体承载。这样在没有物品时，只需将子物体的active属性设置为false即可正常显示背包栏背景，而对于物品的移动和交换，只需要将两个Slot下的子物体交换即可。<br><br>Slot.cs</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> UnityEngine.UI;<br><span class="hljs-keyword">using</span> TMPro;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Slot</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> slotID; <span class="hljs-comment">//空格ID=物体ID</span><br>    <span class="hljs-keyword">public</span> Item slotItem;<br>    <span class="hljs-keyword">public</span> Image slotImage;<br>    <span class="hljs-keyword">public</span> TMP_Text slotNum;<br>    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> slotInfo;<br>    <span class="hljs-keyword">public</span> GameObject itemInSlot;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ItemOnClicked</span>()</span><br>    &#123;<br>        InventoryManger.UpdateItemInformation(slotInfo);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetupSlot</span>(<span class="hljs-params">Item item</span>)</span>&#123;<br>        <span class="hljs-keyword">if</span>(item==<span class="hljs-literal">null</span>)&#123;<br>            itemInSlot.SetActive(<span class="hljs-literal">false</span>);<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            slotImage.sprite=item.itemImage;<br>            slotNum.text=item.itemHeld.ToString();<br>            slotInfo=item.itemInfo;<br>        &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p>这里的绑定关系如图所示:<br><img src="/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/slot.png" srcset="/img/loading.gif" lazyload><br>当调用SetupSlot的时候就会显示当前类型物品的图片和数量，并更新描述信息。<br></p>
+<p>实现拖拽功能，主要靠交换slot下的item来实现，因此需要创建ItemOnDrag脚本并赋给item对象。<br><br>注意点：</p>
+<ol>
+<li>拖拽的时候解除item和slot的父子关系，但是此时它还是位于Gird布局下，因此会“溢出”，所以要给item添加组件，忽略布局<img src="/Unity%E5%AE%9E%E7%8E%B0%E7%AE%80%E6%98%93%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/ingorelayout.png" srcset="/img/loading.gif" lazyload></li>
+<li>如何判读拖拽后的位置可以放物体进去。使用UI射线检测，为了避免item挡住检测，要给它添加CanvasGroup组件，通过设置blocksRaycasts来控制是否阻止射线检测。</li>
+<li>如果只是交换item的位置并不能实际改变数据，下次调用RefreshItem()又会重置会原来的样子，所以需要实际交换背包的itemList对应的内容才行。<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> UnityEngine.EventSystems;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ItemOnDrag</span> : <span class="hljs-title">MonoBehaviour</span>, <span class="hljs-title">IBeginDragHandler</span>, <span class="hljs-title">IDragHandler</span>, <span class="hljs-title">IEndDragHandler</span><br>&#123;<br>    <span class="hljs-keyword">public</span> Transform originalParent;<br>    <span class="hljs-keyword">public</span> Inventory myBag;<br>    <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> currentItemID; <span class="hljs-comment">//当前物品ID</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnBeginDrag</span>(<span class="hljs-params">PointerEventData eventData</span>)</span><br>    &#123;<br>        originalParent=transform.parent;<br>        currentItemID=originalParent.GetComponent&lt;Slot&gt;().slotID;<br>        transform.SetParent(transform.parent.parent);<br>        transform.position=eventData.position;<br>        GetComponent&lt;CanvasGroup&gt;().blocksRaycasts=<span class="hljs-literal">false</span>;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnDrag</span>(<span class="hljs-params">PointerEventData eventData</span>)</span><br>    &#123;<br>        transform.position=eventData.position;<br>        Debug.Log(eventData.pointerCurrentRaycast.gameObject.name);<br><br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnEndDrag</span>(<span class="hljs-params">PointerEventData eventData</span>)</span><br>    &#123;<br>        <span class="hljs-keyword">if</span>(eventData.pointerCurrentRaycast.gameObject!=<span class="hljs-literal">null</span>)<br>            <span class="hljs-keyword">if</span>(eventData.pointerCurrentRaycast.gameObject.name==<span class="hljs-string">&quot;ItemImage&quot;</span>)&#123;<br>                transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform.parent.parent);<br>                transform.position=eventData.pointerCurrentRaycast.gameObject.transform.parent.parent.position;<br><br>                <span class="hljs-comment">//实际数据改变</span><br>                <span class="hljs-keyword">var</span> tmp=myBag.itemList[currentItemID];<br>                myBag.itemList[currentItemID]=myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID];<br>                myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID]=tmp;<br><br><br>                eventData.pointerCurrentRaycast.gameObject.transform.parent.position=originalParent.position;<br>                eventData.pointerCurrentRaycast.gameObject.transform.parent.SetParent(originalParent);<br>                GetComponent&lt;CanvasGroup&gt;().blocksRaycasts=<span class="hljs-literal">true</span>;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span>(eventData.pointerCurrentRaycast.gameObject.name==<span class="hljs-string">&quot;slot(Clone)&quot;</span>)<br>            &#123;<br>                transform.SetParent(eventData.pointerCurrentRaycast.gameObject.transform);<br>                transform.position=eventData.pointerCurrentRaycast.gameObject.transform.position;<br>                myBag.itemList[eventData.pointerCurrentRaycast.gameObject.GetComponentInParent&lt;Slot&gt;().slotID]=myBag.itemList[currentItemID];<br>                <span class="hljs-keyword">if</span>(eventData.pointerCurrentRaycast.gameObject.GetComponent&lt;Slot&gt;().slotID!=currentItemID)<br>                    myBag.itemList[currentItemID]=<span class="hljs-literal">null</span>;<br>                GetComponent&lt;CanvasGroup&gt;().blocksRaycasts=<span class="hljs-literal">true</span>;    <br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>        <span class="hljs-comment">//其他任何位置都归位</span><br>        transform.SetParent(originalParent);<br>        transform.position=originalParent.position;<br>        GetComponent&lt;CanvasGroup&gt;().blocksRaycasts=<span class="hljs-literal">true</span>;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="移动背包"><a href="#移动背包" class="headerlink" title="移动背包"></a>移动背包</h1><p>最后需要做是移动背包整体界面的功能，通过在一个简单的脚本实现</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> UnityEngine.EventSystems;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MoveBag</span> : <span class="hljs-title">MonoBehaviour</span>, <span class="hljs-title">IDragHandler</span><br>&#123;<br>    <span class="hljs-keyword">public</span> Canvas canvas;<br>    RectTransform currentRect;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Awake</span>()</span><br>    &#123;<br>        currentRect = GetComponent&lt;RectTransform&gt;();<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnDrag</span>(<span class="hljs-params">PointerEventData eventData</span>)</span><br>    &#123;<br>        currentRect.anchoredPosition+=eventData.delta;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h1 id="保存背包数据到本地，下次加载"><a href="#保存背包数据到本地，下次加载" class="headerlink" title="保存背包数据到本地，下次加载"></a>保存背包数据到本地，下次加载</h1><p>在场景中新建空物体，挂载GameSaveManger脚本，绑定想保存的背包</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">using</span> System.Collections;<br><span class="hljs-keyword">using</span> System.Collections.Generic;<br><span class="hljs-keyword">using</span> UnityEngine;<br><span class="hljs-keyword">using</span> System.IO;<br><span class="hljs-keyword">using</span> System.Runtime.Serialization.Formatters.Binary;<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">GameSaveManger</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-keyword">public</span> Inventory myInventory;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveGame</span>()</span>&#123;<br>        <span class="hljs-keyword">if</span>(!Directory.Exists(Application.persistentDataPath+<span class="hljs-string">&quot;/game_SaveData&quot;</span>))&#123;&#125;<br>            Directory.CreateDirectory(Application.persistentDataPath+<span class="hljs-string">&quot;/game_SaveData&quot;</span>);<br>        BinaryFormatter formatter=<span class="hljs-keyword">new</span> BinaryFormatter(); <span class="hljs-comment">//二进制转换</span><br>        FileStream file=File.Create(Application.persistentDataPath+<span class="hljs-string">&quot;/game_SaveData/inventory.txt&quot;</span>);<br>        <span class="hljs-keyword">var</span> json=JsonUtility.ToJson(myInventory);<br>        formatter.Serialize(file,json);<br>        file.Close();<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">LoadGame</span>()</span>&#123;<br>        BinaryFormatter binaryFormatter=<span class="hljs-keyword">new</span> BinaryFormatter();<br>        <span class="hljs-keyword">if</span>(File.Exists(Application.persistentDataPath+<span class="hljs-string">&quot;/game_SaveData/inventory.txt&quot;</span>))&#123;<br>            FileStream file=File.Open(Application.persistentDataPath+<span class="hljs-string">&quot;/game_SaveData/inventory.txt&quot;</span>,FileMode.Open);<br>            JsonUtility.FromJsonOverwrite((<span class="hljs-built_in">string</span>)binaryFormatter.Deserialize(file),myInventory);<br>            file.Close();<br>        &#125;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Unity/" class="category-chain-item">Unity</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%83%8C%E5%8C%85%E7%B3%BB%E7%BB%9F/">#背包系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Unity实现简易背包系统</div>
+      <div>https://shanhainanhua.github.io/2023/03/25/Unity实现简易背包系统/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年3月25日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/23/chatglm-with-vits%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2/" title="chatglm_with_vits本地部署">
+                        <span class="hidden-mobile">chatglm_with_vits本地部署</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
