@@ -1,0 +1,953 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="记录常考，应知应会的操作系统八股，主要参考阿秀的学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统八股一">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/04/04/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%85%AB%E8%82%A1%E4%B8%80/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="记录常考，应知应会的操作系统八股，主要参考阿秀的学习笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s8286d7938efe4cb90d573a6cd1c9406b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4Mjg2ZDc5MzhlZmU0Y2I5MGQ1NzNhNmNkMWM5NDA2YiJ9.hn4zp9Ii5GVglmLLEbWdep8dOf__piIowfXeRefOp7Q&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s4b0abe7a324cb323ea33ee1330570f66?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YjBhYmU3YTMyNGNiMzIzZWEzM2VlMTMzMDU3MGY2NiJ9.5tW2VgJyLHk4D3-0SDokfpEKjbwHwGZmUuqbbD0zSG8&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sc22e9a71ff59e3084daf18351aeae152?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNjMjJlOWE3MWZmNTllMzA4NGRhZjE4MzUxYWVhZTE1MiJ9.OjHE-LEWzGT3ar-rfLqSboYpHiQo-jpNEcBHf3C2DjI&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s58871d06cd5be8998835dcd63b336579?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM1ODg3MWQwNmNkNWJlODk5ODgzNWRjZDYzYjMzNjU3OSJ9.A7PUTPUcN0gTy246ThTro2YI9gxSMWtPnRWQLrd3M6c&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sa58a1bf6197190c903d0b7ec193eaedf?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhNThhMWJmNjE5NzE5MGM5MDNkMGI3ZWMxOTNlYWVkZiJ9.kfevWp4H9LfHsMsIf4TDeeLxlRIbKsPB0gBEwkbYDCw&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s199216a1a2a9d90294fdc96d78cad3bf?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxOTkyMTZhMWEyYTlkOTAyOTRmZGM5NmQ3OGNhZDNiZiJ9.9u05WNMbFz4a7iZEe5dZQe0flLXSBMq4jgk6xDV7UJQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sc81ae0a07962003ad5444f4cffe38711?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNjODFhZTBhMDc5NjIwMDNhZDU0NDRmNGNmZmUzODcxMSJ9.uRhzEpzXaS_iQemnIQp3hgZ60wOmIOcoxhftezv4Tek&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s79bd22620f4016c67d23e4d02f2c318d?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxOTgwOSwiaWF0IjoxNjgwNjE2MjA5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3OWJkMjI2MjBmNDAxNmM2N2QyM2U0ZDAyZjJjMzE4ZCJ9.d02LRxy_DTWiRqHydF0QDLXh4FXTrkJOlWsZ_L8MpRQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sbf93ac27536bd00b7ecd220e92f3acc5?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxODAzMywiaWF0IjoxNjgwNjE0NDMzLCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNiZjkzYWMyNzUzNmJkMDBiN2VjZDIyMGU5MmYzYWNjNSJ9.KphocziHcQ5tFYvV1hrXuXFxTlEW34204l6OWy8cj6M&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s4bf5d89126a94650856641e578749e92?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzY1OSwiaWF0IjoxNjgwNjE0MDU5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YmY1ZDg5MTI2YTk0NjUwODU2NjQxZTU3ODc0OWU5MiJ9.q9Q0YR8A5xiGM4Wpj6gkjJ7kqB1hg2oHgMUF2cn-c-0&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sd0a417832687c63684d52c75f4a8fcea?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkMGE0MTc4MzI2ODdjNjM2ODRkNTJjNzVmNGE4ZmNlYSJ9.O7TWxSGvrK-YK3CDXfPbPT7dTQCOyjB3xE6ubRQ9Sxo&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s7cfdeb6bfd6c2d80ac929cf4f71f56df?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3Y2ZkZWI2YmZkNmMyZDgwYWM5MjljZjRmNzFmNTZkZiJ9.HTgypvjvctSAfgNSMGnzcIb9azhq_WKjVXCI52Xe2KI&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s8444da01754b03726bb13e147ffc23fc?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4NDQ0ZGEwMTc1NGIwMzcyNmJiMTNlMTQ3ZmZjMjNmYyJ9.gifNII9FqSdEl3iRcmbTRa7xj-aCuQMdpEw6xhcbuoA&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sf8158918cc2fd0bd3eaaac8583999099?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNmODE1ODkxOGNjMmZkMGJkM2VhYWFjODU4Mzk5OTA5OSJ9.IjCtC0gfiw43I16f0r9VhRpFEpQcBPDbt6-2XRgcbuQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s06c57d449d2af0f70e419fc586ea447f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzQxMCwiaWF0IjoxNjgwNjEzODEwLCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMwNmM1N2Q0NDlkMmFmMGY3MGU0MTlmYzU4NmVhNDQ3ZiJ9.TKShIBrB90_e_bNoT0ScK1z4ZMa_MBBREP1Gp8PusDs&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s70410a137d79c6652f4c0bc1a96b8b4b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzQ4NywiaWF0IjoxNjgwNjEzODg3LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3MDQxMGExMzdkNzljNjY1MmY0YzBiYzFhOTZiOGI0YiJ9.ZwEypmq0eIhqLBwZ-3Bejiau3Nz3JvVEOvWaoWN3Sx8&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s37e8bccb1eb76f020b3c3f23c9964f47?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxODQwOCwiaWF0IjoxNjgwNjE0ODA4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMzN2U4YmNjYjFlYjc2ZjAyMGIzYzNmMjNjOTk2NGY0NyJ9.AZF9QwjMpxGEzJ-DIEYrroWuysSmHmPKB4stW-SdIgM&download=image.png">
+<meta property="article:published_time" content="2023-04-04T13:53:36.000Z">
+<meta property="article:modified_time" content="2023-04-04T13:56:55.291Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tcs.teambition.net/storage/312s8286d7938efe4cb90d573a6cd1c9406b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4Mjg2ZDc5MzhlZmU0Y2I5MGQ1NzNhNmNkMWM5NDA2YiJ9.hn4zp9Ii5GVglmLLEbWdep8dOf__piIowfXeRefOp7Q&download=image.png">
+  
+  
+  
+  <title>操作系统八股一 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <!--其中rgba中的a，指的是mask文件的alpha，透明度-->
+	<div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+	<div id="banner_video_insert">
+	</div>	
+	<div id='vvd_banner_img'>
+	</div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="操作系统八股一"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          74 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+	<script type="text/javascript" src="/vvd_js/jquery.js"></script>
+
+	<div class="banner" id='banner' >
+
+		<div class="full-bg-img" >
+
+			
+				<script>
+					var ua = navigator.userAgent;
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+						isMobile = isIphone || isAndroid;
+
+					function set_video_attr(id){
+
+						var height = document.body.clientHeight
+						var width = document.body.clientWidth
+						var video_item = document.getElementById(id);
+
+						if (height / width < 0.56){
+							video_item.setAttribute('width', '100%');
+							video_item.setAttribute('height', 'auto');
+						} else {
+							video_item.setAttribute('height', '100%');
+							video_item.setAttribute('width', 'auto');
+						}
+					}
+
+					$.getJSON('/vvd_js/video_url.json', function(data){
+						if (true){
+							var video_list_length = data.length
+							var seed = Math.random()
+							index = Math.floor(seed * video_list_length)
+							
+							video_url = data[index][0]
+							pre_show_image_url = data[index][1]
+							
+							banner_obj = document.getElementById("banner")
+							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+							vvd_banner_obj = document.getElementById("vvd_banner_img")
+
+							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+							vvd_banner_obj.innerHTML = vvd_banner_content
+							set_video_attr('banner_img_item')
+
+							if (!isMobile) {
+								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+								document.getElementById("banner_video_insert").innerHTML = video_html_res;
+								set_video_attr('video_item')
+							}
+						}
+					});
+
+					if (!isMobile){
+						window.onresize = function(){
+							set_video_attr('video_item')
+							}
+						}
+				</script>
+			
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">操作系统八股一</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p> 记录常考，应知应会的操作系统八股，主要参考<a target="_blank" rel="noopener" href="https://interviewguide.cn/notes/03-hunting_job/02-interview/02-02-os.html">阿秀的学习笔记</a><br> <span id="more"></span></p>
+<h1 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h1><h2 id="操作系统内存管理功能"><a href="#操作系统内存管理功能" class="headerlink" title="操作系统内存管理功能"></a>操作系统内存管理功能</h2><ul>
+<li><p>操作系统负责内存空间的分配与回收。</p>
+</li>
+<li><p>操作系统需要提供某种技术从逻辑上对内存空间进行扩充。</p>
+</li>
+<li><p>操作系统需要提供地址转换功能，负责程序的逻辑地址与物理地址的转换。</p>
+</li>
+<li><p>操作系统需要提供内存保护功能。保证各进程在各自存储空间内运行，互不干扰</p>
+</li>
+</ul>
+<h2 id="进程，线程，协程"><a href="#进程，线程，协程" class="headerlink" title="进程，线程，协程"></a>进程，线程，协程</h2><p><img src="https://tcs.teambition.net/storage/312s8286d7938efe4cb90d573a6cd1c9406b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4Mjg2ZDc5MzhlZmU0Y2I5MGQ1NzNhNmNkMWM5NDA2YiJ9.hn4zp9Ii5GVglmLLEbWdep8dOf__piIowfXeRefOp7Q&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>根本区别在于 多进程中每个进程有自己的地址空间，线程则共享地址空间</p>
+<p>进程通信方式：</p>
+<p><img src="https://tcs.teambition.net/storage/312s4b0abe7a324cb323ea33ee1330570f66?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YjBhYmU3YTMyNGNiMzIzZWEzM2VlMTMzMDU3MGY2NiJ9.5tW2VgJyLHk4D3-0SDokfpEKjbwHwGZmUuqbbD0zSG8&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>线程通信方式：</p>
+<p><img src="https://tcs.teambition.net/storage/312sc22e9a71ff59e3084daf18351aeae152?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNjMjJlOWE3MWZmNTllMzA4NGRhZjE4MzUxYWVhZTE1MiJ9.OjHE-LEWzGT3ar-rfLqSboYpHiQo-jpNEcBHf3C2DjI&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s58871d06cd5be8998835dcd63b336579?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM1ODg3MWQwNmNkNWJlODk5ODgzNWRjZDYzYjMzNjU3OSJ9.A7PUTPUcN0gTy246ThTro2YI9gxSMWtPnRWQLrd3M6c&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>为什么会有协程是轻量级线程的说法呢？因为协程具有中断可恢复的特性，那么只需要在开一个全局的数组存储所有的协程，在协程中断时，不断轮转调用下一个协程继续运行即可； 这看起来似乎和线程无异，但其实有巨大的区别，<strong>因为协程本质是函数，调用协程后原来的地方就会被阻塞，协程处理完了才返回结果，这是天然同步的</strong>，而多线程无法做到这点，因为多线程的调度受内核控制，触发点来自于硬件时钟中断不可预见，同时又运行在多核心下，调用后运行次序是不确定的，想实现同步调用就必须通过std::promise&#x2F;future 去辅佐，但为了性能往往见到的是异步+回调的方式进行多线程的交互，异步回调代码的可读性是很差的而且还需要考虑一大堆并发上锁的情况，<strong>协程因其函数本质，是天然同步的，而在遇到阻塞条件时候，把cpu让给别的协程，等条件满足了再通过中断可恢复的特性再继续运行，就实现了并发，同步+并发就是协程强大的地方，其使用范式和轮转+同步非阻塞很像</strong></p>
+<p>最大的优势就是协程极高的执行效率。因为子程序切换不是线程切换，而是由程序自身控制，因此，没有线程切换的开销，和多线程比，线程数量越多，协程的性能优势就越明显。</p>
+<p>第二大优势就是不需要多线程的锁机制，因为只有一个线程，也不存在同时写变量冲突，在协程中控制共享资源不加锁，只需要判断状态就好了，所以执行效率比多线程高很多</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/279383752">Unity协程的原理与应用</a></p>
+<h2 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h2><p>1、先来先服务</p>
+<p>2、短作业优先</p>
+<p>3、最短剩余时间优先</p>
+<p>4、时间片轮转</p>
+<p>5、优先级调度</p>
+<p>6、多级反馈队列</p>
+<h2 id="进程同步的四种方法"><a href="#进程同步的四种方法" class="headerlink" title="进程同步的四种方法"></a>进程同步的四种方法</h2><p>1、临界区</p>
+<p>2、同步与互斥</p>
+<p>3、信号量（生产者，消费者问题）</p>
+<p>4、管程（引入了条件变量和相关操作）在信号量基础上改进的并发编程模型</p>
+<p><img src="https://tcs.teambition.net/storage/312sa58a1bf6197190c903d0b7ec193eaedf?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhNThhMWJmNjE5NzE5MGM5MDNkMGI3ZWMxOTNlYWVkZiJ9.kfevWp4H9LfHsMsIf4TDeeLxlRIbKsPB0gBEwkbYDCw&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s199216a1a2a9d90294fdc96d78cad3bf?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxOTkyMTZhMWEyYTlkOTAyOTRmZGM5NmQ3OGNhZDNiZiJ9.9u05WNMbFz4a7iZEe5dZQe0flLXSBMq4jgk6xDV7UJQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="进程状态转换"><a href="#进程状态转换" class="headerlink" title="进程状态转换"></a>进程状态转换</h2><p><img src="https://tcs.teambition.net/storage/312sc81ae0a07962003ad5444f4cffe38711?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNjODFhZTBhMDc5NjIwMDNhZDU0NDRmNGNmZmUzODcxMSJ9.uRhzEpzXaS_iQemnIQp3hgZ60wOmIOcoxhftezv4Tek&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>就绪状态（ready）：等待被调度</p>
+</li>
+<li><p>运行状态（running）</p>
+</li>
+<li><p>阻塞状态（waiting）：等待资源</p>
+</li>
+</ul>
+<p>应该注意以下内容：</p>
+<ul>
+<li><p>只有就绪态和运行态可以相互转换，其它的都是单向转换。就绪状态的进程通过调度算法从而获得 CPU 时间，转为运行状态；而运行状态的进程，在分配给它的 CPU 时间片用完之后就会转为就绪状态，等待下一次调度。</p>
+</li>
+<li><p>阻塞状态是缺少需要的资源从而由运行状态转换而来，但是该资源不包括 CPU 时间，缺少 CPU 时间会从运行态转换为就绪态。</p>
+</li>
+</ul>
+<h2 id="回收线程方法"><a href="#回收线程方法" class="headerlink" title="回收线程方法"></a>回收线程方法</h2><ul>
+<li><p><strong>等待线程结束：</strong> int pthread_join(pthread_t tid, void** retval);主线程调用，等待子线程退出并回收其资源，类似于进程中wait&#x2F;waitpid回收僵尸进程，调用pthread_join的线程会被阻塞。</p>
+<ul>
+<li><p>tid：创建线程时通过指针得到tid值。</p>
+</li>
+<li><p>retval：指向返回值的指针。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>结束线程：</strong> void pthread_exit(void *retval);子线程执行，用来结束当前线程并通过retval传递返回值，该返回值可通过pthread_join获得。</p>
+<ul>
+<li>retval：同上。</li>
+</ul>
+</li>
+<li><p><strong>分离线程：</strong> int pthread_detach(pthread_t tid);主线程、子线程均可调用。主线程中pthread_detach(tid)，子线程中pthread_detach(pthread_self())，调用后和主线程分离，子线程结束时自己立即回收资源。</p>
+</li>
+</ul>
+<p>终端退出，终端运行的进程会怎么样？</p>
+<p>终端在退出时会发送SIGHUP给对应的bash进程，bash进程收到这个信号后首先将它发给session下面的进程，如果程序没有对SIGHUP信号做特殊处理，那么进程就会随着终端关闭而退出</p>
+<h2 id="如何让进程后台运行"><a href="#如何让进程后台运行" class="headerlink" title="如何让进程后台运行"></a>如何让进程后台运行</h2><p>（1）命令后面加上&amp;即可，实际上，这样是将命令放入到一个作业队列中了</p>
+<p>（2）ctrl + z 挂起进程，使用jobs查看序号，在使用bg %序号后台运行进程</p>
+<p>（3）nohup + &amp;，将标准输出和标准错误缺省会被重定向到 nohup.out 文件中，忽略所有挂断（SIGHUP）信号</p>
+<p>（4）运行指令前面 + setsid，使其父进程编程init进程，不受HUP信号的影响</p>
+<p>（5）将 命令+ &amp;放在()括号中，也可以是进程不受HUP信号的影响</p>
+<h2 id="进程终止的几种方式"><a href="#进程终止的几种方式" class="headerlink" title="进程终止的几种方式"></a>进程终止的几种方式</h2><p>1、main函数的自然返回，<code>return</code> </p>
+<p>2、调用<code>exit</code>函数，属于c的函数库 </p>
+<p>3、调用<code>_exit</code>函数，属于系统调用 </p>
+<p>4、调用<code>abort</code>函数，异常程序终止，同时发送SIGABRT信号给调用进程。 </p>
+<p>5、接受能导致进程终止的信号：ctrl+c (^C)、SIGINT(SIGINT中断进程)</p>
+<p><img src="https://tcs.teambition.net/storage/312s79bd22620f4016c67d23e4d02f2c318d?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxOTgwOSwiaWF0IjoxNjgwNjE2MjA5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3OWJkMjI2MjBmNDAxNmM2N2QyM2U0ZDAyZjJjMzE4ZCJ9.d02LRxy_DTWiRqHydF0QDLXh4FXTrkJOlWsZ_L8MpRQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="守护进程、僵尸进程和孤儿进程"><a href="#守护进程、僵尸进程和孤儿进程" class="headerlink" title="守护进程、僵尸进程和孤儿进程"></a>守护进程、僵尸进程和孤儿进程</h2><h3 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h3><p>指在后台运行的，没有控制终端与之相连的进程。它独立于控制终端，周期性地执行某种任务。Linux的大多数服务器就是用守护进程的方式实现的，如web服务器进程http等</p>
+<p>创建守护进程要点：</p>
+<p>（1）让程序在后台执行。方法是调用fork（）产生一个子进程，然后使父进程退出。</p>
+<p>（2）调用setsid（）创建一个新对话期。控制终端、登录会话和进程组通常是从父进程继承下来的，守护进程要摆脱它们，不受它们的影响，方法是调用setsid（）使进程成为一个会话组长。setsid（）调用成功后，进程成为新的会话组长和进程组长，并与原来的登录会话、进程组和控制终端脱离。</p>
+<p>（3）禁止进程重新打开控制终端。经过以上步骤，进程已经成为一个无终端的会话组长，但是它可以重新申请打开一个终端。为了避免这种情况发生，可以通过使进程不再是会话组长来实现。再一次通过fork（）创建新的子进程，使调用fork的进程退出。</p>
+<p>（4）关闭不再需要的文件描述符。子进程从父进程继承打开的文件描述符。如不关闭，将会浪费系统资源，造成进程所在的文件系统无法卸下以及引起无法预料的错误。首先获得最高文件描述符值，然后用一个循环程序，关闭0到最高文件描述符值的所有文件描述符。</p>
+<p>（5）将当前目录更改为根目录。</p>
+<p>（6）子进程从父进程继承的文件创建屏蔽字可能会拒绝某些许可权。为防止这一点，使用unmask（0）将屏蔽字清零。</p>
+<p>（7）处理SIGCHLD信号。对于服务器进程，在请求到来时往往生成子进程处理请求。如果子进程等待父进程捕获状态，则子进程将成为僵尸进程（zombie），从而占用系统资源。如果父进程等待子进程结束，将增加父进程的负担，影响服务器进程的并发性能。在Linux下可以简单地将SIGCHLD信号的操作设为SIG_IGN。这样，子进程结束时不会产生僵尸进程。</p>
+<p><img src="https://tcs.teambition.net/storage/312sbf93ac27536bd00b7ecd220e92f3acc5?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxODAzMywiaWF0IjoxNjgwNjE0NDMzLCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNiZjkzYWMyNzUzNmJkMDBiN2VjZDIyMGU5MmYzYWNjNSJ9.KphocziHcQ5tFYvV1hrXuXFxTlEW34204l6OWy8cj6M&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h3><p>如果父进程先退出，子进程还没退出，那么子进程的父进程将变为init进程。（注：任何一个进程都必须有父进程）。</p>
+<p>一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。孤儿进程将被init进程(进程号为1)所收养，并由init进程对它们完成状态收集工作</p>
+<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><p>如果子进程先退出，父进程还没退出，那么子进程必须等到父进程捕获到了子进程的退出状态才真正结束，否则这个时候子进程就成为僵尸进程。</p>
+<p>设置<strong>僵尸进程的目</strong>的是维护子进程的信息，以便父进程在以后某个时候获取。这些信息至少包括进程ID，进程的终止状态，以及该进程使用的CPU时间，所以当终止子进程的父进程调用wait或waitpid时就可以得到这些信息。如果一个进程终止，而该进程有子进程处于僵尸状态，那么它的所有僵尸子进程的父进程ID将被重置为1（init进程）。继承这些子进程的init进程将清理它们（也就是说init进程将wait它们，从而去除它们的僵尸状态）</p>
+<h3 id="避免僵尸进程"><a href="#避免僵尸进程" class="headerlink" title="避免僵尸进程"></a>避免僵尸进程</h3><ul>
+<li><p>通过signal(SIGCHLD, SIG_IGN)通知内核对子进程的结束不关心，由内核回收。如果不想让父进程挂起，可以在父进程中加入一条语句：signal(SIGCHLD,SIG_IGN);表示父进程忽略SIGCHLD信号，该信号是子进程退出的时候向父进程发送的。</p>
+</li>
+<li><p>父进程调用wait&#x2F;waitpid等函数等待子进程结束，如果尚无子进程退出wait会导致父进程阻塞。waitpid可以通过传递WNOHANG使父进程不阻塞立即返回。</p>
+</li>
+<li><p>如果父进程很忙可以用signal注册信号处理函数，在信号处理函数调用wait&#x2F;waitpid等待子进程退出。</p>
+</li>
+<li><p>通过两次调用fork。父进程首先调用fork创建一个子进程然后waitpid等待子进程退出，子进程再fork一个孙进程后退出。这样子进程退出后会被父进程等待回收，而对于孙子进程其父进程已经退出所以孙进程成为一个孤儿进程，孤儿进程由init进程接管，孙进程结束后，init会等待回收。</p>
+</li>
+</ul>
+<p>第一种方法忽略SIGCHLD信号，这常用于并发服务器的性能的一个技巧因为并发服务器常常fork很多子进程，子进程终结之后需要服务器进程去wait清理资源。如果将此信号的处理方式设为忽略，可让内核把僵尸子进程转交给init进程去处理，省去了大量僵尸进程占用系统资源。</p>
+<h2 id="父进程、子进程、进程组、作业和会话"><a href="#父进程、子进程、进程组、作业和会话" class="headerlink" title="父进程、子进程、进程组、作业和会话"></a>父进程、子进程、进程组、作业和会话</h2><h3 id="父进程"><a href="#父进程" class="headerlink" title="父进程"></a>父进程</h3><p>已创建一个或多个子进程的进程</p>
+<h3 id="子进程"><a href="#子进程" class="headerlink" title="子进程"></a>子进程</h3><p>由fork创建的新进程被称为子进程（child process）。该函数被调用一次，但返回两次。两次返回的区别是子进程的返回值是0，而父进程的返回值则是新进程（子进程）的进程 id。将子进程id返回给父进程的理由是：因为一个进程的子进程可以多于一个，没有一个函数使一个进程可以获得其所有子进程的进程id。对子进程来说，之所以fork返回0给它，是因为它随时可以调用getpid()来获取自己的pid；也可以调用getppid()来获取父进程的id。(进程id 0总是由交换进程使用，所以一个子进程的进程id不可能为0 )。</p>
+<p>fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，但是数据空间是互相独立的，子进程数据空间中的内容是父进程的完整拷贝，指令指针也完全相同，子进程拥有父进程当前运行到的位置（两进程的程序计数器pc值相同，也就是说，子进程是从fork返回处开始执行的），但有一点不同，如果fork成功，子进程中fork的返回值是0，父进程中fork的返回值是子进程的进程号，如果fork不成功，父进程会返回错误。</p>
+<p>子进程从父进程继承的有：</p>
+<p>1.进程的资格(真实(real)&#x2F;有效(effective)&#x2F;已保存(saved)用户号(UIDs)和组号(GIDs))</p>
+<p>2.环境(environment)</p>
+<p>3.堆栈</p>
+<p>4.内存</p>
+<p>5.进程组号</p>
+<p>独有：</p>
+<p>1.进程号；</p>
+<p>2.不同的父进程号(译者注：即子进程的父进程号与父进程的父进程号不同， 父进程号可由getppid函数得到)；</p>
+<p>3.资源使用(resource utilizations)设定为0</p>
+<h3 id="进程组"><a href="#进程组" class="headerlink" title="进程组"></a>进程组</h3><p>进程组就是多个进程的集合，其中肯定有一个组长，其进程PID等于进程组的PGID。只要在某个进程组中一个进程存在，该进程组就存在，这与其组长进程是否终止无关</p>
+<h3 id="作业"><a href="#作业" class="headerlink" title="作业"></a>作业</h3><p>一个作业是我们提交给shell的一项任务或者批处理，和操作系统无关。</p>
+<p>一个作业通常包括几个进程，几个进程共同完成一个任务，即作业。</p>
+<p> 进程是具体执行的一个可执行程序，是操作系统调度的对象</p>
+<p>shell分前后台来控制的不是进程而是作业（job）或者进程组（Process Group）。</p>
+<p>一个前台作业可以由多个进程组成，一个后台也可以由多个进程组成，shell可以运行一个前台作业和任意多个后台作业，这称为作业控制</p>
+<p><strong>为什么只能运行一个前台作业？</strong></p>
+<p>答：当我们在前台新起了一个作业，shell就被提到了后台，因此shell就没有办法再继续接受我们的指令并且解析运行了。 但是如果前台进程退出了，shell就会有被提到前台来，就可以继续接受我们的命令并且解析运行。</p>
+<p>作业与进程组的区别：如果作业中的某个进程有创建了子进程，则该子进程是不属于该作业的。 一旦作业运行结束，shell就把自己提到前台（子进程还存在，但是子进程不属于作业），如果原来的前台进程还存在（这个子进程还没有终止），他将自动变为后台进程组</p>
+<h3 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h3><p>会话（Session）是一个或多个进程组的集合。一个会话可以有一个控制终端。在xshell或者WinSCP中打开一个窗口就是新建一个会话。</p>
+<h2 id="C-socket"><a href="#C-socket" class="headerlink" title="C++ socket"></a>C++ socket</h2><p>socket顾名思义就是套接字的意思，用于描述地址和端口，是一个通信链的句柄。应用程序通过socket向网络发出请求或者回应</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_27923041/article/details/83857964">C++:实现socket通信（TCP&#x2F;IP）实例_c++ socket_Cche1的博客-CSDN博客</a></p>
+<h2 id="Linux下同步机制"><a href="#Linux下同步机制" class="headerlink" title="Linux下同步机制"></a>Linux下同步机制</h2><p>POSIX信号量：可用于进程同步，也可用于线程同步</p>
+<p>POSIX互斥锁+条件变量：只能用于线程同步</p>
+<h2 id="快表"><a href="#快表" class="headerlink" title="快表"></a>快表</h2><p>①CPU给出逻辑地址，由某个硬件算得页号、页内偏移量，将页号与快表中的所有页号进行比较。</p>
+<p>②如果找到匹配的页号，说明要访问的页表项在快表中有副本，则直接从中取出该页对应的内存块号，再将内存块号与页内偏移量拼接形成物理地址，最后，访问该物理地址对应的内存单元。因此，若快表命中，则访问某个逻辑地址仅需一次访存即可。</p>
+<p>③如果没有找到匹配的页号，则需要访问内存中的页表，找到对应页表项，得到页面存放的内存块号，再将内存块号与页内偏移量拼接形成物理地址，最后，访问该物理地址对应的内存单元。因此,若快表未命中，则访问某个逻辑地址需要两次访存(注意:在找到页表项后，应同时将其存入快表,以便后面可能的再次访问。但若快表已满，则必须按照-定的算法对旧的页表项进行替换)</p>
+<p><img src="https://tcs.teambition.net/storage/312s4bf5d89126a94650856641e578749e92?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzY1OSwiaWF0IjoxNjgwNjE0MDU5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YmY1ZDg5MTI2YTk0NjUwODU2NjQxZTU3ODc0OWU5MiJ9.q9Q0YR8A5xiGM4Wpj6gkjJ7kqB1hg2oHgMUF2cn-c-0&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="逻辑地址-x3D-gt-物理地址"><a href="#逻辑地址-x3D-gt-物理地址" class="headerlink" title="逻辑地址&#x3D;&gt;物理地址"></a>逻辑地址&#x3D;&gt;物理地址</h2><p>可以借助进程的页表将逻辑地址转换为物理地址。</p>
+<p>通常会在系统中设置一个页表寄存器(PTR)，存放页表在内存中的起始地址F和页表长度M。进程未执行时，页表的始址和页表长度放在进程控制块(PCB) 中，当进程被调度时，操作系统内核会把它们放到页表寄存器中。</p>
+<p>注意:页面大小是2的整数幂 设页面大小为L，逻辑地址A到物理地址E的变换过程如下：</p>
+<p><img src="https://tcs.teambition.net/storage/312sd0a417832687c63684d52c75f4a8fcea?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkMGE0MTc4MzI2ODdjNjM2ODRkNTJjNzVmNGE4ZmNlYSJ9.O7TWxSGvrK-YK3CDXfPbPT7dTQCOyjB3xE6ubRQ9Sxo&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>计算物理地址：</p>
+<p><img src="https://tcs.teambition.net/storage/312s7cfdeb6bfd6c2d80ac929cf4f71f56df?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3Y2ZkZWI2YmZkNmMyZDgwYWM5MjljZjRmNzFmNTZkZiJ9.HTgypvjvctSAfgNSMGnzcIb9azhq_WKjVXCI52Xe2KI&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="动态分区分配算法"><a href="#动态分区分配算法" class="headerlink" title="动态分区分配算法"></a>动态分区分配算法</h2><p><img src="https://tcs.teambition.net/storage/312s8444da01754b03726bb13e147ffc23fc?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4NDQ0ZGEwMTc1NGIwMzcyNmJiMTNlMTQ3ZmZjMjNmYyJ9.gifNII9FqSdEl3iRcmbTRa7xj-aCuQMdpEw6xhcbuoA&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>内部碎片和外部碎片区别：</p>
+<p>固定分区存储管理会产生内部碎片，可变分区存储可能会产生外部碎片</p>
+<p>内外是相对于分区而言的</p>
+<ul>
+<li><p>内碎片：是已经被分配出去（能明确指出属于哪个进程）却不能被利用的内存空间，占有这些区域或页面的进程并不使用这个存储块。而在进程占有这块存储块时，系统无法利用它。直到进程释放它，或进程结束时，系统才有可能利用这个存储块</p>
+</li>
+<li><p>外碎片：是还没有被分配出去（不属于任何进程），但由于太小了无法分配给申请内存空间的新进程的内存空闲区域，这些存储块的总和可以满足当前申请的长度要求，但是由于它们的地址不连续或其他原因，使得系统无法满足当前申请</p>
+</li>
+</ul>
+<h2 id="虚拟内存目的"><a href="#虚拟内存目的" class="headerlink" title="虚拟内存目的"></a>虚拟内存目的</h2><p>虚拟内存的目的是为了让物理内存扩充成更大的逻辑内存，从而让程序获得更多的可用内存。</p>
+<p>为了更好的管理内存，操作系统将内存抽象成地址空间。每个程序拥有自己的地址空间，这个地址空间被分割成多个块，每一块称为一页。</p>
+<p>这些页被映射到物理内存，但不需要映射到连续的物理内存，也不需要所有页都必须在物理内存中。当程序引用到不在物理内存中的页时，由硬件执行必要的映射，将缺失的部分装入物理内存并重新执行失败的指令。</p>
+<p>从上面的描述中可以看出，虚拟内存允许程序不用将地址空间中的每一页都映射到物理内存，也就是说一个程序不需要全部调入内存就可以运行，这使得有限的内存运行大程序成为可能。</p>
+<h2 id="读写锁问题"><a href="#读写锁问题" class="headerlink" title="读写锁问题"></a>读写锁问题</h2><p>允许多个进程同时对数据进行读操作，但是不允许读和写以及写和写操作同时发生。</p>
+<p>一个整型变量 count 记录在对数据进行读操作的进程数量，一个互斥量 count_mutex 用于对 count 加锁，一个互斥量 data_mutex 用于对读写的数据加锁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">typedef</span> <span class="hljs-type">int</span> semaphore;<br>semaphore count_mutex = <span class="hljs-number">1</span>;<br>semaphore data_mutex = <span class="hljs-number">1</span>;<br><span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reader</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-built_in">down</span>(&amp;count_mutex);<br>        count++;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">1</span>) <span class="hljs-built_in">down</span>(&amp;data_mutex); <span class="hljs-comment">// 第一个读者需要对数据进行加锁，防止写进程访问</span><br>        <span class="hljs-built_in">up</span>(&amp;count_mutex);<br>        <span class="hljs-built_in">read</span>();<br>        <span class="hljs-built_in">down</span>(&amp;count_mutex);<br>        count--;<br>        <span class="hljs-keyword">if</span>(count == <span class="hljs-number">0</span>) <span class="hljs-built_in">up</span>(&amp;data_mutex);<span class="hljs-comment">//最后一个读者要对数据进行解锁，防止写进程无法访问</span><br>        <span class="hljs-built_in">up</span>(&amp;count_mutex);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writer</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">while</span>(TRUE) &#123;<br>        <span class="hljs-built_in">down</span>(&amp;data_mutex);<br>        <span class="hljs-built_in">write</span>();<br>        <span class="hljs-built_in">up</span>(&amp;data_mutex);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://tcs.teambition.net/storage/312sf8158918cc2fd0bd3eaaac8583999099?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIxODIyOCwiaWF0IjoxNjgwNjEzNDI4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNmODE1ODkxOGNjMmZkMGJkM2VhYWFjODU4Mzk5OTA5OSJ9.IjCtC0gfiw43I16f0r9VhRpFEpQcBPDbt6-2XRgcbuQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/612035861">C++线程中的五种常见锁与C++ RAII锁的常见用法</a></p>
+<h2 id="常见线程锁"><a href="#常见线程锁" class="headerlink" title="常见线程锁"></a>常见线程锁</h2><h3 id="互斥锁（mutex）"><a href="#互斥锁（mutex）" class="headerlink" title="互斥锁（mutex）"></a><strong>互斥锁（mutex）</strong></h3><p>互斥锁属于sleep-waiting类型的锁。例如在一个双核的机器上有两个线程A和B，它们分别运行在core 0和core 1上。假设线程A想要通过pthread_mutex_lock操作去得到一个临界区的锁，而此时这个锁正被线程B所持有，那么线程A就会被阻塞，此时会通过上下文切换将线程A置于等待队列中，此时core 0就可以运行其他的任务（如线程C）。</p>
+<h3 id="条件变量-cond"><a href="#条件变量-cond" class="headerlink" title="条件变量(cond)"></a><strong>条件变量(cond)</strong></h3><h3 id="自旋锁-spin"><a href="#自旋锁-spin" class="headerlink" title="自旋锁(spin)"></a><strong>自旋锁(spin)</strong></h3><p>自旋锁属于busy-waiting类型的锁，如果线程A是使用pthread_spin_lock操作去请求锁，如果自旋锁已经被线程B所持有，那么线程A就会一直在core 0上进行忙等待并不停的进行锁请求，检查该自旋锁是否已经被线程B释放，直到得到这个锁为止。因为自旋锁不会引起调用者睡眠，所以自旋锁的效率远高于互斥锁。</p>
+<p>虽然它的效率比互斥锁高，但是它也有些不足之处：</p>
+<ul>
+<li><p>自旋锁一直占用CPU，在未获得锁的情况下，一直进行自旋，所以占用着CPU，如果不能在很短的时间内获得锁，无疑会使CPU效率降低。</p>
+</li>
+<li><p>在用自旋锁时有可能造成死锁，当递归调用时有可能造成死锁。</p>
+</li>
+<li><p>自旋锁只有在内核可抢占式或SMP的情况下才真正需要，在单CPU且不可抢占式的内核下，自旋锁的操作为空操作。自旋锁适用于锁使用者保持锁时间比较短的情况下。</p>
+</li>
+</ul>
+<h2 id="内存的覆盖，交换"><a href="#内存的覆盖，交换" class="headerlink" title="内存的覆盖，交换"></a>内存的覆盖，交换</h2><p>覆盖：</p>
+<p>由于程序运行时并非任何时候都要访问程序及数据的各个部分（尤其是大程序），因此可以把用户空间分成为一个固定区和若干个覆盖区。将经常活跃的部分放在固定区，其余部分按照调用关系分段，首先将那些即将要访问的段放入覆盖区，其他段放在外存中，在需要调用前，系统将其调入覆盖区，替换覆盖区中原有的段。</p>
+<p>覆盖技术的特点：是打破了必须将一个进程的全部信息装入内存后才能运行的限制，但当同时运行程序的代码量大于主存时仍不能运行，再而，大家要注意到，内存中能够更新的地方只有覆盖区的段，不在覆盖区的段会常驻内存</p>
+<p>缺点：覆盖结构必须要<strong>用户（程序员）声明</strong>，<strong>对用户不透明</strong>。用于早期，现在早已成为<strong>历史</strong></p>
+<p>交换：</p>
+<p><strong>交换(对换)技术的设计思想</strong>：内存空间紧张时，系统将内存中某些进程暂时换出外存，把外存中某些已具备运行条件的进程换入内存(进程在内存与磁盘间动态调度)</p>
+<p>换入：把准备好竞争CPU运行的程序从辅存移到内存。 换出：把处于等待状态（或CPU调度原则下被剥夺运行权力）的程序从内存移到辅存，把内存空间腾出来</p>
+<p><img src="https://tcs.teambition.net/storage/312s06c57d449d2af0f70e419fc586ea447f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzQxMCwiaWF0IjoxNjgwNjEzODEwLCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMwNmM1N2Q0NDlkMmFmMGY3MGU0MTlmYzU4NmVhNDQ3ZiJ9.TKShIBrB90_e_bNoT0ScK1z4ZMa_MBBREP1Gp8PusDs&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s70410a137d79c6652f4c0bc1a96b8b4b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxNzQ4NywiaWF0IjoxNjgwNjEzODg3LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3MDQxMGExMzdkNzljNjY1MmY0YzBiYzFhOTZiOGI0YiJ9.ZwEypmq0eIhqLBwZ-3Bejiau3Nz3JvVEOvWaoWN3Sx8&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>区别？</strong></p>
+<p>1.覆盖是在<strong>同一个进程或程序之</strong>间的，交换是在<strong>不同</strong>的进程或作业之间的。</p>
+<p>2.覆盖技术打破了程<strong>序必须全部装入内存</strong>才能运行的<strong>限制</strong>。而交换技术打破了<strong>进程进入内存就会一直运行到结束的限制</strong>。</p>
+<h2 id="在执行malloc申请内存的时候，操作系统是怎么做的？"><a href="#在执行malloc申请内存的时候，操作系统是怎么做的？" class="headerlink" title="在执行malloc申请内存的时候，操作系统是怎么做的？"></a>在执行malloc申请内存的时候，操作系统是怎么做的？</h2><p>从操作系统层面上看，malloc是通过两个系统调用来实现的： brk和mmap</p>
+<ul>
+<li><p>brk是将进程数据段(.data)的最高地址指针向高处移动，这一步可以扩大进程在运行时的堆大小</p>
+</li>
+<li><p>mmap是在进程的虚拟地址空间中寻找一块空闲的虚拟内存，这一步可以获得一块可以操作的堆内存。</p>
+</li>
+</ul>
+<p>通常，分配的内存小于128k时，使用brk调用来获得虚拟内存，大于128k时就使用mmap来获得虚拟内存。</p>
+<p>进程先通过这两个系统调用获取或者扩大进程的虚拟内存，获得相应的虚拟地址，在访问这些虚拟地址的时候，通过缺页中断，让内核分配相应的物理内存，这样内存分配才算完成。</p>
+<h2 id="局部性原理"><a href="#局部性原理" class="headerlink" title="局部性原理"></a>局部性原理</h2><p>主要分为<strong>时间局部性和空间局部性</strong>。</p>
+<p>时间局部性:如果执行了程序中的某条指令，那么不久后这条指令很有可能再次执行;如果某个数据被访问过，不久之后该数据很可能再次被访问。(因为程序中存在大量的循环) 空间局部性:一旦程序访问了某个存储单元，在不久之后，其附近的存储单元也很有可能被访问。(因为很多数据在内存中都是连续存放的，并且程序的指令也是顺序地在内存中存放的)</p>
+<p><img src="https://tcs.teambition.net/storage/312s37e8bccb1eb76f020b3c3f23c9964f47?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IjYwM2NkZGQ4NjZiNjNmMzk4ZjA3ZGQxZCIsImV4cCI6MTY4MDYxODQwOCwiaWF0IjoxNjgwNjE0ODA4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMzN2U4YmNjYjFlYjc2ZjAyMGIzYzNmMjNjOTk2NGY0NyJ9.AZF9QwjMpxGEzJ-DIEYrroWuysSmHmPKB4stW-SdIgM&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Linux异常和中断区别"><a href="#Linux异常和中断区别" class="headerlink" title="Linux异常和中断区别"></a>Linux异常和中断区别</h2><p>中断是由硬件设备产生的，而它们从物理上说就是电信号，之后，它们通过中断控制器发送给CPU，接着CPU判断收到的中断来自于哪个硬件设备（这定义在内核中），最后，由CPU发送给内核，有内核处理中断。</p>
+<p><strong>异常是由CPU产生的，同时，它会发送给内核，要求内核处理这些异常</strong></p>
+<p><strong>相同点</strong></p>
+<ul>
+<li><p>最后都是由CPU发送给内核，由内核去处理</p>
+</li>
+<li><p>处理程序的流程设计上是相似的</p>
+</li>
+</ul>
+<p><strong>不同点</strong></p>
+<ul>
+<li><p>产生源不相同，异常是由CPU产生的，而中断是由硬件设备产生的</p>
+</li>
+<li><p>内核需要根据是异常还是中断调用不同的处理程序</p>
+</li>
+<li><p>中断不是时钟同步的，这意味着中断可能随时到来；异常由于是CPU产生的，所以它是时钟同步的</p>
+</li>
+<li><p>当处理中断时，处于中断上下文中；处理异常时，处于进程上下文中</p>
+</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%85%AB%E8%82%A1/" class="category-chain-item">八股</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>操作系统八股一</div>
+      <div>https://shanhainanhua.github.io/2023/04/04/操作系统八股一/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/04/%E6%A8%A1%E6%9D%BF%E4%B8%93%E9%A2%98/" title="模板专题">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">模板专题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/03/25/Unity%E7%AE%80%E6%98%93%E8%A7%A3%E5%AF%86%E6%B8%B8%E6%88%8F%E7%BB%83%E4%B9%A0/" title="Unity简易解密游戏练习">
+                        <span class="hidden-mobile">Unity简易解密游戏练习</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

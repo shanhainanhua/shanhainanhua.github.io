@@ -1,0 +1,794 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="课程3~4介绍了基础变换，齐次坐标，mvp矩阵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games101-课程3~4(变换)">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/04/04/Games101-%E8%AF%BE%E7%A8%8B3-4-%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="课程3~4介绍了基础变换，齐次坐标，mvp矩阵">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312r61ff0d63d17e96a9ee5c76fe2fe5935e?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI2MWZmMGQ2M2QxN2U5NmE5ZWU1Yzc2ZmUyZmU1OTM1ZSJ9.tH8cizYxuMq0jNjsHHtdgeOMR7gj_JhfhOj4iWsPuEM&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312r65f6938161b3c7f980d130d81eb1adb0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI2NWY2OTM4MTYxYjNjN2Y5ODBkMTMwZDgxZWIxYWRiMCJ9.0xpXNA5ZNytwoQnFG0Ozb6Nwjro2gGLnspBc7YnSwYQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312r90af93e4381d2ae8c5ec46cce55f3ccd?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI5MGFmOTNlNDM4MWQyYWU4YzVlYzQ2Y2NlNTVmM2NjZCJ9.7XXRR9O18ZwDwwXeNXAjOJBwiTs9lQ4KEJB_b6HEj7s&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312r95fcd0c9027e2eb9dc9bbb32e1d44326?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI5NWZjZDBjOTAyN2UyZWI5ZGM5YmJiMzJlMWQ0NDMyNiJ9.rg24bzwCwe-14d07S8u37kfc77rfdhb9BTzCMzv0KlQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312r0612649373987b8e935cdaf18be386aa?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnIwNjEyNjQ5MzczOTg3YjhlOTM1Y2RhZjE4YmUzODZhYSJ9.xIciB-kjge6GUPB8wf1a_iayh2rYyy3NqgpP6PTOZrA&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312se66bfe93ddedb00a75c40821b911da23?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlNjZiZmU5M2RkZWRiMDBhNzVjNDA4MjFiOTExZGEyMyJ9.our2X8JdU7sESozDvPxSyf-ygatSrhCU7kNAwkV1lhM&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s261b6a9b469c165d662f27bffa86f5fe?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMyNjFiNmE5YjQ2OWMxNjVkNjYyZjI3YmZmYTg2ZjVmZSJ9.dDFFfYZsMK-Ah62Ms953nTOEPSOrIPLHXJQVchJjyIw&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sa2ee82784c45048b4d10290ae4406e3f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhMmVlODI3ODRjNDUwNDhiNGQxMDI5MGFlNDQwNmUzZiJ9.V-MddZUAHPT1EcMamIupDg547ENoJJac51TIxMS35Co&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sde204c34c7f8eeca6b8727351c219707?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkZTIwNGMzNGM3ZjhlZWNhNmI4NzI3MzUxYzIxOTcwNyJ9.GhWBjQ4VMgQHo-J6_-HkoDrFAjsRKaXAeyP0WIAwMUQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s0366ac6bafbca7e269ed3685a0e91379?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMwMzY2YWM2YmFmYmNhN2UyNjllZDM2ODVhMGU5MTM3OSJ9.wGiyU03Q7T16bV309txHCl5FkbBiLkkeHcVPzv8c0EY&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s74ea9369bc7f80bb6f11a4dca20d521c?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3NGVhOTM2OWJjN2Y4MGJiNmYxMWE0ZGNhMjBkNTIxYyJ9.pWQY906Ol6zPY2ksM4BR-qiNN-wyXdjVDmFla9abFTE&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sebf23ea346b9b5b5d34e22fb115dd7e4?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlYmYyM2VhMzQ2YjliNWI1ZDM0ZTIyZmIxMTVkZDdlNCJ9.LQ8QcjhzGHW15nV1iHz73Zw0T6mXwrCsaVYoVCQMX4E&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s205028d0a75191c4f90c2606e115c38c?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMyMDUwMjhkMGE3NTE5MWM0ZjkwYzI2MDZlMTE1YzM4YyJ9.PNYoEY42glO0JwGyZe6Ey4cAanmjgvFNSY-cyWNvcYU&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s3bce78b98044cee3fd0cc3caec78878f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMzYmNlNzhiOTgwNDRjZWUzZmQwY2MzY2FlYzc4ODc4ZiJ9.XNPOEgNw_C2H4YdsTy8Sy3ZTYQdRH25KYbpCXLOyQPY&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s4c22a7a4482230068a9c21b92415503b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YzIyYTdhNDQ4MjIzMDA2OGE5YzIxYjkyNDE1NTAzYiJ9.LkeUN-NM4th2T7e_jkZmlXfz6zoPvXOCi9lPi7j-n6Y&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312seeb9da250164ce0e9d27129419ee7ffd?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlZWI5ZGEyNTAxNjRjZTBlOWQyNzEyOTQxOWVlN2ZmZCJ9.QVUCYKV2Uyo9sY3ZwIYFLxhYKUSwqSk44kc0qDr5MRA&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sa8a6868ae21566de0620c4870d02d162?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhOGE2ODY4YWUyMTU2NmRlMDYyMGM0ODcwZDAyZDE2MiJ9.3OPh3dsVLl6I28QzV30ZZRownZx_wPz-0VhqIQPJ-v0&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s1a4c74b16015d5630f3f38526bf222af?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxYTRjNzRiMTYwMTVkNTYzMGYzZjM4NTI2YmYyMjJhZiJ9.voFEic_CtDPowK4kms9K36t4b0C9ELJ2xLqHL6cHzsw&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s6657ccdc7bb25cadd18d5d1870c1768e?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM2NjU3Y2NkYzdiYjI1Y2FkZDE4ZDVkMTg3MGMxNzY4ZSJ9.DkPviGBc-zSxDHH40H2CHgZxckwSjgrzFJ7WkNlArgU&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sdbb4c1bf290e5123caffbf1e9efc3cec?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkYmI0YzFiZjI5MGU1MTIzY2FmZmJmMWU5ZWZjM2NlYyJ9.Je3FtGs5dbUJiQPMbm044shuihNMT-Y3CFo26IEA5RQ&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s16005832662be900530b7be2e9904fc0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxNjAwNTgzMjY2MmJlOTAwNTMwYjdiZTJlOTkwNGZjMCJ9.gT0rXqrH3_33d2pVCQUdUHAamgAXw5yKio7SOhLdD9s&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sfd3ee381047752c99d61ba2b5d1af667?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNmZDNlZTM4MTA0Nzc1MmM5OWQ2MWJhMmI1ZDFhZjY2NyJ9.qbXSLT5g2YyLIVwBcnVMg-RyGSZgzjfdT6bbEVQQLLo&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sb7cf89f2a85f31a7b303595361408be5?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNiN2NmODlmMmE4NWYzMWE3YjMwMzU5NTM2MTQwOGJlNSJ9.5ZX8pRPLYiEmL4g_P7Td-529m8-J9gRp9dg4oedRMcU&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s8a5f74bf7deeeaa71c0748b54ae318b0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4YTVmNzRiZjdkZWVlYWE3MWMwNzQ4YjU0YWUzMThiMCJ9.EeoEVeG7YPzXW9whhz0C9ShJw9KnMb2D6tsKp8Pgqgw&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312sa012c26e3a7062da827f1d9ce0593942?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhMDEyYzI2ZTNhNzA2MmRhODI3ZjFkOWNlMDU5Mzk0MiJ9.6Vms4yrF-46ca5KzERaBGTL4M33aOhJe61-v_QPQX1U&download=image.png">
+<meta property="og:image" content="https://tcs.teambition.net/storage/312s78e16cd89caf6439ada11d34120b609a?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3OGUxNmNkODljYWY2NDM5YWRhMTFkMzQxMjBiNjA5YSJ9.klYU9bwyPhwxTVJqsSOdV3YUsI67MDSfoK5Gd5cCl_s&download=image.png">
+<meta property="article:published_time" content="2023-04-04T14:12:14.000Z">
+<meta property="article:modified_time" content="2023-04-04T14:16:55.598Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="Games101">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tcs.teambition.net/storage/312r61ff0d63d17e96a9ee5c76fe2fe5935e?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI2MWZmMGQ2M2QxN2U5NmE5ZWU1Yzc2ZmUyZmU1OTM1ZSJ9.tH8cizYxuMq0jNjsHHtdgeOMR7gj_JhfhOj4iWsPuEM&download=image.png">
+  
+  
+  
+  <title>Games101-课程3~4(变换) - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <!--其中rgba中的a，指的是mask文件的alpha，透明度-->
+	<div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+	<div id="banner_video_insert">
+	</div>	
+	<div id='vvd_banner_img'>
+	</div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Games101-课程3~4(变换)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          593 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          5 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+	<script type="text/javascript" src="/vvd_js/jquery.js"></script>
+
+	<div class="banner" id='banner' >
+
+		<div class="full-bg-img" >
+
+			
+				<script>
+					var ua = navigator.userAgent;
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+						isMobile = isIphone || isAndroid;
+
+					function set_video_attr(id){
+
+						var height = document.body.clientHeight
+						var width = document.body.clientWidth
+						var video_item = document.getElementById(id);
+
+						if (height / width < 0.56){
+							video_item.setAttribute('width', '100%');
+							video_item.setAttribute('height', 'auto');
+						} else {
+							video_item.setAttribute('height', '100%');
+							video_item.setAttribute('width', 'auto');
+						}
+					}
+
+					$.getJSON('/vvd_js/video_url.json', function(data){
+						if (true){
+							var video_list_length = data.length
+							var seed = Math.random()
+							index = Math.floor(seed * video_list_length)
+							
+							video_url = data[index][0]
+							pre_show_image_url = data[index][1]
+							
+							banner_obj = document.getElementById("banner")
+							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+							vvd_banner_obj = document.getElementById("vvd_banner_img")
+
+							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+							vvd_banner_obj.innerHTML = vvd_banner_content
+							set_video_attr('banner_img_item')
+
+							if (!isMobile) {
+								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+								document.getElementById("banner_video_insert").innerHTML = video_html_res;
+								set_video_attr('video_item')
+							}
+						}
+					});
+
+					if (!isMobile){
+						window.onresize = function(){
+							set_video_attr('video_item')
+							}
+						}
+				</script>
+			
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Games101-课程3~4(变换)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>课程3~4介绍了基础变换，齐次坐标，mvp矩阵</p>
+<span id="more"></span>
+<p>modeling<br>viewing</p>
+<h1 id="base"><a href="#base" class="headerlink" title="base"></a>base</h1><p>二维变换 矩阵</p>
+<p>切变</p>
+<p><img src="https://tcs.teambition.net/storage/312r61ff0d63d17e96a9ee5c76fe2fe5935e?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI2MWZmMGQ2M2QxN2U5NmE5ZWU1Yzc2ZmUyZmU1OTM1ZSJ9.tH8cizYxuMq0jNjsHHtdgeOMR7gj_JhfhOj4iWsPuEM&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>旋转 考虑不同的点 两个特殊点 推出来旋转公式</p>
+<p><img src="https://tcs.teambition.net/storage/312r65f6938161b3c7f980d130d81eb1adb0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI2NWY2OTM4MTYxYjNjN2Y5ODBkMTMwZDgxZWIxYWRiMCJ9.0xpXNA5ZNytwoQnFG0Ozb6Nwjro2gGLnspBc7YnSwYQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312r90af93e4381d2ae8c5ec46cce55f3ccd?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI5MGFmOTNlNDM4MWQyYWU4YzVlYzQ2Y2NlNTVmM2NjZCJ9.7XXRR9O18ZwDwwXeNXAjOJBwiTs9lQ4KEJB_b6HEj7s&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>齐次坐标</p>
+<p><img src="https://tcs.teambition.net/storage/312r95fcd0c9027e2eb9dc9bbb32e1d44326?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnI5NWZjZDBjOTAyN2UyZWI5ZGM5YmJiMzJlMWQ0NDMyNiJ9.rg24bzwCwe-14d07S8u37kfc77rfdhb9BTzCMzv0KlQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312r0612649373987b8e935cdaf18be386aa?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnIwNjEyNjQ5MzczOTg3YjhlOTM1Y2RhZjE4YmUzODZhYSJ9.xIciB-kjge6GUPB8wf1a_iayh2rYyy3NqgpP6PTOZrA&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>点相加 表示这两个点的终点</p>
+<p><img src="https://tcs.teambition.net/storage/312se66bfe93ddedb00a75c40821b911da23?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlNjZiZmU5M2RkZWRiMDBhNzVjNDA4MjFiOTExZGEyMyJ9.our2X8JdU7sESozDvPxSyf-ygatSrhCU7kNAwkV1lhM&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>y反的原因  z叉乘x得到y所以反</p>
+<p>任意旋转：</p>
+<p>任意旋转可以拆成x，y，z轴上旋转的组合，旋转角度就是欧拉角</p>
+<p>罗德里格斯旋转公式：</p>
+<p><img src="https://tcs.teambition.net/storage/312s261b6a9b469c165d662f27bffa86f5fe?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMyNjFiNmE5YjQ2OWMxNjVkNjYyZjI3YmZmYTg2ZjVmZSJ9.dDFFfYZsMK-Ah62Ms953nTOEPSOrIPLHXJQVchJjyIw&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>旋转矩阵不太适合做差值 四元数的引入更多的是为了旋转的差值</p>
+<h1 id="Viewing-transformation"><a href="#Viewing-transformation" class="headerlink" title="Viewing transformation"></a>Viewing transformation</h1><h2 id="View-x2F-Camera-Transformation"><a href="#View-x2F-Camera-Transformation" class="headerlink" title="View&#x2F;Camera Transformation"></a>View&#x2F;Camera Transformation</h2><p>MVP变换 </p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/261097735">计算机图形学 5：齐次坐标与 MVP 矩阵变换</a></p>
+<p><img src="https://tcs.teambition.net/storage/312sa2ee82784c45048b4d10290ae4406e3f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhMmVlODI3ODRjNDUwNDhiNGQxMDI5MGFlNDQwNmUzZiJ9.V-MddZUAHPT1EcMamIupDg547ENoJJac51TIxMS35Co&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>约定俗成：相机放在0，0，0 看向-z方向 向上方向是y</p>
+<p><img src="https://tcs.teambition.net/storage/312sde204c34c7f8eeca6b8727351c219707?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkZTIwNGMzNGM3ZjhlZWNhNmI4NzI3MzUxYzIxOTcwNyJ9.GhWBjQ4VMgQHo-J6_-HkoDrFAjsRKaXAeyP0WIAwMUQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>怎么移动相机从e g t到标准位置</p>
+<p>首先考虑移动e，</p>
+<p><img src="https://tcs.teambition.net/storage/312s0366ac6bafbca7e269ed3685a0e91379?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMwMzY2YWM2YmFmYmNhN2UyNjllZDM2ODVhMGU5MTM3OSJ9.wGiyU03Q7T16bV309txHCl5FkbBiLkkeHcVPzv8c0EY&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后旋转g到-z，t到y，gxt到x轴，直接算不方便。可以先求由标准位置旋转到现在位置的矩阵，也就是先算逆矩阵</p>
+<p><img src="https://tcs.teambition.net/storage/312s74ea9369bc7f80bb6f11a4dca20d521c?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3NGVhOTM2OWJjN2Y4MGJiNmYxMWE0ZGNhMjBkNTIxYyJ9.pWQY906Ol6zPY2ksM4BR-qiNN-wyXdjVDmFla9abFTE&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>然后旋转矩阵是个正交矩阵，具有性质：逆矩阵&#x3D;转置矩阵，所以求出来对应旋转矩阵</p>
+<p><img src="https://tcs.teambition.net/storage/312sebf23ea346b9b5b5d34e22fb115dd7e4?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlYmYyM2VhMzQ2YjliNWI1ZDM0ZTIyZmIxMTVkZDdlNCJ9.LQ8QcjhzGHW15nV1iHz73Zw0T6mXwrCsaVYoVCQMX4E&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s205028d0a75191c4f90c2606e115c38c?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMyMDUwMjhkMGE3NTE5MWM0ZjkwYzI2MDZlMTE1YzM4YyJ9.PNYoEY42glO0JwGyZe6Ey4cAanmjgvFNSY-cyWNvcYU&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>相对运动，得到结果一样，相机和物体应用同样变换</p>
+<h2 id="Projection-transformation"><a href="#Projection-transformation" class="headerlink" title="Projection transformation"></a>Projection transformation</h2><h3 id="正交投影"><a href="#正交投影" class="headerlink" title="正交投影"></a>正交投影</h3><p>相机放在标准位置上，把z扔掉自然就是在x y上，然后规范到-1到1的范围内</p>
+<p><img src="https://tcs.teambition.net/storage/312s3bce78b98044cee3fd0cc3caec78878f?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMzYmNlNzhiOTgwNDRjZWUzZmQwY2MzY2FlYzc4ODc4ZiJ9.XNPOEgNw_C2H4YdsTy8Sy3ZTYQdRH25KYbpCXLOyQPY&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s4c22a7a4482230068a9c21b92415503b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM0YzIyYTdhNDQ4MjIzMDA2OGE5YzIxYjkyNDE1NTAzYiJ9.LkeUN-NM4th2T7e_jkZmlXfz6zoPvXOCi9lPi7j-n6Y&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312seeb9da250164ce0e9d27129419ee7ffd?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNlZWI5ZGEyNTAxNjRjZTBlOWQyNzEyOTQxOWVlN2ZmZCJ9.QVUCYKV2Uyo9sY3ZwIYFLxhYKUSwqSk44kc0qDr5MRA&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312sa8a6868ae21566de0620c4870d02d162?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhOGE2ODY4YWUyMTU2NmRlMDYyMGM0ODcwZDAyZDE2MiJ9.3OPh3dsVLl6I28QzV30ZZRownZx_wPz-0VhqIQPJ-v0&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="透视投影"><a href="#透视投影" class="headerlink" title="透视投影"></a>透视投影</h3><p>怎么做透视投影</p>
+<p>先挤在正交</p>
+<p><img src="https://tcs.teambition.net/storage/312s1a4c74b16015d5630f3f38526bf222af?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxYTRjNzRiMTYwMTVkNTYzMGYzZjM4NTI2YmYyMjJhZiJ9.voFEic_CtDPowK4kms9K36t4b0C9ELJ2xLqHL6cHzsw&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>挤压注意：近平面不变 z不会发生变化 远平面的中心点也不会发生变化</p>
+<p>从侧面来看，相似三角形求解：</p>
+<p><img src="https://tcs.teambition.net/storage/312s6657ccdc7bb25cadd18d5d1870c1768e?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM2NjU3Y2NkYzdiYjI1Y2FkZDE4ZDVkMTg3MGMxNzY4ZSJ9.DkPviGBc-zSxDHH40H2CHgZxckwSjgrzFJ7WkNlArgU&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312sdbb4c1bf290e5123caffbf1e9efc3cec?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNkYmI0YzFiZjI5MGU1MTIzY2FmZmJmMWU5ZWZjM2NlYyJ9.Je3FtGs5dbUJiQPMbm044shuihNMT-Y3CFo26IEA5RQ&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s16005832662be900530b7be2e9904fc0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnMxNjAwNTgzMjY2MmJlOTAwNTMwYjdiZTJlOTkwNGZjMCJ9.gT0rXqrH3_33d2pVCQUdUHAamgAXw5yKio7SOhLdD9s&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312sfd3ee381047752c99d61ba2b5d1af667?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNmZDNlZTM4MTA0Nzc1MmM5OWQ2MWJhMmI1ZDFhZjY2NyJ9.qbXSLT5g2YyLIVwBcnVMg-RyGSZgzjfdT6bbEVQQLLo&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>利用近平面点变换不变的特性 ：</p>
+<p><img src="https://tcs.teambition.net/storage/312sb7cf89f2a85f31a7b303595361408be5?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNiN2NmODlmMmE4NWYzMWE3YjMwMzU5NTM2MTQwOGJlNSJ9.5ZX8pRPLYiEmL4g_P7Td-529m8-J9gRp9dg4oedRMcU&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p>利用远平面z不变的特性：</p>
+<p><img src="https://tcs.teambition.net/storage/312s8a5f74bf7deeeaa71c0748b54ae318b0?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM4YTVmNzRiZjdkZWVlYWE3MWMwNzQ4YjU0YWUzMThiMCJ9.EeoEVeG7YPzXW9whhz0C9ShJw9KnMb2D6tsKp8Pgqgw&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312sa012c26e3a7062da827f1d9ce0593942?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnNhMDEyYzI2ZTNhNzA2MmRhODI3ZjFkOWNlMDU5Mzk0MiJ9.6Vms4yrF-46ca5KzERaBGTL4M33aOhJe61-v_QPQX1U&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://tcs.teambition.net/storage/312s78e16cd89caf6439ada11d34120b609a?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTY4MTIyMjExOCwiaWF0IjoxNjgwNjE3MzE4LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMnM3OGUxNmNkODljYWY2NDM5YWRhMTFkMzQxMjBiNjA5YSJ9.klYU9bwyPhwxTVJqsSOdV3YUsI67MDSfoK5Gd5cCl_s&download=image.png" srcset="/img/loading.gif" lazyload></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7085176703085412383">GAMES101投影矩阵推导详解和分析 - 掘金</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" class="category-chain-item">图形学</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Games101/">#Games101</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Games101-课程3~4(变换)</div>
+      <div>https://shanhainanhua.github.io/2023/04/04/Games101-课程3-4-变换/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月4日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/04/Games101-%E8%AF%BE%E7%A8%8B2/" title="Games101-课程2">
+                        <span class="hidden-mobile">Games101-课程2</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
