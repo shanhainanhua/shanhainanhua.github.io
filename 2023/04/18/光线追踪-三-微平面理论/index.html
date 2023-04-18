@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于物理的渲染：微平面理论（Cook-Torrance BRDF推导)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="光线追踪(三) 微平面理论">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="基于物理的渲染：微平面理论（Cook-Torrance BRDF推导)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/1.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/2.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/3.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/4.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/5.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/6.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/7.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/8.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/9.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/10.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/11.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/12.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/13.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/14.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/15.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/16.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/17.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/18.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/19.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/20.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/21.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/22.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/23.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/24.png">
+<meta property="article:published_time" content="2023-04-18T11:17:06.000Z">
+<meta property="article:modified_time" content="2023-04-18T11:25:24.468Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="光线追踪">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/1.png">
+  
+  
+  
+  <title>光线追踪(三) 微平面理论 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <!--其中rgba中的a，指的是mask文件的alpha，透明度-->
+	<div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+	<div id="banner_video_insert">
+	</div>	
+	<div id='vvd_banner_img'>
+	</div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="光线追踪(三) 微平面理论"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+	<script type="text/javascript" src="/vvd_js/jquery.js"></script>
+
+	<div class="banner" id='banner' >
+
+		<div class="full-bg-img" >
+
+			
+				<script>
+					var ua = navigator.userAgent;
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+						isMobile = isIphone || isAndroid;
+
+					function set_video_attr(id){
+
+						var height = document.body.clientHeight
+						var width = document.body.clientWidth
+						var video_item = document.getElementById(id);
+
+						if (height / width < 0.56){
+							video_item.setAttribute('width', '100%');
+							video_item.setAttribute('height', 'auto');
+						} else {
+							video_item.setAttribute('height', '100%');
+							video_item.setAttribute('width', 'auto');
+						}
+					}
+
+					$.getJSON('/vvd_js/video_url.json', function(data){
+						if (true){
+							var video_list_length = data.length
+							var seed = Math.random()
+							index = Math.floor(seed * video_list_length)
+							
+							video_url = data[index][0]
+							pre_show_image_url = data[index][1]
+							
+							banner_obj = document.getElementById("banner")
+							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+							vvd_banner_obj = document.getElementById("vvd_banner_img")
+
+							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+							vvd_banner_obj.innerHTML = vvd_banner_content
+							set_video_attr('banner_img_item')
+
+							if (!isMobile) {
+								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+								document.getElementById("banner_video_insert").innerHTML = video_html_res;
+								set_video_attr('video_item')
+							}
+						}
+					});
+
+					if (!isMobile){
+						window.onresize = function(){
+							set_video_attr('video_item')
+							}
+						}
+				</script>
+			
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">光线追踪(三) 微平面理论</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>基于物理的渲染：微平面理论（Cook-Torrance BRDF推导)</p>
+<span id="more"></span>
+<h1 id="辐射度量基础概念总结"><a href="#辐射度量基础概念总结" class="headerlink" title="辐射度量基础概念总结"></a>辐射度量基础概念总结</h1><p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/3.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/4.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="微平面理论"><a href="#微平面理论" class="headerlink" title="微平面理论"></a>微平面理论</h1><p>微平面理论(Microfacets Theory)顾名思义，就是从微观的角度去分析，其认为任意物体的表面在到达微观的尺度之后，都是由许许多多的更小的<strong>镜面</strong>所组成的</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/5.png" srcset="/img/loading.gif" lazyload></p>
+<p>当这些微小的镜面的法线方向较为集中一致的时候，从宏观角度来看，物体的镜面反射会比较明显，反之，当这些微小镜面的法线方向较为杂乱，分布均匀的时候，物体表面则会相对粗糙。如下图所示：</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/6.png" srcset="/img/loading.gif" lazyload></p>
+<p>（上方图中，微平面的镜面法线方向比较集中，下方图中微平面的镜面法线方向比较分散）</p>
+<p>对于微观尺度的漫反射可以作如下解释，当光线照射到物体表面时，一部分光线会与表面的许许多多的微小镜面发生镜面反射，另一部分光线则会折射进入物体内部，如下图：</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/7.png" srcset="/img/loading.gif" lazyload></p>
+<p>当光线折射进入内部的时候会与物体的微小粒子不断发生碰撞并散射到随机方向，同时在碰撞的过程中一部分光线的能量会被吸收转换为热能，有些光线在多次碰撞之后能量消耗殆尽，则表示该光线完全被物体吸收。还有一部分折射到物体内部的光线会因为散射方向的随机性重新离开表面，而这部分光线就形成了漫反射。 (tips:光线折射进入物体内部之后再被散射出来，离开表面的点可能并不是进入表面的点，但这里并不考虑这种情形，次表面散射(Subsurface Scattering)技术则将这种现象考虑了进去。)</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/8.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="Cook-Torrance-BRDF推导"><a href="#Cook-Torrance-BRDF推导" class="headerlink" title="Cook-Torrance BRDF推导"></a>Cook-Torrance BRDF推导</h1><h2 id="漫反射项推导"><a href="#漫反射项推导" class="headerlink" title="漫反射项推导"></a>漫反射项推导</h2><p>漫反射会均匀的向每个方向反射，因此，漫反射的BRDF一定是一个常数。假设入射光是均匀且遍布整个半球方向，可以得到如下方程：</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/9.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/10.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="镜面反射项推导"><a href="#镜面反射项推导" class="headerlink" title="镜面反射项推导"></a>镜面反射项推导</h2><p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/11.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>函数D：法线分布函数(Normal Distribution Function)，其代表了所有微观角度下微小镜面法线的分布情况，粗糙表面法线分布相对均匀，光滑表面法线分布相对集中 (这种解释可能会有些抽象，后面会给出更加直观的物理上的解释)</strong></p>
+<p><strong>函数G：几何函数(Geometry Function)，描述了微平面自遮挡的属性。当一个平面相对比较粗糙的时候，平面表面上的微平面有可能挡住其他的微平面从而减少表面所反射的光线。</strong></p>
+<p><strong>函数F：菲涅尔方程(Fresnel Rquation)，描述了物体表面在不同入射光角度下反射光线所占的比率</strong></p>
+<p>可以看出无论是几何函数G，还是菲涅尔方程F，都是由于观察方向，入射方向的不同所导致的只有部分光线能够被反射</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/12.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/13.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/14.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/15.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/16.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/17.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/18.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/19.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/20.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="菲涅尔方程与几何函数的补充"><a href="#菲涅尔方程与几何函数的补充" class="headerlink" title="菲涅尔方程与几何函数的补充"></a>菲涅尔方程与几何函数的补充</h2><h3 id="菲涅尔方程"><a href="#菲涅尔方程" class="headerlink" title="菲涅尔方程"></a>菲涅尔方程</h3><p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/21.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/22.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="几何函数"><a href="#几何函数" class="headerlink" title="几何函数"></a>几何函数</h3><p>几何函数G是为了表示微平面的自遮挡从而引起的光线损失，一般会出现如下两种的遮挡情况</p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/23.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%B8%89-%E5%BE%AE%E5%B9%B3%E9%9D%A2%E7%90%86%E8%AE%BA/24.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" class="category-chain-item">图形学</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/">#光线追踪</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>光线追踪(三) 微平面理论</div>
+      <div>https://shanhainanhua.github.io/2023/04/18/光线追踪-三-微平面理论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月18日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/" title="光线追踪(二) 辐射度量，BRDF，渲染方程，蒙特卡洛路径追踪">
+                        <span class="hidden-mobile">光线追踪(二) 辐射度量，BRDF，渲染方程，蒙特卡洛路径追踪</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
