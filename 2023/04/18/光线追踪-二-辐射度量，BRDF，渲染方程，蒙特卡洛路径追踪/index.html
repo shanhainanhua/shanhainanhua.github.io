@@ -82,7 +82,7 @@
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/57.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/58.png">
 <meta property="article:published_time" content="2023-04-18T10:50:45.000Z">
-<meta property="article:modified_time" content="2023-04-18T11:25:49.624Z">
+<meta property="article:modified_time" content="2023-04-23T05:23:20.207Z">
 <meta property="article:author" content="wantong">
 <meta property="article:tag" content="光线追踪">
 <meta name="twitter:card" content="summary_large_image">
@@ -264,7 +264,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
       <div class="banner-text text-center fade-in-up">
@@ -324,61 +324,6 @@
 		<div class="full-bg-img" >
 
 			
-				<script>
-					var ua = navigator.userAgent;
-					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
-						isMobile = isIphone || isAndroid;
-
-					function set_video_attr(id){
-
-						var height = document.body.clientHeight
-						var width = document.body.clientWidth
-						var video_item = document.getElementById(id);
-
-						if (height / width < 0.56){
-							video_item.setAttribute('width', '100%');
-							video_item.setAttribute('height', 'auto');
-						} else {
-							video_item.setAttribute('height', '100%');
-							video_item.setAttribute('width', 'auto');
-						}
-					}
-
-					$.getJSON('/vvd_js/video_url.json', function(data){
-						if (true){
-							var video_list_length = data.length
-							var seed = Math.random()
-							index = Math.floor(seed * video_list_length)
-							
-							video_url = data[index][0]
-							pre_show_image_url = data[index][1]
-							
-							banner_obj = document.getElementById("banner")
-							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
-
-							vvd_banner_obj = document.getElementById("vvd_banner_img")
-
-							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
-							vvd_banner_obj.innerHTML = vvd_banner_content
-							set_video_attr('banner_img_item')
-
-							if (!isMobile) {
-								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
-								document.getElementById("banner_video_insert").innerHTML = video_html_res;
-								set_video_attr('video_item')
-							}
-						}
-					});
-
-					if (!isMobile){
-						window.onresize = function(){
-							set_video_attr('video_item')
-							}
-						}
-				</script>
-			
 			</div>
 		</div>
     </div>
@@ -427,7 +372,7 @@
 <p>solid angle其实就是对应二维空间中圆的弧度在三维空间中球上的拓展。 首先看在二维计算弧度公式如下：</p>
 <p>那么对应在三维上的球的弧度(立体角)，只需进行一个简单的扩展如下：</p>
 <p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/5.png" srcset="/img/loading.gif" lazyload></p>
-<p>那么对于Radiant intensity的定义当中，微分立体角dw计算如下:</p>
+<p>那么对于Radiant intensity的定义当中，微分立体角dw计算如下:<br>推导过程：[<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/450731138]">https://zhuanlan.zhihu.com/p/450731138]</a></p>
 <p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/6.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/7.png" srcset="/img/loading.gif" lazyload></p>
 <p><img src="/2023/04/18/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA-%E4%BA%8C-%E8%BE%90%E5%B0%84%E5%BA%A6%E9%87%8F%EF%BC%8CBRDF%EF%BC%8C%E6%B8%B2%E6%9F%93%E6%96%B9%E7%A8%8B%EF%BC%8C%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E8%B7%AF%E5%BE%84%E8%BF%BD%E8%B8%AA/8.png" srcset="/img/loading.gif" lazyload></p>
