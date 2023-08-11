@@ -1,0 +1,835 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="总结计算机网络基础面试题目和知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网-基础">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="总结计算机网络基础面试题目和知识点">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312w2b05d4945e39821c3ba65c798af0e040-20230811162623-1g6bk71.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312wb212ee7ee25b134350aff53004cc0887-20230811162623-76r6tmo.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s00a468fa4b8476af1ff806d30170e1da-20230811162623-7rk1ryn.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s2e792c2f092d1b299fb27dd4990c1611-20230811162623-r8baoud.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sd2c31d0d6ea16923e9b4d23e8458c6ec-20230811162623-mmbl356.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sc434f3aebf2bc0a75d9845ef9654a195-20230811162623-nyla9mw.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sf0665a413d9f68fc2658dcdec7da6751-20230811162623-1al74lt.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s7b57f1fa7cb0f7ddd78c8442b85b300d-20230811162624-rm04mmo.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312te761e0ff7ff08ae81cdcdb6469270de0-20230811162624-ivywvwi.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s2303b48c6fd6aac3aa4378e3d53efe11-20230811162624-inaex91.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s02172db0e647016b5f6b38af749caf8e-20230811162624-rvcq1g3.png">
+<meta property="article:published_time" content="2023-08-11T08:30:47.000Z">
+<meta property="article:modified_time" content="2023-08-11T08:36:00.748Z">
+<meta property="article:author" content="wantong">
+<meta property="article:tag" content="计算机网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312w2b05d4945e39821c3ba65c798af0e040-20230811162623-1g6bk71.png">
+  
+  
+  
+  <title>计网-基础 - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <!--其中rgba中的a，指的是mask文件的alpha，透明度-->
+	<div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+	<div id="banner_video_insert">
+	</div>	
+	<div id='vvd_banner_img'>
+	</div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="计网-基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          31 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+	<script type="text/javascript" src="/vvd_js/jquery.js"></script>
+
+	<div class="banner" id='banner' >
+
+		<div class="full-bg-img" >
+
+			
+				<script>
+					var ua = navigator.userAgent;
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+						isMobile = isIphone || isAndroid;
+
+					function set_video_attr(id){
+
+						var height = document.body.clientHeight
+						var width = document.body.clientWidth
+						var video_item = document.getElementById(id);
+
+						if (height / width < 0.56){
+							video_item.setAttribute('width', '100%');
+							video_item.setAttribute('height', 'auto');
+						} else {
+							video_item.setAttribute('height', '100%');
+							video_item.setAttribute('width', 'auto');
+						}
+					}
+
+					$.getJSON('/vvd_js/video_url.json', function(data){
+						if (true){
+							var video_list_length = data.length
+							var seed = Math.random()
+							index = Math.floor(seed * video_list_length)
+							
+							video_url = data[index][0]
+							pre_show_image_url = data[index][1]
+							
+							banner_obj = document.getElementById("banner")
+							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+							vvd_banner_obj = document.getElementById("vvd_banner_img")
+
+							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+							vvd_banner_obj.innerHTML = vvd_banner_content
+							set_video_attr('banner_img_item')
+
+							if (!isMobile) {
+								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+								document.getElementById("banner_video_insert").innerHTML = video_html_res;
+								set_video_attr('video_item')
+							}
+						}
+					});
+
+					if (!isMobile){
+						window.onresize = function(){
+							set_video_attr('video_item')
+							}
+						}
+				</script>
+			
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">计网-基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>总结计算机网络基础面试题目和知识点</p>
+<span id="more"></span>
+
+<h1 id="1、OSI-七层模型、TCP-x2F-IP-五层模型以及各层的代表协议"><a href="#1、OSI-七层模型、TCP-x2F-IP-五层模型以及各层的代表协议" class="headerlink" title="1、OSI 七层模型、TCP&#x2F;IP 五层模型以及各层的代表协议"></a>1、OSI 七层模型、TCP&#x2F;IP 五层模型以及各层的代表协议</h1><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312w2b05d4945e39821c3ba65c798af0e040-20230811162623-1g6bk71.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/143654140">一文读懂OSI七层模型和TCP&#x2F;IP五层模型</a></p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312wb212ee7ee25b134350aff53004cc0887-20230811162623-76r6tmo.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　网络接口层的传输单位是<strong>帧</strong>（frame），IP 层的传输单位是<strong>包</strong>（packet），TCP 层的传输单位是<strong>段</strong>（segment），HTTP 的传输单位则是<strong>消息或报文</strong>（message）</p>
+<h2 id="为什么协议分层？是为了解决什么问题？"><a href="#为什么协议分层？是为了解决什么问题？" class="headerlink" title="为什么协议分层？是为了解决什么问题？"></a>为什么协议分层？是为了解决什么问题？</h2><p>　　总结原因： 简化、灵活、易维护、标准化</p>
+<p>　　<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/593911743">每日一道面试题-为什么要对网络协议分层？</a></p>
+<h2 id="两台计算机通信过程"><a href="#两台计算机通信过程" class="headerlink" title="两台计算机通信过程"></a>两台计算机通信过程</h2><p>　　<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/349790772">💻 一文读懂两台计算机之间是如何通信的</a></p>
+<h1 id="2、浏览器中输入URL到返回页面的全过程"><a href="#2、浏览器中输入URL到返回页面的全过程" class="headerlink" title="2、浏览器中输入URL到返回页面的全过程"></a>2、浏览器中输入URL到返回页面的全过程</h1><h2 id="总步骤"><a href="#总步骤" class="headerlink" title="总步骤"></a>总步骤</h2><ul>
+<li>1.根据域名，进行DNS域名解析；</li>
+<li>2.拿到解析的IP地址，建立TCP连接；</li>
+<li>3.向IP地址，发送HTTP请求；</li>
+<li>4.服务器处理请求；</li>
+<li>5.返回响应结果；</li>
+<li>6.关闭TCP连接；</li>
+<li>7.浏览器解析HTML；</li>
+<li>8.浏览器布局渲染；</li>
+</ul>
+<h2 id="查找域名：-本-根-顶级-权威"><a href="#查找域名：-本-根-顶级-权威" class="headerlink" title="查找域名： 本-根-顶级-权威"></a>查找域名： 本-根-顶级-权威</h2><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s00a468fa4b8476af1ff806d30170e1da-20230811162623-7rk1ryn.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　浏览器会先看自身有没有对这个域名的缓存，如果有，就直接返回，如果没有，就去问操作系统，操作系统也会去看自己的缓存，如果有，就直接返回，如果没有，再去 hosts 文件看，也没有，才会去问「本地 DNS 服务器」</p>
+<h2 id="协议栈"><a href="#协议栈" class="headerlink" title="协议栈"></a>协议栈</h2><p>　　通过 DNS 获取到 IP 后，就可以把 HTTP 的传输工作交给操作系统中的<strong>协议栈</strong>。</p>
+<p>　　协议栈的内部分为几个部分，分别承担不同的工作。上下关系是有一定的规则的，上面的部分会向下面的部分委托工作，下面的部分收到委托的工作并执行。</p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s2e792c2f092d1b299fb27dd4990c1611-20230811162623-r8baoud.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><code>ICMP</code> 用于告知网络包传送过程中产生的错误以及各种控制信息。</li>
+<li><code>ARP</code> 用于根据 IP 地址查询相应的以太网 MAC 地址。</li>
+</ul>
+<h3 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h3><p>　　ping&#x2F;traceroute 命令是基于 ICMP 协议来实现的。</p>
+<p>　　ICMP是 Internet Control Message Protocol 的缩写，即互联网控制消息协议。它是互联网协议族的核心协议之一。它用于 TCP&#x2F;IP 网络中发送控制消息，提供可能发生在通信环境中的各种问题反馈，通过这些信息，使网络管理者可以对所发生的问题作出诊断，然后采取适当的措施解决问题。</p>
+<p>　　从 ICMP 的报文格式来说，ICMP 是 IP 的上层协议。但是 ICMP 是分担了 IP 的一部分功能。所以，他也被认为是与 IP 同层的协议</p>
+<p>　　虽然 ICMP 是网络层协议，但是它不像 IP 协议和 ARP 协议一样直接传递给数据链路层，而是先封装成 IP 数据包然后再传递给数据链路层。所以在 IP 数据包中如果协议类型字段的值是 1 的话，就表示 IP 数据是 ICMP 报文。IP 数据包就是靠这个协议类型字段来区分不同的数据包的。</p>
+<p>　　在 IP 通信中如果某个包因为未知原因没有到达目的地址，那么这个具体的原因就是由 ICMP 负责告知。而 ICMP 协议的类型定义中就清楚的描述了各种报文的含义。</p>
+<p>　　ICMP协议的类型分为两大类，<strong>查询报文</strong>和<strong>差错报文</strong>。</p>
+<p>　　<strong>ping命令原理</strong></p>
+<ol>
+<li><strong>向目的服务器发送回显请求</strong>    ：主机会构建一个 ICMP 回显请求消息数据包（类型是8，代码是0），在这个回显请求数据包中，除了类型和代码字段，还被追加了标识符（填写进程号）和序号字段（每送出一个数据包数值就增加1）。</li>
+<li><strong>目的服务器发送回显应答</strong> ：（类型是0，代码是0）</li>
+<li><strong>源服务器显示相关数据</strong>： 记住发送回显请求数据包的时间，与接收到回显应答数据包的时间差，就能计算出数据包一去一回所需要的时间。这个时候ping命令就会将目的服务器的 IP 地址，数据大小，往返花费的时间打印到屏幕上。</li>
+</ol>
+<p>　　<strong>traceroute命令原理</strong></p>
+<p>　　利用ICMP差错报文，原理就是利用 IP 包的 TTL 从 1 开始按照顺序递增的同时发送 UDP 包，强制接收 ICMP 超时消息的方法。</p>
+<p>　　（1）首先 traceroute 会将 IP 包的 TTL 设置 为 1，然后发送 UDP 包，他会填入一个端口号作为 UDP 目标端口号（默认是：33434-33534）</p>
+<p>　　（2）当目的主机收到 UDP 包后，会返回 ICMP 差错报文消息（类型 3，代码 3）。该报文类型是端口不可达，说明发送方发出的 UDP 包到达了目的主机。</p>
+<p>　　这样的过程，traceroute 就可以拿到了所有的路由器 IP，这样子就可以看到从源主机到目的主机过程中的所有路由信息。</p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sd2c31d0d6ea16923e9b4d23e8458c6ec-20230811162623-mmbl356.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　traceroute 在类 Unix&#x2F;Linux 系统中默认使用的是 UDP 协议，也可以通过参数修改为使用 ICMP 协议；Windows 操作系统中只使用 ICMP 协议。</p>
+<h3 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h3><p>　　地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP&#x2F;IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源。</p>
+<p>　　**ARP表 **</p>
+<p>　　网络设备一般都有一个ARP缓存（ARP Cache），ARP缓存用来存放IP地址和MAC地址的关联信息。</p>
+<p>　　ARP表项又分为动态ARP表项和静态ARP表项。</p>
+<p>　　<strong>动态ARP表项</strong>：</p>
+<p>　　动态ARP表项由ARP协议通过ARP报文自动生成和维护，可以被老化，可以被新的ARP报文更新，可以被静态ARP表项覆盖。每个动态ARP缓存项的潜在生命周期是10分钟。新加到缓存中的项目带有时间戳，如果某个项目添加后2分钟内没有再使用，则此项目过期并从ARP缓存中删除；如果某个项目已在使用，则又收到2分钟的生命周期；如果某个项目始终在使用，则会另外收到2分钟的生命周期，一直到10分钟的最长生命周期</p>
+<p>　　<strong>静态ARP表项</strong></p>
+<p>　　静态ARP表项通过手工配置和维护，不会被老化，不会被动态ARP表项覆盖。直到重新启动计算机为止。</p>
+<p>　　一般情况下，ARP动态执行并自动寻求IP地址到以太网MAC地址的解析，无需管理员的介入。</p>
+<p>　　当希望设备和指定用户只能使用某个固定的IP地址和MAC地址通信时，可以配置短静态ARP表项，当进一步希望限定这个用户只在某VLAN内的某个特定接口上连接时就可以配置长静态ARP表项。</p>
+<h2 id="可靠传输-TCP"><a href="#可靠传输-TCP" class="headerlink" title="可靠传输-TCP"></a>可靠传输-TCP</h2><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sc434f3aebf2bc0a75d9845ef9654a195-20230811162623-nyla9mw.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　<code>SYN</code> 是发起一个连接，<code>ACK</code> 是回复，<code>RST</code> 是重新连接，<code>FIN</code> 是结束连接等。TCP 是面向连接的，因而双方要维护连接的状态，这些带状态位的包的发送，会引起双方的状态变更。</p>
+<p>　　TCP有流量控制和拥塞控制</p>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a><strong>三次握手</strong></h3><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312sf0665a413d9f68fc2658dcdec7da6751-20230811162623-1al74lt.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　TCP 的连接状态查看，在 Linux 可以通过 <code>netstat -napt</code> 命令查看。</p>
+<h3 id="分割数据"><a href="#分割数据" class="headerlink" title="分割数据"></a><strong>分割数据</strong></h3><p>　　如果 HTTP 请求消息比较长，超过了 <code>MSS</code> 的长度，这时 TCP 就需要把 HTTP 的数据拆解成一块块的数据发送，而不是一次性发送所有数据。</p>
+<p>　　数据会被以 <code>MSS</code> 的长度为单位进行拆分，拆分出来的每一块数据都会被放进单独的网络包中。也就是在每个被拆分的数据加上 TCP 头信息，然后交给 IP 模块来发送数据。</p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s7b57f1fa7cb0f7ddd78c8442b85b300d-20230811162624-rm04mmo.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　在双方建立了连接后，TCP 报文中的数据部分就是存放 HTTP 头部 + 数据，组装好 TCP 报文之后，就需交给下面的网络层处理。</p>
+<h2 id="远程定位-IP"><a href="#远程定位-IP" class="headerlink" title="远程定位-IP"></a>远程定位-IP</h2><p>　　在 IP 协议里面需要有<strong>源地址 IP</strong> 和 <strong>目标地址 IP</strong>：</p>
+<ul>
+<li>源地址IP，即是客户端输出的 IP 地址；</li>
+<li>目标地址，即通过 DNS 域名解析得到的 Web 服务器 IP。</li>
+</ul>
+<p>　　当存在多个网卡时，在填写源地址 IP 时，就需要判断到底应该填写哪个地址。这个判断相当于在多块网卡中判断应该使用哪个一块网卡来发送包。</p>
+<p>　　这个时候就需要根据<strong>路由表</strong>规则，来判断哪一个网卡作为源地址 IP。 掩码与运算</p>
+<p>　　<strong>有了MAC地址，为什么还要有IP地址？</strong></p>
+<p>　　<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41549632/article/details/116711241?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-1-116711241-blog-86708609.235%5Ev32%5Epc_relevant_default_base3&spm=1001.2101.3001.4242.2&utm_relevant_index=4">有了MAC地址，为什么还要有IP地址？或者说有了 IP 地址，为什么还要用 MAC 地址？_有了mac地址为什么还需要ip地址呢_天亮i的博客-CSDN博客</a></p>
+<p>　　<strong>有了IP为什么还要有MAC？</strong></p>
+<p>　　<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/571619940">有了IP地址，为何还要有MAC地址</a></p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312te761e0ff7ff08ae81cdcdb6469270de0-20230811162624-ivywvwi.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="两点运输-MAC"><a href="#两点运输-MAC" class="headerlink" title="两点运输-MAC"></a>两点运输-MAC</h2><p>　　在 MAC 包头里需要<strong>发送方 MAC 地址</strong>和<strong>接收方目标 MAC 地址</strong>，用于<strong>两点之间的传输</strong>。</p>
+<p>　　一般在 TCP&#x2F;IP 通信里，MAC 包头的<strong>协议类型</strong>只使用：</p>
+<ul>
+<li><code>0800</code> ： IP 协议</li>
+<li><code>0806</code> ： ARP 协议</li>
+</ul>
+<p>　　至此，网络包的报文如下图：</p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s2303b48c6fd6aac3aa4378e3d53efe11-20230811162624-inaex91.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="出口-网卡"><a href="#出口-网卡" class="headerlink" title="出口-网卡"></a>出口-网卡</h2><p>　　网络包只是存放在内存中的一串二进制数字信息，没有办法直接发送给对方。因此，我们需要将<strong>数字信息转换为电信号</strong>，才能在网线上传输，也就是说，这才是真正的数据发送过程。</p>
+<p>　　负责执行这一操作的是<strong>网卡</strong>，要控制网卡还需要靠<strong>网卡驱动程序</strong>。</p>
+<p>　　网卡驱动获取网络包之后，会将其<strong>复制</strong>到网卡内的缓存区中，接着会在其<strong>开头加上报头和起始帧分界符，在末尾加上用于检测错误的帧校验序列</strong>。</p>
+<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-%E5%9F%BA%E7%A1%80/net-img-312s02172db0e647016b5f6b38af749caf8e-20230811162624-rvcq1g3.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="送别者-交换机"><a href="#送别者-交换机" class="headerlink" title="送别者-交换机"></a>送别者-交换机</h2><p>　　交换机的端口不核对接收方 MAC 地址，而是直接接收所有的包并存放到缓冲区中。因此，和网卡不同，<strong>交换机的端口不具有 MAC 地址</strong></p>
+<p>　　交换机的 MAC 地址表主要包含两个信息：</p>
+<ul>
+<li>一个是设备的 MAC 地址，</li>
+<li>另一个是该设备连接在交换机的哪个端口上。</li>
+</ul>
+<p>　　<strong>交换机根据 MAC 地址表查找 MAC 地址，然后将信号发送到相应的端口</strong></p>
+<p>　　地址表中找不到指定的 MAC 地址，交换机无法判断应该把包转发到哪个端口，只能将包转发到除了源端口之外的所有端口上，无论该设备连接在哪个端口上都能收到这个包。</p>
+<p>　　此外，如果接收方 MAC 地址是一个<strong>广播地址</strong>，那么交换机会将包发送到除源端口之外的所有端口。</p>
+<p>　　以下两个属于广播地址：</p>
+<ul>
+<li>MAC 地址中的 <code>FF:FF:FF:FF:FF:FF</code></li>
+<li>IP 地址中的 <code>255.255.255.255</code></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%85%AB%E8%82%A1/" class="category-chain-item">八股</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>计网-基础</div>
+      <div>https://shanhainanhua.github.io/2023/08/11/计网-基础/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/" title="计网-TCP">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">计网-TCP</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/23/Unity-Shader%E5%85%A5%E9%97%A8/" title="Unity Shader入门">
+                        <span class="hidden-mobile">Unity Shader入门</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
