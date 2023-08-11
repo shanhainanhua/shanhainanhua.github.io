@@ -35,8 +35,9 @@
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312w4c3245c47ce008785dab7a42e9cae60c-20230811162630-c2soyk0.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312w0ed8be25d628153040d7b5c901d8cb8c-20230811162630-t4cqtyw.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312wdd652bebf8c0748266591e2c92162de9-20230811162630-8hfs467.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/image-20230811220001-43qia5z.png">
 <meta property="article:published_time" content="2023-08-11T08:31:00.000Z">
-<meta property="article:modified_time" content="2023-08-11T08:33:31.362Z">
+<meta property="article:modified_time" content="2023-08-11T14:30:53.854Z">
 <meta property="article:author" content="wantong">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
@@ -242,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          4.6k 字
+          7.8k 字
         
       </span>
     
@@ -253,7 +254,7 @@
         
         
         
-          39 分钟
+          66 分钟
         
       </span>
     
@@ -415,7 +416,16 @@
 </tr>
 </tbody></table>
 <p>　　注意，<strong>ACK 报文是不会有重传的，当 ACK 丢失了，就由对方重传对应的报文</strong>。</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="2、TCP四次挥手"><a href="#2、TCP四次挥手" class="headerlink" title="2、TCP四次挥手"></a>2、TCP四次挥手</h1><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312waa4a7ece5bdd5f6ea4e11454fd7ba381-20230811162629-7fau260.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="如何防范TCP洪泛攻击？"><a href="#如何防范TCP洪泛攻击？" class="headerlink" title="如何防范TCP洪泛攻击？"></a>如何防范TCP洪泛攻击？</h2><h3 id="什么是-SYN-Flood？"><a href="#什么是-SYN-Flood？" class="headerlink" title="什么是 SYN Flood？"></a>什么是 SYN Flood？</h3><p>　　SYN Flood（SYN 洪泛攻击）就是 <strong>Client 在短时间内伪造大量不存在的源 IP 地址，并向 Server 不断地发送 SYN 包</strong>，Server 一旦接收到 Client 发来的 Syn 报文，就<strong>立即</strong>为该请求分配一个 <strong>TCB（Transmission Control Block）</strong>，并回复 ACK 确认包，等待 Client 确认。由于源地址不存在，因此 Server 需要不断重发直至超时</p>
+<p>　　<strong>这些伪造的 SYN 包将长时间占用「半连接队列」，并请求分配大量 TCB，消耗服务器资源，同时也导致正常的 SYN 请求因为队列满而被丢弃，从而引起网络拥塞甚至系统瘫痪</strong></p>
+<h3 id="如何防御-SYN-Flood？"><a href="#如何防御-SYN-Flood？" class="headerlink" title="如何防御 SYN Flood？"></a>如何防御 SYN Flood？</h3><ol>
+<li>配置防火墙：防火墙可以通过限制每秒钟接收的 SYN 请求数量，或限制源地址的数量来降低攻击的威力。</li>
+<li>使用反向代理：将流量分配到多个服务器上，通过负载均衡来减轻单台服务器的负担，从而使服务器更难受到攻击。</li>
+<li>使用 CDN：使用 CDN 可以帮助过滤掉大部分的攻击流量，并将请求转发到最近的可用服务器上。</li>
+<li>限制连接数：限制每个 IP 地址的连接数量，通过对 TCP 连接进行监控和记录，及时发现异常连接行为，限制同一 IP 地址的连接数量。</li>
+<li>绕过半连接队列，使用cookies确认验证，<code>cookies</code>​并不会有一个专门的队列保存，它是通过<strong>通信双方的IP地址端口、时间戳、MSS</strong>等信息进行<strong>实时计算</strong>的，保存在<strong>TCP报头</strong>的<code>seq</code>​里。</li>
+</ol>
+<h1 id="2、TCP四次挥手"><a href="#2、TCP四次挥手" class="headerlink" title="2、TCP四次挥手"></a>2、TCP四次挥手</h1><p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312waa4a7ece5bdd5f6ea4e11454fd7ba381-20230811162629-7fau260.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="为什么要是四次，可以变成三次吗？"><a href="#为什么要是四次，可以变成三次吗？" class="headerlink" title="为什么要是四次，可以变成三次吗？"></a>为什么要是四次，可以变成三次吗？</h2><p>　　Q1：</p>
 <blockquote>
 <p>关闭连接时，客户端向服务端发送 <code>FIN</code> 时，仅仅表示客户端不再发送数据了但是还能接收数据。</p>
@@ -492,8 +502,8 @@
 </blockquote>
 <h2 id="为什么-TIME-WAIT-等待的时间是-2MSL？"><a href="#为什么-TIME-WAIT-等待的时间是-2MSL？" class="headerlink" title="为什么 TIME_WAIT 等待的时间是 2MSL？"></a>为什么 TIME_WAIT 等待的时间是 2MSL？</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">MSL 是 Maximum Segment Lifetime，报文最大生存时间<br></code></pre></td></tr></table></figure>
 
-<p>　　网络中可能存在来自发送方的数据包，<strong>一来一回需要等待 2 倍的时间</strong>。</p>
-<p>　　<strong>至少允许报文丢失一次</strong>。比如，若 ACK 在一个 MSL 内丢失，这样被动方重发的 FIN 会在第 2 个 MSL 内到达，TIME_WAIT 状态的连接可以应对。</p>
+<p>网络中可能存在来自发送方的数据包，<strong>一来一回需要等待 2 倍的时间</strong>。</p>
+<p><strong>至少允许报文丢失一次</strong>。比如，若 ACK 在一个 MSL 内丢失，这样被动方重发的 FIN 会在第 2 个 MSL 内到达，TIME_WAIT 状态的连接可以应对。</p>
 <h2 id="TIME-WAIT过多危害"><a href="#TIME-WAIT过多危害" class="headerlink" title="TIME_WAIT过多危害"></a>TIME_WAIT过多危害</h2><p>　　发起连接方：端口被占满，但<strong>不同服务端端口可以复用</strong></p>
 <p>　　连接接收方：端口不受限，但占用系统资源</p>
 <h2 id="场景题"><a href="#场景题" class="headerlink" title="场景题"></a>场景题</h2><p>　　<a target="_blank" rel="noopener" href="https://xiaolincoding.com/network/3_tcp/tcp_interview.html#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BA%E7%8E%B0%E5%A4%A7%E9%87%8F-time-wait-%E7%8A%B6%E6%80%81%E7%9A%84%E5%8E%9F%E5%9B%A0%E6%9C%89%E5%93%AA%E4%BA%9B">4.1 TCP 三次握手与四次挥手面试题</a></p>
@@ -618,7 +628,67 @@
 <li><code>ssthresh = cwnd</code>;</li>
 <li>进入快速恢复算法</li>
 </ul>
-<p>　　<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312wdd652bebf8c0748266591e2c92162de9-20230811162630-8hfs467.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　​<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312wdd652bebf8c0748266591e2c92162de9-20230811162630-8hfs467.png" srcset="/img/loading.gif" lazyload></p>
+<p>　　‍</p>
+<h1 id="什么是TCP拆包和粘包问题？怎么解决？"><a href="#什么是TCP拆包和粘包问题？怎么解决？" class="headerlink" title="什么是TCP拆包和粘包问题？怎么解决？"></a>什么是TCP拆包和粘包问题？怎么解决？</h1><p>　　首先明确原因：</p>
+<ul>
+<li>TCP面向字节流</li>
+<li>用户消息通过 TCP 协议传输时，<strong>消息可能会被操作系统分组成多个的 TCP 报文</strong></li>
+<li>不知道消息边界无法读出有效的用户消息</li>
+</ul>
+<h2 id="为什么UDP没有？"><a href="#为什么UDP没有？" class="headerlink" title="为什么UDP没有？"></a>为什么UDP没有？</h2><p>　　粘包拆包问题在数据链路层、网络层以及传输层都有可能发生。日常的网络应用开发大都在传输层进行，由于<strong>UDP有消息保护边界</strong>，不会发生粘包拆包问题，因此粘包拆包问题只发生在TCP协议中。</p>
+<p>　　操作系统在收到 UDP 报文后，会将其插入到队列里，<strong>队列里的每一个元素就是一个 UDP 报文</strong>，这样当用户调用 recvfrom() 系统调用读数据的时候，就会从队列里取出一个数据，然后从内核里拷贝给用户缓冲区。</p>
+<h2 id="粘包拆包发生场景："><a href="#粘包拆包发生场景：" class="headerlink" title="粘包拆包发生场景："></a>粘包拆包发生场景：</h2><p>　　因为TCP是面向流，没有边界，而操作系统在发送TCP数据时，会通过缓冲区来进行优化，例如缓冲区为1024个字节大小。</p>
+<p>　　如果一次请求发送的数据量比较小，没达到缓冲区大小，TCP则会将<strong>多个请求合并为同一个请求</strong>进行发送，这就形成了粘包问题。</p>
+<p>　　如果一次请求发送的数据量比较大，超过了缓冲区大小，TCP就会将其<strong>拆分为多次发送</strong>，这就是拆包。</p>
+<h2 id="常见解决方案："><a href="#常见解决方案：" class="headerlink" title="常见解决方案："></a>常见解决方案：</h2><ul>
+<li>发送端将每个包都封装成<strong>固定的长度</strong>，比如100字节大小。如果不足100字节可通过补0或空等进行填充到指定长度；</li>
+<li>发送端在每个包的<strong>末尾</strong>使用<strong>固定的分隔符</strong>，例如\r\n。如果发生拆包需等待多个包发送过来之后再找到其中的\r\n进行合并；例如，FTP协议；</li>
+<li>将<strong>消息分为头部和消息体</strong>，头部中保存整个消息的长度，只有读取到足够长度的消息之后才算是读到了一个完整的消息；</li>
+<li>通过<strong>自定义协议</strong>进行粘包和拆包的处理。</li>
+</ul>
+<p>　　‍</p>
+<h1 id="TCP糊涂窗口综合症（SWS）和解决方案？"><a href="#TCP糊涂窗口综合症（SWS）和解决方案？" class="headerlink" title="TCP糊涂窗口综合症（SWS）和解决方案？"></a>TCP糊涂窗口综合症（SWS）和解决方案？</h1><h2 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h2><p>　　当发送端应用进程产生数据很慢、或接收端应用进程处理接收缓冲区数据很慢，或二者兼而有之；就会使应用进程间传送的报文段很小，特别是有效载荷很小。极端情况下，有效载荷可能只有1个字节；而传输开销有40字节(20字节的IP头+20字节的TCP头) 这种现象就叫糊涂窗口综合症。</p>
+<h2 id="解决方案？"><a href="#解决方案？" class="headerlink" title="解决方案？"></a>解决方案？</h2><p>　　发送方：</p>
+<p>　　Nagle 算法：指发送端即使还有应该发送的数据，但如果这部分数据很少的话，则进行延迟发送的一种处理机制。具体来说，当满足已发送的数据都已经收到确认应答时；或者可以发送的数据大小 &gt;&#x3D; 内核缓冲区大小的一半时，才可以发送数据。这样，从发送方的角度去防止了小报文的发送</p>
+<p>　　接收方：</p>
+<p>　　方案 1：只要窗口大小 &lt; 某个值（内核缓冲区大小的一半）的时候，就直接将窗口大小设置为 0，防止发送方发送小数据；然后等到窗口大小 &gt;&#x3D; 内核缓冲区大小的一半 的时候，才打开窗口，通告发送方，告知其可以发送数据。这样就可以防止发送方发送小报文了</p>
+<p>　　方案 2（延迟确认应答）：延迟确认应答其实是针对如果接受数据的主机在接收到报文的时候就立刻返回 ACK 应答的话，这时候返回的窗口可能比较小。如果接收方稍微等一会再应答，那么这个时候接收的数据已经被处理完了，从缓冲区中被清理出去了，这样的话，窗口就变大了，发送方能够发送的数据也就更多了</p>
+<p>　　‍</p>
+<h1 id="TCP首部包含哪些字段？"><a href="#TCP首部包含哪些字段？" class="headerlink" title="TCP首部包含哪些字段？"></a>TCP首部包含哪些字段？</h1><p>　　​<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/image-20230811220001-43qia5z.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　<strong>TCP 首部包含可选项，所以总体长度可变，但包含 20 字节的固定部分（和 IP 首部一样）</strong></p>
+<ul>
+<li><strong>确认 ACK</strong>：仅当 ACK &#x3D; 1 时确认号字段 ack 才有效。TCP 规定，TCP 规定除了最初建立连接时的 <code>SYN</code>​ 包之外该位必须设置为 1</li>
+<li><strong>推送 PSH</strong>（Push）：当两个应用进程进行交互式的通信时，有时在一端的应用进程希望在键入一个命令后立即就能收到对方的响应。在这种情况下，TCP 就可以使用推送（push）操作。这时，发送方 TCP 把 PSH 置为 1，并立即创建一个报文段发送出去。接收方 TCP 收到 PSH &#x3D; 1 的报文段，就尽快地交付接收应用进程。而不用等到整个缓存都填满了后再向上交付。</li>
+<li><strong>复位 RST</strong>（Reset）：当 RST &#x3D; 1 时，表明 TCP 连接中出现了严重错误（如由于主机崩溃或其他原因），必须释放连接，然后再重新建立连接</li>
+<li><strong>同步 SYN</strong>：SYN &#x3D; 1 表示这是希望建立连接</li>
+<li><strong>终止 FIN</strong>（Finish）：用来释放一个连接。当 FIN &#x3D; 1时，表明此报文段的发送发的数据已发送完毕，并要求释放连接</li>
+</ul>
+<h1 id="TCP中有哪些定时器？"><a href="#TCP中有哪些定时器？" class="headerlink" title="TCP中有哪些定时器？"></a>TCP中有哪些定时器？</h1><p>　　对于每个TCP连接，TCP一般要管理4个不同的定时器：<strong>重传定时器</strong>、<strong>坚持定时器</strong>、<strong>保活定时器</strong>、<strong>2MSL定时器</strong>。</p>
+<p>　　重传定时器：计算超时重传时间</p>
+<p>　　坚持定时器：也叫持续计数器，为了解决窗口为0的问题</p>
+<blockquote>
+<p>若坚持定时器设置的时间到期，就发送一个零窗体控測报文段（该报文段仅仅有一个字节的数据，它有一个序号，但该序号永远不须要确认，因此该序号能够持续重传），之后会出现下面三种情况：</p>
+<pre><code class="hljs">1、对方在收到探測报文段后，在对该报文段的确认中给出如今的窗体值，假设窗体值仍未零，则收到这个报文段的一方将坚持定时器的值加倍并重新启动。坚持计数器最大仅仅能添加到约60秒，在此之后，每次收到零窗体通知，坚持计数器的值就定位60秒。
+
+2、对方在收到探測报文段后，在对该报文段的确认中给出如今的窗体值，假设窗体不为零，那么死锁的僵局就被打破了。
+
+3、该探測报文发出后，会同一时候启动重传定时器，假设重传定时器的时间到期，还没有收到接收到发来的响应，则超时重传探測报文。
+</code></pre>
+</blockquote>
+<p>　　保活定时器：应对两个TCP连接间长时间没有传输数据的情况。 通常为2小时，以后每隔75s发送一次，连续10次终止连接。</p>
+<p>　　2MSL定时器：为什么 TIME_WAIT 等待的时间是 2MSL？</p>
+<h1 id="怎么快速回收TCP资源？"><a href="#怎么快速回收TCP资源？" class="headerlink" title="怎么快速回收TCP资源？"></a>怎么快速回收TCP资源？</h1><p>　　<strong>快速回收和重用TIME-WAIT</strong></p>
+<p>　　不再等待2MSL，等待一个重传时间直接释放。</p>
+<p>　　IP层可以保存一个peer信息，有peer的IP地址信息以及TCP最后一次触摸它的时间戳，遵循一定规范就可快速接入。</p>
+<p>　　<a target="_blank" rel="noopener" href="https://blog.csdn.net/dog250/article/details/13760985">TCP的TIME_WAIT快速回收与重用_dog250的博客-CSDN博客</a></p>
+<p>　　‍</p>
+<h1 id="DNS协议为什么同时使用TCP和UDP？"><a href="#DNS协议为什么同时使用TCP和UDP？" class="headerlink" title="DNS协议为什么同时使用TCP和UDP？"></a>DNS协议为什么同时使用TCP和UDP？</h1><p>　　DNS使用<strong>TCP协议进行区域传输</strong>，使用<strong>UDP协议进行名称查询</strong>。</p>
+<p>　　UDP协议用于交换小信息，而TCP协议必须用于交换大于<strong>512字节</strong>的信息。</p>
+<p>　　如果客户端未从DNS获取响应，则必须在间隔3-5秒后使用TCP重新传输数据。</p>
+<p>　　当域名解析的反馈报文的长度超过512字节时，将不能使用UDP协议进行解析，此时必须使用TCP。</p>
+<p>　　区域传输的数据量相比单次DNS查询的数据量要大得多，区域传输对数据的可靠性和准确性相比普通的DNS查询要高得多，因此使用TCP协议。</p>
+<p>　　‍</p>
 
                 
               </div>
@@ -708,6 +778,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2023/08/11/C++11%E7%89%B9%E6%80%A7/" title="C++11特性">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">C++11特性</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
