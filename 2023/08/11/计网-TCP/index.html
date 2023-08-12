@@ -37,7 +37,7 @@
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312wdd652bebf8c0748266591e2c92162de9-20230811162630-8hfs467.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/image-20230811220001-43qia5z.png">
 <meta property="article:published_time" content="2023-08-11T08:31:00.000Z">
-<meta property="article:modified_time" content="2023-08-11T14:30:53.854Z">
+<meta property="article:modified_time" content="2023-08-12T07:28:23.072Z">
 <meta property="article:author" content="wantong">
 <meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
@@ -243,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          7.8k 字
+          8.5k 字
         
       </span>
     
@@ -254,7 +254,7 @@
         
         
         
-          66 分钟
+          72 分钟
         
       </span>
     
@@ -630,17 +630,17 @@
 </ul>
 <p>　　​<img src="/2023/08/11/%E8%AE%A1%E7%BD%91-TCP/net-img-312wdd652bebf8c0748266591e2c92162de9-20230811162630-8hfs467.png" srcset="/img/loading.gif" lazyload></p>
 <p>　　‍</p>
-<h1 id="什么是TCP拆包和粘包问题？怎么解决？"><a href="#什么是TCP拆包和粘包问题？怎么解决？" class="headerlink" title="什么是TCP拆包和粘包问题？怎么解决？"></a>什么是TCP拆包和粘包问题？怎么解决？</h1><p>　　首先明确原因：</p>
+<h1 id="什么是TCP拆包和粘包问题？怎么解决？"><a href="#什么是TCP拆包和粘包问题？怎么解决？" class="headerlink" title="什么是TCP拆包和粘包问题？怎么解决？"></a>什么是TCP拆包和粘包问题？怎么解决？</h1><p>首先明确原因：</p>
 <ul>
 <li>TCP面向字节流</li>
 <li>用户消息通过 TCP 协议传输时，<strong>消息可能会被操作系统分组成多个的 TCP 报文</strong></li>
 <li>不知道消息边界无法读出有效的用户消息</li>
 </ul>
-<h2 id="为什么UDP没有？"><a href="#为什么UDP没有？" class="headerlink" title="为什么UDP没有？"></a>为什么UDP没有？</h2><p>　　粘包拆包问题在数据链路层、网络层以及传输层都有可能发生。日常的网络应用开发大都在传输层进行，由于<strong>UDP有消息保护边界</strong>，不会发生粘包拆包问题，因此粘包拆包问题只发生在TCP协议中。</p>
-<p>　　操作系统在收到 UDP 报文后，会将其插入到队列里，<strong>队列里的每一个元素就是一个 UDP 报文</strong>，这样当用户调用 recvfrom() 系统调用读数据的时候，就会从队列里取出一个数据，然后从内核里拷贝给用户缓冲区。</p>
-<h2 id="粘包拆包发生场景："><a href="#粘包拆包发生场景：" class="headerlink" title="粘包拆包发生场景："></a>粘包拆包发生场景：</h2><p>　　因为TCP是面向流，没有边界，而操作系统在发送TCP数据时，会通过缓冲区来进行优化，例如缓冲区为1024个字节大小。</p>
-<p>　　如果一次请求发送的数据量比较小，没达到缓冲区大小，TCP则会将<strong>多个请求合并为同一个请求</strong>进行发送，这就形成了粘包问题。</p>
-<p>　　如果一次请求发送的数据量比较大，超过了缓冲区大小，TCP就会将其<strong>拆分为多次发送</strong>，这就是拆包。</p>
+<h2 id="为什么UDP没有？"><a href="#为什么UDP没有？" class="headerlink" title="为什么UDP没有？"></a>为什么UDP没有？</h2><p>粘包拆包问题在数据链路层、网络层以及传输层都有可能发生。日常的网络应用开发大都在传输层进行，由于<strong>UDP有消息保护边界</strong>，不会发生粘包拆包问题，因此粘包拆包问题只发生在TCP协议中。</p>
+<p>操作系统在收到 UDP 报文后，会将其插入到队列里，<strong>队列里的每一个元素就是一个 UDP 报文</strong>，这样当用户调用 recvfrom() 系统调用读数据的时候，就会从队列里取出一个数据，然后从内核里拷贝给用户缓冲区。</p>
+<h2 id="粘包拆包发生场景："><a href="#粘包拆包发生场景：" class="headerlink" title="粘包拆包发生场景："></a>粘包拆包发生场景：</h2><p>因为TCP是面向流，没有边界，而操作系统在发送TCP数据时，会通过缓冲区来进行优化，例如缓冲区为1024个字节大小。</p>
+<p>如果一次请求发送的数据量比较小，没达到缓冲区大小，TCP则会将<strong>多个请求合并为同一个请求</strong>进行发送，这就形成了粘包问题。</p>
+<p>如果一次请求发送的数据量比较大，超过了缓冲区大小，TCP就会将其<strong>拆分为多次发送</strong>，这就是拆包。</p>
 <h2 id="常见解决方案："><a href="#常见解决方案：" class="headerlink" title="常见解决方案："></a>常见解决方案：</h2><ul>
 <li>发送端将每个包都封装成<strong>固定的长度</strong>，比如100字节大小。如果不足100字节可通过补0或空等进行填充到指定长度；</li>
 <li>发送端在每个包的<strong>末尾</strong>使用<strong>固定的分隔符</strong>，例如\r\n。如果发生拆包需等待多个包发送过来之后再找到其中的\r\n进行合并；例如，FTP协议；</li>
@@ -688,6 +688,15 @@
 <p>　　如果客户端未从DNS获取响应，则必须在间隔3-5秒后使用TCP重新传输数据。</p>
 <p>　　当域名解析的反馈报文的长度超过512字节时，将不能使用UDP协议进行解析，此时必须使用TCP。</p>
 <p>　　区域传输的数据量相比单次DNS查询的数据量要大得多，区域传输对数据的可靠性和准确性相比普通的DNS查询要高得多，因此使用TCP协议。</p>
+<h1 id="一台机器最大支持多少TCP连接？"><a href="#一台机器最大支持多少TCP连接？" class="headerlink" title="一台机器最大支持多少TCP连接？"></a>一台机器最大支持多少TCP连接？</h1><p>　　<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/290651392">一台机器最多能撑多少个TCP连接? 今天掰扯清楚！ - 知乎 (zhihu.com)</a></p>
+<ul>
+<li><strong>TCP连接的客户端机：</strong>每一个ip可建立的TCP连接理论受限于ip_local_port_range参数，也受限于65535。但可以通过配置多ip的方式来加大自己的建立连接的能力。</li>
+<li><strong>TCP连接的服务器机：</strong>每一个监听的端口虽然理论值很大，但这个数字没有实际意义。最大并发数取决你的内存大小，每一条静止状态的TCP连接大约需要吃3<br>.3K的内存。</li>
+</ul>
+<h1 id="一台主机可以有多少端口？"><a href="#一台主机可以有多少端口？" class="headerlink" title="一台主机可以有多少端口？"></a>一台主机可以有多少端口？</h1><p>　　TCP&#x2F;IP协议中的服务端口通过不同的逻辑端口来区分不同的服务。一个IP地址的端口通过16bit进行编号，最多可以有65535个端口。</p>
+<p>　　<a target="_blank" rel="noopener" href="https://www.cnblogs.com/innershare/">Innershar</a></p>
+<h2 id="常见的端口号及其用途"><a href="#常见的端口号及其用途" class="headerlink" title="常见的端口号及其用途"></a><a target="_blank" rel="noopener" href="https://www.cnblogs.com/innershare/p/10749981.html">常见的端口号及其用途</a></h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">一些常见的端口号及其用途如下：</span><br><span class="hljs-number">21</span><span class="hljs-string">端口：FTP</span> <span class="hljs-string">文件传输服务</span><br><span class="hljs-number">22</span><span class="hljs-string">端口：SSH</span> <span class="hljs-string">端口</span><br><span class="hljs-number">23</span><span class="hljs-string">端口：TELNET</span> <span class="hljs-string">终端仿真服务</span><br><span class="hljs-number">25</span><span class="hljs-string">端口：SMTP</span> <span class="hljs-string">简单邮件传输服务</span><br><span class="hljs-number">53</span><span class="hljs-string">端口：DNS</span> <span class="hljs-string">域名解析服务</span><br><span class="hljs-number">80</span><span class="hljs-string">端口：HTTP</span> <span class="hljs-string">超文本传输服务</span><br><span class="hljs-number">110</span><span class="hljs-string">端口：POP3</span> <span class="hljs-string">“邮局协议版本3”使用的端口</span><br><span class="hljs-number">443</span><span class="hljs-string">端口：HTTPS</span> <span class="hljs-string">加密的超文本传输服务</span><br><span class="hljs-number">1433</span><span class="hljs-string">端口：MS</span> <span class="hljs-string">SQL*SERVER数据库</span> <span class="hljs-string">默认端口号</span><br><span class="hljs-number">1521</span><span class="hljs-string">端口：Oracle数据库服务</span><br><span class="hljs-number">1863</span><span class="hljs-string">端口：MSN</span> <span class="hljs-string">Messenger的文件传输功能所使用的端口</span><br><span class="hljs-number">3306</span><span class="hljs-string">端口：MYSQL</span> <span class="hljs-string">默认端口号</span><br><span class="hljs-number">3389</span><span class="hljs-string">端口：Microsoft</span> <span class="hljs-string">RDP</span> <span class="hljs-string">微软远程桌面使用的端口</span><br><span class="hljs-number">5631</span><span class="hljs-string">端口：Symantec</span> <span class="hljs-string">pcAnywhere</span> <span class="hljs-string">远程控制数据传输时使用的端口</span><br><span class="hljs-number">5632</span><span class="hljs-string">端口：Symantec</span> <span class="hljs-string">pcAnywhere</span> <span class="hljs-string">主控端扫描被控端时使用的端口</span><br><span class="hljs-number">5000</span><span class="hljs-string">端口：MS</span> <span class="hljs-string">SQL</span> <span class="hljs-string">Server使用的端口</span><br><span class="hljs-number">8000</span><span class="hljs-string">端口：腾讯QQ</span><br></code></pre></td></tr></table></figure>
+
 <p>　　‍</p>
 
                 
