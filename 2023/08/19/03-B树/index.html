@@ -16,18 +16,18 @@
   <meta name="author" content="wantong">
   <meta name="keywords" content="">
   
-    <meta name="description" content="翻译自《build your own database fromscratch》, 转代码为C++">
+    <meta name="description" content="翻译自《build your own database from scratch》, 转代码为C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03.B树">
 <meta property="og:url" content="https://shanhainanhua.github.io/2023/08/19/03-B%E6%A0%91/index.html">
 <meta property="og:site_name" content="WT&#39;s blog">
-<meta property="og:description" content="翻译自《build your own database fromscratch》, 转代码为C++">
+<meta property="og:description" content="翻译自《build your own database from scratch》, 转代码为C++">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/19/03-B%E6%A0%91/image-20230819220143-3ai3iup.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/19/03-B%E6%A0%91/image-20230819221458-e07x0n0.png">
 <meta property="og:image" content="https://shanhainanhua.github.io/2023/08/19/03-B%E6%A0%91/image-20230819221520-0qjf9rq.png">
 <meta property="article:published_time" content="2023-08-19T14:24:18.000Z">
-<meta property="article:modified_time" content="2023-08-19T14:27:57.949Z">
+<meta property="article:modified_time" content="2023-08-19T14:31:15.120Z">
 <meta property="article:author" content="wantong">
 <meta property="article:tag" content="C++">
 <meta property="article:tag" content="数据库">
@@ -361,7 +361,7 @@
             
               <div class="markdown-body">
                 
-                <p>翻译自《build your own database fromscratch》, 转代码为C++</p>
+                <p>翻译自《build your own database from scratch》, 转代码为C++</p>
 <span id="more"></span>
 <h1 id="03-B-Tree-The-Ideas"><a href="#03-B-Tree-The-Ideas" class="headerlink" title="03. B-Tree: The Ideas"></a>03. B-Tree: The Ideas</h1><h1 id="3-1-B树和BST树"><a href="#3-1-B树和BST树" class="headerlink" title="3.1 B树和BST树"></a>3.1 B树和BST树</h1><p>　　首先介绍的知识是平衡二叉树（BST）。二叉树是用于排序数据的常用数据结构。插入或移除键后保持树的良好形状就是“平衡”的含义。如前一章所述，为了利用“页面”（IO的最小单位），应该使用n元树而不是二叉树。B树可以从BST中推广。B树的每个节点都包含多个key和多个指向其子节点的链接。在节点中查找关键字时，所有关键字都用于决定下一个子节点。</p>
 <p>　　​<img src="/2023/08/19/03-B%E6%A0%91/image-20230819220143-3ai3iup.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
