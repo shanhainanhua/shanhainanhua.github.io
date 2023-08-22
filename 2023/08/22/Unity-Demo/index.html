@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="wantong">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="自己实现的Unity Demo的记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity Demo">
+<meta property="og:url" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/index.html">
+<meta property="og:site_name" content="WT&#39;s blog">
+<meta property="og:description" content="自己实现的Unity Demo的记录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/randommap-20230822171730-n1oj1j5.gif">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822164052-hv821tc.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822164121-janoqie.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822165251-gm32gjs.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/charactercontroller-20230822174038-crvh0pd.gif">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/normalattack-20230822174534-crk2io5.gif">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/skill-20230822200408-uw9jx7j.gif">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822200154-2a0hqvl.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822200732-j6ry2op.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/image-20230822202046-o1670va.png">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/ui-20230822202842-75pvruo.gif">
+<meta property="og:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/event-20230822210219-yej0y4w.gif">
+<meta property="article:published_time" content="2023-08-22T13:05:13.000Z">
+<meta property="article:modified_time" content="2023-08-22T13:07:25.978Z">
+<meta property="article:author" content="wantong">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://shanhainanhua.github.io/2023/08/22/Unity-Demo/randommap-20230822171730-n1oj1j5.gif">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Unity Demo - WT&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"shanhainanhua.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  <div>
+    <!--其中rgba中的a，指的是mask文件的alpha，透明度-->
+	<div class='real_mask' style="
+		background-color: rgba(0,0,0,0.3);
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		z-index: -777;
+	"></div>
+	<div id="banner_video_insert">
+	</div>	
+	<div id='vvd_banner_img'>
+	</div>
+</div>
+<div id="banner"></div>
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>WT&#39;s blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://101.43.39.125/HexoFiles/new/bg-trans.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Unity Demo"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+	<script type="text/javascript" src="/vvd_js/jquery.js"></script>
+
+	<div class="banner" id='banner' >
+
+		<div class="full-bg-img" >
+
+			
+				<script>
+					var ua = navigator.userAgent;
+					var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
+						isIphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+						isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+						isMobile = isIphone || isAndroid;
+
+					function set_video_attr(id){
+
+						var height = document.body.clientHeight
+						var width = document.body.clientWidth
+						var video_item = document.getElementById(id);
+
+						if (height / width < 0.56){
+							video_item.setAttribute('width', '100%');
+							video_item.setAttribute('height', 'auto');
+						} else {
+							video_item.setAttribute('height', '100%');
+							video_item.setAttribute('width', 'auto');
+						}
+					}
+
+					$.getJSON('/vvd_js/video_url.json', function(data){
+						if (true){
+							var video_list_length = data.length
+							var seed = Math.random()
+							index = Math.floor(seed * video_list_length)
+							
+							video_url = data[index][0]
+							pre_show_image_url = data[index][1]
+							
+							banner_obj = document.getElementById("banner")
+							banner_obj.style.cssText = "background: url('" + pre_show_image_url + "') no-repeat; background-size: cover;"
+
+							vvd_banner_obj = document.getElementById("vvd_banner_img")
+
+							vvd_banner_content = "<img id='banner_img_item' src='" + pre_show_image_url + "' style='height: 100%; position: fixed; z-index: -999'>"
+							vvd_banner_obj.innerHTML = vvd_banner_content
+							set_video_attr('banner_img_item')
+
+							if (!isMobile) {
+								video_html_res = "<video id='video_item' style='position: fixed; z-index: -888;'  muted='muted' src=" + video_url + " autoplay='autoplay' loop='loop'></video>"
+								document.getElementById("banner_video_insert").innerHTML = video_html_res;
+								set_video_attr('video_item')
+							}
+						}
+					});
+
+					if (!isMobile){
+						window.onresize = function(){
+							set_video_attr('video_item')
+							}
+						}
+				</script>
+			
+			</div>
+		</div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Unity Demo</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>自己实现的Unity Demo的记录</p>
+<span id="more"></span>
+
+<h1 id="随机地图生成"><a href="#随机地图生成" class="headerlink" title="随机地图生成"></a>随机地图生成</h1><p>　　​<img src="/2023/08/22/Unity-Demo/randommap-20230822171730-n1oj1j5.gif" srcset="/img/loading.gif" lazyload alt="randommap">​</p>
+<p>　　原理说明：</p>
+<p>　　预先准备好不同类型的房间模型。</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822164052-hv821tc.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822164121-janoqie.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　现在要把第二个房间接在第一个房间上，只需要从第二个房间的Connectors随机挑选一个可用的Connector——connectTo，将它设为第二个房间的父物体。然后在第一个房间中也选一个Connector——connectFrom。</p>
+<p>　　将connectTo设为connectFrom的子物体，然后重置connectTo的本地坐标和位置，再围绕y轴旋转180度即可拼接两个房间。</p>
+<p>　　连接的核心代码为：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ConnectTiles</span>()</span><br>&#123;<br>    Transform connectFrom = GetRandomConnector(tileFrom);<br>    <span class="hljs-keyword">if</span> (connectFrom == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span>;<br>    Transform connectTo = GetRandomConnector(tileTo);<br>    <span class="hljs-keyword">if</span> (connectTo == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span>;<br>    connectTo.SetParent(connectFrom);<br>    tileTo.SetParent(connectTo);<br>    connectTo.localPosition = Vector3.zero;<br>    connectTo.localRotation = Quaternion.identity;<br>    connectTo.Rotate(<span class="hljs-number">0</span>, <span class="hljs-number">180f</span>, <span class="hljs-number">0</span>);<br>    tileTo.SetParent(container);<br>    connectTo.SetParent(tileTo.Find(<span class="hljs-string">&quot;Connectors&quot;</span>));<br>    generatedTiles.Last().connector = connectFrom.GetComponent&lt;Connector&gt;();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>　　进一步可以通过调整参数控制地图的生成</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822165251-gm32gjs.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<h1 id="角色控制"><a href="#角色控制" class="headerlink" title="角色控制"></a>角色控制</h1><p>　　​<img src="/2023/08/22/Unity-Demo/charactercontroller-20230822174038-crvh0pd.gif" srcset="/img/loading.gif" lazyload alt="charactercontroller">​</p>
+<p>　　‍</p>
+<p>　　<img src="/2023/08/22/Unity-Demo/normalattack-20230822174534-crk2io5.gif" srcset="/img/loading.gif" lazyload alt="normalattack">​</p>
+<p>　　​</p>
+<p>　　使用Character Controller和根运动动画</p>
+<ol>
+<li><strong>PlayerPosture枚举：</strong> 这是角色的姿态枚举，用于描述角色当前的状态，比如站立、蹲下、跳跃、攀爬等。每个枚举值表示一种姿态。</li>
+<li><strong>LocomotionState枚举：</strong> 这是角色的运动状态枚举，用于描述角色的移动状态，包括站立、行走、奔跑、攻击、使用技能等。每个枚举值表示一种运动状态。</li>
+<li><strong>AnimatorInit()方法：</strong> 这个方法用于初始化动画状态机里相关参数的哈希值，以便在后续使用这些哈希值来控制动画状态。</li>
+<li><strong>CheckEquipWeapon()方法：</strong> 检查是否装备武器，根据输入切换角色是否持有武器，并相应地激活&#x2F;隐藏武器的游戏对象。</li>
+<li><strong>CheckGround()方法：</strong> 用于检查角色是否在地面上。使用了射线检测来判断角色是否站在地面上，以便在合适的时机设置isGrounded变量。</li>
+<li><strong>SwitchPlayerStates()方法：</strong> 根据角色的不同姿态和运动状态，进行状态切换。比如根据角色的运动状态和输入，判断角色应该是行走、奔跑还是站立。</li>
+<li><strong>CaculateInputDirection()方法：</strong> 计算玩家输入方向在角色的本地坐标系下的方向。</li>
+<li><strong>Jump()方法：</strong> 处理跳跃和攀爬等操作。根据输入和环境条件，决定角色应该执行的动作。</li>
+<li><strong>SetupAnimator()方法：</strong> 设置动画参数，根据不同的状态和姿态来控制动画的播放。这里包括角色的移动速度、转向速度等信息。</li>
+<li><strong>OnAnimatorMove()方法：</strong> 这个方法是 Unity 中 Animator 自带的回调函数。它在动画更新时被调用，用于应用动画控制的角色移动。这里根据不同的姿态和状态，应用动画的位移和角色的垂直速度来更新角色的位置。</li>
+</ol>
+<p>　　针对跳跃攀爬，根据射线检测结果、玩家的输入方向和与墙体的角度等条件，决定玩家的下一步动作，如跳跃、低位攀爬、高位攀爬、翻越或爬墙。</p>
+<h1 id="角色技能"><a href="#角色技能" class="headerlink" title="角色技能"></a>角色技能</h1><p>　　​<img src="/2023/08/22/Unity-Demo/skill-20230822200408-uw9jx7j.gif" srcset="/img/loading.gif" lazyload alt="skill">​</p>
+<p>　　‍</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822200154-2a0hqvl.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822200732-j6ry2op.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　调用流程：</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/image-20230822202046-o1670va.png" srcset="/img/loading.gif" lazyload alt="image">​</p>
+<p>　　所有技能资源：预制体和图标都通过Resource动态加载</p>
+<h1 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h1><p>　　​<img src="/2023/08/22/Unity-Demo/ui-20230822202842-75pvruo.gif" srcset="/img/loading.gif" lazyload alt="ui">​</p>
+<h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p>　　通过单例类UIManager来管理不同的UI面板。</p>
+<p>　　通过解析json文件来获取不同面板的路径然后动态加载。</p>
+<p>　　使用堆栈来管理面板进出的顺序，使得只有一个面板属于激活状态。</p>
+<p>　　所有面板都继承面板基类并实现其中的方法。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c#"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">PanelBase</span> : <span class="hljs-title">MonoBehaviour</span><br>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnEnter</span>(<span class="hljs-params">System.Object o = <span class="hljs-literal">null</span></span>)</span><br>    &#123;<br>        <span class="hljs-keyword">this</span>.gameObject.SetActive(<span class="hljs-literal">true</span>);<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnStay</span>(<span class="hljs-params">System.Object o = <span class="hljs-literal">null</span></span>)</span><br>    &#123;<br><br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnResume</span>()</span><br>    &#123;<br><br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnExit</span>()</span><br>    &#123;<br>        <span class="hljs-keyword">this</span>.gameObject.SetActive(<span class="hljs-literal">false</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="背包管理"><a href="#背包管理" class="headerlink" title="背包管理"></a>背包管理</h2><p>　　所有背包类似的功能都通过继承Inventory类实现，Inventory类实现了对应物品槽的管理，管理Slot对象。</p>
+<p>　　真正的物品都放在槽里，挂在ItemUI脚本。</p>
+<p>　　ItemUI脚本实现了物品的显示和交互，包括点击，拖拽事件，计算物品对人物的属性加成。</p>
+<p>　　物品的定义通过继承物品基类Item类实现，Item类中定义了物品的类型，品质，属性。</p>
+<h1 id="接入ChatGPT"><a href="#接入ChatGPT" class="headerlink" title="接入ChatGPT"></a>接入ChatGPT</h1><p>　　事件的管理通过EventManager单例类实现，初始化解析json文件实现初始的事件，同时每一次调用都会在后台通过ChatGPT生成新事件并存储在事件数组中，实现事件越来越丰富。</p>
+<p>　　​<img src="/2023/08/22/Unity-Demo/event-20230822210219-yej0y4w.gif" srcset="/img/loading.gif" lazyload alt="event">​</p>
+<p>　　‍</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Unity/" class="category-chain-item">Unity</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Unity Demo</div>
+      <div>https://shanhainanhua.github.io/2023/08/22/Unity-Demo/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>wantong</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年8月22日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/08/19/03-B%E6%A0%91/" title="03.B树">
+                        <span class="hidden-mobile">03.B树</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
