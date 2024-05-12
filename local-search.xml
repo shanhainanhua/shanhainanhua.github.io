@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>vscode端口转发</title>
+    <link href="/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+    <url>/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</url>
+    
+    <content type="html"><![CDATA[<p>记录一次关于vscode端口转发的使用</p><span id="more"></span><p>　　问题场景：</p><p>　　通过streamlit构建了一个app，需要部署到内网服务器上，然后我在外网&#x2F;或者本地能够访问到，以便进行演示。</p><p>　　遇到问题点：内网有两台服务器A和B，需要先开vpn进内网，连接A，再通过A连接B，在B上创建docker，然后应用就部署在docker中</p><p>　　前提：B是不可以直接访问到的，必须跳转。</p><p>　　‍</p><p>　　我首先是在B的docker中新建容器，配好环境，并作出端口映射。需要通过8501端口访问streamlit app，我将docker的8501映射到了B的28501中，</p><p>　　然后一开始想要直接通过B地址+28501访问，无法访问，原因在于B无法直接访问。</p><p>　　‍</p><p>　　解决方案：借助VScode端口下的添加端口</p><p>　　​<img src="/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/image-20240512230714-pkgg05b.png" alt="image">​</p><p>　　将docker所在服务器地址加对应服务器的端口进行转发，也就是转发B地址+端口</p><p>　　​<img src="/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/image-20240512230818-wa5ggpl.png" alt="image">​</p><p>　　​<img src="/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/image-20240512230958-xtpli2h.png" alt="image">​</p><p>　　然后就可以打开浏览器，通过本地地址访问服务器中部署的streamlit应用。</p><p>　　缺点：vscode关闭就不行了，只是用于临时演示</p><p>　　‍</p><p>　　补充：</p><p>　　其实当前我vscode的环境是直接连的B服务器下的docker中，所以可以直接转发docker中的8501端口出来，直接访问即可，不需要通过其他的，也不需要将docker的8501端口</p><p>　　映射出来为服务器B的28501端口。</p><p>　　​<img src="/2024/05/12/vscode%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/image-20240512231258-sgu2ujm.png" alt="image">​</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>配置环境</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>算法-单调栈</title>
     <link href="/2023/08/25/%E7%AE%97%E6%B3%95-%E5%8D%95%E8%B0%83%E6%A0%88/"/>
     <url>/2023/08/25/%E7%AE%97%E6%B3%95-%E5%8D%95%E8%B0%83%E6%A0%88/</url>
